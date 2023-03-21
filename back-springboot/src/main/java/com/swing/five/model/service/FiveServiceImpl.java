@@ -4,7 +4,6 @@ import com.swing.five.model.entity.FiveRank;
 import com.swing.five.model.entity.Word;
 import com.swing.five.model.repository.FiveRankRepository;
 import com.swing.five.model.repository.WordRepository;
-import com.swing.note.model.repository.WordNoteRepository;
 import com.swing.user.model.repository.UserRepository;
 import com.swing.util.S3Upload;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,9 +27,6 @@ public class FiveServiceImpl implements FiveService {
 	@Autowired
 	private FiveRankRepository fiveRankRepository;
 	
-	@Autowired
-	private WordNoteRepository wordNoteRepository;
-	
 	@Override
 	public Word image (MultipartFile multipartFile, String content, String meaningKr, String meaningEn) throws IOException {
 		if (wordRepository.findByMeaningKr(meaningKr) == null) return null;
@@ -46,10 +42,10 @@ public class FiveServiceImpl implements FiveService {
 	
 	@Override
 	public FiveRank saveResult (String userId, int score) {
-		FiveRank five = new FiveRank();
-		five.setUser(userRepository.findByUserId(userId));
-		five.setScore(score);
-		return fiveRankRepository.save(five);
+		FiveRank fiveRank = new FiveRank();
+		fiveRank.setUser(userRepository.findByUserId(userId));
+		fiveRank.setScore(score);
+		return fiveRankRepository.save(fiveRank);
 	}
 	
 }

@@ -1,9 +1,8 @@
 package com.swing.sentency.model.service;
 
-import com.swing.five.model.entity.FiveRank;
-import com.swing.five.model.entity.FiveRank;
+import com.swing.sentency.model.entity.SentencyRank;
 
 public interface SentencyService {
-	FiveRank saveResult (String userId, int score);
+	SentencyRank saveResult (String userId, int score);
 	
 }
