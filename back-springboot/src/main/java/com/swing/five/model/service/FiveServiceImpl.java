@@ -1,9 +1,10 @@
 package com.swing.five.model.service;
 
-import com.swing.five.model.entity.Five;
-import com.swing.five.model.repository.FiveRepository;
-import com.swing.note.model.entity.Word;
-import com.swing.note.model.repository.WordRepository;
+import com.swing.five.model.entity.FiveRank;
+import com.swing.five.model.entity.Word;
+import com.swing.five.model.repository.FiveRankRepository;
+import com.swing.five.model.repository.WordRepository;
+import com.swing.note.model.repository.WordNoteRepository;
 import com.swing.user.model.repository.UserRepository;
 import com.swing.util.S3Upload;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,10 +23,13 @@ public class FiveServiceImpl implements FiveService {
 	private UserRepository userRepository;
 	
 	@Autowired
-	private FiveRepository fiveRepository;
+	private WordRepository wordRepository;
 	
 	@Autowired
-	private WordRepository wordRepository;
+	private FiveRankRepository fiveRankRepository;
+	
+	@Autowired
+	private WordNoteRepository wordNoteRepository;
 	
 	@Override
 	public Word image (MultipartFile multipartFile, String content, String meaningKr, String meaningEn) throws IOException {
@@ -41,11 +45,11 @@ public class FiveServiceImpl implements FiveService {
 	}
 	
 	@Override
-	public Five saveResult (String userId, Integer score) {
-		Five five = new Five();
+	public FiveRank saveResult (String userId, Integer score) {
+		FiveRank five = new FiveRank();
 		five.setUser(userRepository.findByUserId(userId));
 		five.setScore(score);
-		return fiveRepository.save(five);
+		return fiveRankRepository.save(five);
 	}
 	
 }

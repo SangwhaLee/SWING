@@ -9,5 +9,9 @@ import lombok.ToString;
 @Getter
 @ToString
 @AllArgsConstructor
-public class SentencyDto {
+public class SentenceDto {
+	private Integer sentenceId;
+	private String sentenceImageUrl;
+	private String content;
+	private String meaning;
 }

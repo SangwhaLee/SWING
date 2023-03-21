@@ -1,6 +1,6 @@
 package com.swing.note.controller;
 
-import com.swing.note.model.service.WordService;
+import com.swing.note.model.service.NoteService;
 import io.swagger.annotations.Api;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.CrossOrigin;
@@ -14,6 +14,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class NoteController {
 	
 	@Autowired
-	private WordService noteService;
+	private NoteService noteService;
 	
 }
