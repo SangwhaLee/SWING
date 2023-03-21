@@ -10,7 +10,7 @@ import lombok.ToString;
 @ToString
 @AllArgsConstructor
 public class SentenceDto {
-	private Integer sentenceId;
+	private int sentenceId;
 	private String sentenceImageUrl;
 	private String content;
 	private String meaning;

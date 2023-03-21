@@ -19,9 +19,9 @@ public class User {
 	
 	private String profileImageUrl;
 	
-	private Integer sentencyCnt;
+	private int sentencyCnt;
 	
-	private Integer fiveCnt;
+	private int fiveCnt;
 	
-	private Integer coupon;
+	private int coupon;
 }

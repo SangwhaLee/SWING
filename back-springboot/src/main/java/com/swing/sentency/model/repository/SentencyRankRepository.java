@@ -5,5 +5,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface SentencyRankRepository extends JpaRepository<SentencyRank, Integer> {
+public interface SentencyRankRepository extends JpaRepository<SentencyRank, int> {
 }

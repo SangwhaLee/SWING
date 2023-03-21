@@ -10,7 +10,7 @@ import lombok.ToString;
 @ToString
 @AllArgsConstructor
 public class WordDto {
-	private Integer wordId;
+	private int wordId;
 	private String wordImageUrl;
 	private String content;
 	private String meaningKr;

@@ -16,7 +16,7 @@ import javax.persistence.Id;
 public class Word {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer wordId;
+	private int wordId;
 	
 	private String wordImageUrl;
 	

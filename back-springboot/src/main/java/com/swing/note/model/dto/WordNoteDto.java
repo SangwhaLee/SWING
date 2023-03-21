@@ -10,8 +10,8 @@ import lombok.ToString;
 @ToString
 @AllArgsConstructor
 public class WordNoteDto {
-	private Integer wordNoteId;
+	private int wordNoteId;
 	private String userId;
-	private Integer wordId;
-	private Integer check;
+	private int wordId;
+	private int check;
 }

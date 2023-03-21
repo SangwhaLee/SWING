@@ -7,7 +7,7 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 
 public interface FiveService {
-	FiveRank saveResult (String userId, Integer score);
+	FiveRank saveResult (String userId, int score);
 	
 	Word image (MultipartFile multipartFile, String content, String meaningKr, String meaningEn) throws IOException;
 }

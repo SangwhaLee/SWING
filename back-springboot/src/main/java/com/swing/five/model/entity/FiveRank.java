@@ -14,11 +14,11 @@ import javax.persistence.*;
 public class FiveRank {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer fiveRankId;
+	private int fiveRankId;
 	
 	@ManyToOne
 	@JoinColumn(name = "userId")
 	private User user;
 	
-	private Integer score;
+	private int score;
 }
