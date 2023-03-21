@@ -15,7 +15,7 @@ import java.util.List;
 @NoArgsConstructor
 public class RoundDto {
 	
-	private int roundId;
+	private Integer roundId;
 	private GameDto game;
 	private int roundNo;
 	private Word keyword;

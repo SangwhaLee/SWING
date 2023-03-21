@@ -16,7 +16,7 @@ import java.util.List;
 public class Game {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int gameId;
+	private Integer gameId;
 	@ManyToOne
 	@JoinColumn(name = "roomId")
 	private Room room;

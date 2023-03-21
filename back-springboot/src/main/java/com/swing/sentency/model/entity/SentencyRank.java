@@ -14,7 +14,7 @@ import javax.persistence.*;
 public class SentencyRank {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int sentencyRankId;
+	private Integer sentencyRankId;
 	
 	@ManyToOne
 	@JoinColumn(name = "userId")

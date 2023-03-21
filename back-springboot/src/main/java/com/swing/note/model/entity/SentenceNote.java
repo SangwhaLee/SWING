@@ -15,7 +15,7 @@ import javax.persistence.*;
 public class SentenceNote {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int sentenceNoteId;
+	private Integer sentenceNoteId;
 	
 	@ManyToOne
 	@JoinColumn(name = "userId")

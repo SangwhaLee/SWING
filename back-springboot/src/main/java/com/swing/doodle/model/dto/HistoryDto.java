@@ -12,7 +12,7 @@ import lombok.Setter;
 @NoArgsConstructor
 public class HistoryDto {
 
-	int historyId;
+	Integer historyId;
 
 	User user;
 

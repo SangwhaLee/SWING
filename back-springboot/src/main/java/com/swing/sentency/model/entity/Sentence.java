@@ -16,7 +16,7 @@ import javax.persistence.Id;
 public class Sentence {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int sentenceId;
+	private Integer sentenceId;
 	
 	private String sentenceImageUrl;
 	

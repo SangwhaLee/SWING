@@ -10,7 +10,7 @@ import lombok.*;
 @ToString
 public class UserGameDto {
 
-	private int userGameId;
+	private Integer userGameId;
 
 	private GameDto game;
 	
