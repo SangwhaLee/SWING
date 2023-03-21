@@ -58,7 +58,7 @@ public class FiveController {
 	@ApiOperation(value = "결과 저장", notes = "게임 결과 저장 API", response = Map.class)
 	public ResponseEntity<?> saveResult (
 			@RequestBody @ApiParam(value = "유저 ID", required = true) String userId,
-			@RequestBody @ApiParam(value = "점수", required = true) Integer score) {
+			@RequestBody @ApiParam(value = "점수", required = true) int score) {
 		
 		Map<String, Object> resultMap = new HashMap<>();
 		HttpStatus status = HttpStatus.OK;

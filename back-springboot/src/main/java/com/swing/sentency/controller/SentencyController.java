@@ -32,7 +32,7 @@ public class SentencyController {
 	@PostMapping("")
 	public ResponseEntity<?> registerUser(
 			@RequestBody @ApiParam(value = "유저 ID", required = true) String userId,
-			@RequestBody @ApiParam(value = "점수", required = true) Integer score) {
+			@RequestBody @ApiParam(value = "점수", required = true) int score) {
 		
 		Map<String, Object> resultMap = new HashMap<>();
 		HttpStatus status;

@@ -45,7 +45,7 @@ public class FiveServiceImpl implements FiveService {
 	}
 	
 	@Override
-	public FiveRank saveResult (String userId, Integer score) {
+	public FiveRank saveResult (String userId, int score) {
 		FiveRank five = new FiveRank();
 		five.setUser(userRepository.findByUserId(userId));
 		five.setScore(score);
