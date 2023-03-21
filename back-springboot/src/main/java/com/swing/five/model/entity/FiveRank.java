@@ -11,7 +11,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class Five {
+public class FiveRank {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer fiveRankId;

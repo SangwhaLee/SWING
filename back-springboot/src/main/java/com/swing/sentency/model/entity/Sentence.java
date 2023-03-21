@@ -1,4 +1,4 @@
-package com.swing.note.model.entity;
+package com.swing.sentency.model.entity;
 
 import lombok.*;
 
@@ -13,16 +13,14 @@ import javax.persistence.Id;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class Word {
+public class Sentence {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer wordId;
+	private Integer sentenceId;
 	
-	private String wordImageUrl;
+	private String sentenceImageUrl;
 	
 	private String content;
 	
 	private String meaningKr;
-	
-	private String meaningEn;
 }

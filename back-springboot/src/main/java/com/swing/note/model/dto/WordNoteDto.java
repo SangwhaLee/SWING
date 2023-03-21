@@ -9,9 +9,9 @@ import lombok.ToString;
 @Getter
 @ToString
 @AllArgsConstructor
-public class WordDto {
+public class WordNoteDto {
+	private Integer wordNoteId;
+	private String userId;
 	private Integer wordId;
-	private String content;
-	private String meaningKr;
-	private String meaningEn;
+	private Integer check;
 }
