@@ -1,5 +1,7 @@
 package com.swing.user.controller;
 
+import com.swing.user.model.dto.UserDto;
+import com.swing.user.model.entity.User;
 import com.swing.user.model.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -29,6 +31,30 @@ public class UserController {
 	
 	@Autowired
 	private UserService userService;
+	
+	@ApiOperation(value = "소셜 로그인", notes = "소셜 로그인 API", response = Map.class)
+	@PostMapping("")
+	public ResponseEntity<?> login(
+			@RequestPart @ApiParam(value = "유저 정보") User user) {
+		
+		Map<String, Object> resultMap = new HashMap<>();
+		HttpStatus status;
+		
+		try {
+			UserDto userDto = userService.login(user);
+			resultMap.put("message", SUCCESS);
+			resultMap.put("user", userDto);
+			status = HttpStatus.OK;
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("사진 업로드 실패 : {}", e);
+			resultMap.put("message", e.getMessage());
+			status = HttpStatus.INTERNAL_SERVER_ERROR;
+		}
+		
+		return new ResponseEntity<>(resultMap, status);
+		
+	}
 	
 	@ApiOperation(value = "사진 업로드 테스트", notes = "사진 업로드 테스트 API", response = Map.class)
 	@GetMapping("")

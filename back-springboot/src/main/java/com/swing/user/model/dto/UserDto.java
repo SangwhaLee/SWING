@@ -1,5 +1,6 @@
 package com.swing.user.model.dto;
 
+import com.swing.user.model.entity.User;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -13,7 +14,15 @@ public class UserDto {
 	private String userId;
 	private String nickname;
 	private String profileImageUrl;
-	private Integer sentencyCnt;
-	private Integer fiveCnt;
-	private Integer coupon;
+	private int sentencyCnt;
+	private int fiveCnt;
+	private int coupon;
+	
+	private int first;
+	public static UserDto toDto(User user){
+		
+		return new UserDto(user.getUserId(),user.getNickname(),user.getProfileImageUrl(),user.getSentencyCnt(),user.getFiveCnt(),user.getCoupon(),0);
+	}
+	
+	
 }

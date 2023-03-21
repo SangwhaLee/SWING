@@ -12,5 +12,6 @@ import lombok.ToString;
 public class SentencyRankDto {
 	private Integer sentencyRankId;
 	private String userId;
+	private String profileImageUrl;
 	private Integer score;
 }
