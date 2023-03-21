@@ -15,7 +15,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 public class RoomDto {
-	private int roomId;
+	private Integer roomId;
 	
 	private String name;
 	

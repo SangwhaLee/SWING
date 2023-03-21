@@ -18,7 +18,7 @@ import java.util.List;
 public class Round {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int roundId;
+	private Integer roundId;
 	@ManyToOne
 	@JoinColumn(name = "gameId")
 	private Game game;

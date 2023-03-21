@@ -10,7 +10,7 @@ import lombok.ToString;
 @ToString
 @AllArgsConstructor
 public class FiveRankDto {
-	private int fiveRankId;
+	private Integer fiveRankId;
 	private String userId;
 	private int score;
 }

@@ -13,7 +13,7 @@ import java.util.List;
 @ToString
 public class GameDto {
 	
-	private int gameId;
+	private Integer gameId;
 	
 	private RoomDto room;
 	

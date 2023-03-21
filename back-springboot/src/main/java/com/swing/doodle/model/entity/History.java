@@ -16,7 +16,7 @@ import javax.persistence.*;
 public class History {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private int historyId;
+	private Integer historyId;
 	@ManyToOne
 	@JoinColumn(name = "userId")
 	private User user;

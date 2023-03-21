@@ -10,7 +10,7 @@ import lombok.ToString;
 @ToString
 @AllArgsConstructor
 public class SentencyRankDto {
-	private int sentencyRankId;
+	private Integer sentencyRankId;
 	private String userId;
 	private String profileImageUrl;
 	private int score;
