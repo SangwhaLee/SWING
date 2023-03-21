@@ -14,6 +14,6 @@ public class UserDto {
 	private String nickname;
 	private String profileImageUrl;
 	private Integer sentencyCnt;
-	private Integer hifiveCnt;
+	private Integer fiveCnt;
 	private Integer coupon;
 }

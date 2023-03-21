@@ -1,5 +1,5 @@
 package com.swing.note.model.service;
 
-public interface NoteService {
+public interface WordService {
 	
 }
