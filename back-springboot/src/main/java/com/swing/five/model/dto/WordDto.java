@@ -1,5 +1,6 @@
 package com.swing.five.model.dto;
 
+import com.swing.five.model.entity.Word;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
@@ -15,4 +16,14 @@ public class WordDto {
 	private String content;
 	private String meaningKr;
 	private String meaningEn;
+	
+	public static WordDto toDto(Word word) {
+		return new WordDto(
+				word.getWordId(),
+				word.getWordImageUrl(),
+				word.getContent(),
+				word.getMeaningKr(),
+				word.getMeaningEn()
+		);
+	}
 }

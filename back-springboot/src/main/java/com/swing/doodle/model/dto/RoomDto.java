@@ -16,18 +16,25 @@ import java.util.List;
 @NoArgsConstructor
 public class RoomDto {
 	private Integer roomId;
-	
 	private String name;
-	
 	private int code;
 	private int closed;
 	private UserDto leader;
 	private int mode;
-	private List<GameDto> games = new ArrayList<>();
+	private List<GameDto> gameList = new ArrayList<>();
 	
 	public static RoomDto toDto(Room room){
-		List<GameDto> gamelist = new ArrayList<>();
-		return new RoomDto(room.getRoomId(), room.getName(),room.getCode(), room.getClosed(), UserDto.toDto(room.getLeader()), room.getMode(),gamelist);
+		List<GameDto> gameList = new ArrayList<>();
+		room.getGames().forEach(x -> gameList.add(GameDto.toDto(x)));
+		
+		return new RoomDto(
+				room.getRoomId(),
+				room.getName(),
+				room.getCode(),
+				room.getClosed(),
+				UserDto.toDto(room.getLeader()),
+				room.getMode(),
+				gameList
+		);
 	}
-	
 }

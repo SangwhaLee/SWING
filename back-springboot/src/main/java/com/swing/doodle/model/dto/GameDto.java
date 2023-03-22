@@ -12,14 +12,9 @@ import java.util.List;
 @NoArgsConstructor
 @ToString
 public class GameDto {
-	
 	private Integer gameId;
-	
 	private RoomDto room;
-	
-	private List<RoundDto> rounds = new ArrayList<>();
-	
-	private List<UserGameDto> userGames = new ArrayList<>();
-	
+	private List<RoundDto> roundList = new ArrayList<>();
+	private List<UserGameDto> userGameList = new ArrayList<>();
 	private DateTime playTime;
 }
