@@ -44,12 +44,10 @@ public class SwaggerConfig {
 				.apiInfo(apiInfo())
 				.select()
 				.apis(RequestHandlerSelectors.basePackage("com.swing.user.controller")
-						.or(RequestHandlerSelectors.basePackage("com.main.profile.controller"))
-						.or(RequestHandlerSelectors.basePackage("com.main.category.controller"))
-						.or(RequestHandlerSelectors.basePackage("com.main.playlist.controller"))
-						.or(RequestHandlerSelectors.basePackage("com.main.achievement.controller"))
-						.or(RequestHandlerSelectors.basePackage("com.main.flower.controller"))
-						.or(RequestHandlerSelectors.basePackage("com.main.feed.controller")))
+						.or(RequestHandlerSelectors.basePackage("com.swing.sentency.controller"))
+						.or(RequestHandlerSelectors.basePackage("com.swing.five.controller"))
+						.or(RequestHandlerSelectors.basePackage("com.swing.doodle.controller"))
+						.or(RequestHandlerSelectors.basePackage("com.swing.note.controller")))
 				.paths(PathSelectors.any())
 				.build();
 	}

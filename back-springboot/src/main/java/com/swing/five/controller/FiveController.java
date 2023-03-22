@@ -1,6 +1,7 @@
 package com.swing.five.controller;
 
 import com.swing.five.model.dto.FiveRankDto;
+import com.swing.five.model.dto.WordDto;
 import com.swing.five.model.service.FiveService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -31,8 +32,8 @@ public class FiveController {
 	private static final String FAIL = "fail";
 	private static final String ALREADY_EXIST = "already exists";
 	
-	@PostMapping("/image")
 	@ApiOperation(value = "(관리자) 이미지 저장", notes = "게임에 쓰일 이미지 저장 API", response = Map.class)
+	@PostMapping("/image")
 	public ResponseEntity<?> image (
 			@RequestBody @ApiParam(value = "이미지", required = true) MultipartFile multipartFile,
 			@RequestBody @ApiParam(value = "내용", required = true) String content,
@@ -56,8 +57,28 @@ public class FiveController {
 		return new ResponseEntity<>(resultMap, status);
 	}
 	
-	@PostMapping("")
+	@ApiOperation(value = "이미지 5개 조회", notes = "이미지 5개 조회 API", response = Map.class)
+	@GetMapping("")
+	public ResponseEntity<?> getFive () {
+		
+		Map<String, Object> resultMap = new HashMap<>();
+		HttpStatus status = HttpStatus.OK;
+		
+		try {
+			List<WordDto> wordDtoList = fiveService.getFive();
+			resultMap.put("list", wordDtoList);
+			resultMap.put("message", SUCCESS);
+		} catch (Exception e) {
+			logger.error("이미지 5개 조회 실패 : {}", e);
+			resultMap.put("message", FAIL);
+			status = HttpStatus.INTERNAL_SERVER_ERROR;
+		}
+		
+		return new ResponseEntity<>(resultMap, status);
+	}
+	
 	@ApiOperation(value = "결과 저장", notes = "게임 결과 저장 API", response = Map.class)
+	@PostMapping("")
 	public ResponseEntity<?> saveResult (
 			@RequestBody @ApiParam(value = "유저 ID", required = true) String userId,
 			@RequestBody @ApiParam(value = "점수", required = true) int score) {
@@ -77,8 +98,8 @@ public class FiveController {
 		return new ResponseEntity<>(resultMap, status);
 	}
 	
-	@GetMapping("/{userId}")
 	@ApiOperation(value = "Hi-five 랭킹 조회", notes = "Hi-five 랭킹 조회 API", response = Map.class)
+	@GetMapping("/{userId}")
 	public ResponseEntity<?> getRank (
 			@PathVariable @ApiParam(value = "Hi-five 랭킹 조회할 유저 ID", required = true) String userId) {
 		
