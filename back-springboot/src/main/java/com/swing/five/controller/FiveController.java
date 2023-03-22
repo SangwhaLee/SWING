@@ -1,5 +1,6 @@
 package com.swing.five.controller;
 
+import com.swing.five.model.dto.FiveRankDto;
 import com.swing.five.model.service.FiveService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -13,6 +14,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @CrossOrigin(origins = {"*"}, maxAge = 6000)
@@ -68,6 +70,26 @@ public class FiveController {
 			resultMap.put("message", SUCCESS);
 		} catch (Exception e) {
 			logger.error("게임 결과 저장 실패 : {}", e);
+			resultMap.put("message", FAIL);
+			status = HttpStatus.INTERNAL_SERVER_ERROR;
+		}
+		
+		return new ResponseEntity<>(resultMap, status);
+	}
+	
+	@GetMapping("/{userId}")
+	@ApiOperation(value = "Hi-five 랭킹 조회", notes = "Hi-five 랭킹 조회 API", response = Map.class)
+	public ResponseEntity<?> getRank (
+			@PathVariable @ApiParam(value = "Hi-five 랭킹 조회할 유저 ID", required = true) String userId) {
+		
+		Map<String, Object> resultMap = new HashMap<>();
+		HttpStatus status = HttpStatus.OK;
+		
+		try {
+			List<FiveRankDto> fiveRankDtoList = fiveService.getRank(userId);
+			resultMap.put("list", fiveRankDtoList);
+		} catch (Exception e) {
+			logger.error("(관리자) 이미지 저장 실패 : {}", e);
 			resultMap.put("message", FAIL);
 			status = HttpStatus.INTERNAL_SERVER_ERROR;
 		}

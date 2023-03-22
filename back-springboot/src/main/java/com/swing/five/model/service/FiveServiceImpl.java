@@ -1,5 +1,6 @@
 package com.swing.five.model.service;
 
+import com.swing.five.model.dto.FiveRankDto;
 import com.swing.five.model.entity.FiveRank;
 import com.swing.five.model.entity.Word;
 import com.swing.five.model.repository.FiveRankRepository;
@@ -11,6 +12,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class FiveServiceImpl implements FiveService {
@@ -46,6 +49,15 @@ public class FiveServiceImpl implements FiveService {
 		fiveRank.setUser(userRepository.findByUserId(userId));
 		fiveRank.setScore(score);
 		return fiveRankRepository.save(fiveRank);
+	}
+	
+	@Override
+	public List<FiveRankDto> getRank (String userId) {
+		List<FiveRankDto> fiveRankDtoList = new ArrayList<>();
+		List<FiveRank> fiveRankList = fiveRankRepository.findTop7ByOrderByScoreDesc();
+		fiveRankList.forEach(x -> fiveRankDtoList.add(FiveRankDto.toDto(x)));
+		fiveRankDtoList.add(FiveRankDto.toDto(fiveRankRepository.findByUserUserId(userId)));
+		return fiveRankDtoList;
 	}
 	
 }
