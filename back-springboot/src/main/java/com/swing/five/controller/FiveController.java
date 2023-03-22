@@ -18,7 +18,7 @@ import java.util.Map;
 @CrossOrigin(origins = {"*"}, maxAge = 6000)
 @RestController
 @RequestMapping("/five")
-@Api(tags = {"Hi-five 관리 API"})
+@Api(tags = {"Hi-five 관리 APIs"})
 public class FiveController {
 	
 	@Autowired

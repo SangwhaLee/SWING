@@ -19,13 +19,17 @@ public class Round {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer roundId;
+	
 	@ManyToOne
 	@JoinColumn(name = "gameId")
 	private Game game;
+	
 	private int roundNo;
+	
 	@ManyToOne
 	@JoinColumn(name = "keywordId")
 	private Word keyword;
+	
 	@OneToMany(mappedBy = "round")
 	private List<History> histories = new ArrayList<>();
 }

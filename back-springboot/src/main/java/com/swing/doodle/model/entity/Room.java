@@ -18,15 +18,21 @@ import java.util.List;
 public class Room {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	
 	private Integer roomId;
+	
 	private String name;
+	
 	private int code;
+	
 	private int closed;
+	
 	@ManyToOne
 	@JoinColumn(name = "leaderId")
 	private User leader;
+	
 	private int mode;
+	
 	@OneToMany(mappedBy = "room")
 	private List<Game> games = new ArrayList<>();
-	
 }

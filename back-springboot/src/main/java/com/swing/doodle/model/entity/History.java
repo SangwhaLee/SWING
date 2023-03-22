@@ -17,13 +17,16 @@ public class History {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer historyId;
+	
 	@ManyToOne
 	@JoinColumn(name = "userId")
 	private User user;
+	
 	@ManyToOne
 	@JoinColumn(name = "roundId")
 	private Round round;
-	private double time;
-	private String gameImageUrl;
 	
+	private double time;
+	
+	private String gameImageUrl;
 }

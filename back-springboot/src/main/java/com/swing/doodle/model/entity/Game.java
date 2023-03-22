@@ -17,12 +17,16 @@ public class Game {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer gameId;
+	
 	@ManyToOne
 	@JoinColumn(name = "roomId")
 	private Room room;
+	
 	@OneToMany(mappedBy = "game")
 	private List<Round> rounds = new ArrayList<>();
+	
 	@OneToMany(mappedBy = "game")
 	private List<UserGame> userGames = new ArrayList<>();
+	
 	private DateTime playTime;
 }

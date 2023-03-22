@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 @CrossOrigin(origins = {"*"}, maxAge = 6000)
 @RestController
 @RequestMapping("/note")
-@Api(tags = {"회원 관리 API"})
+@Api(tags = {"오답노트 관리 APIs"})
 public class NoteController {
 	
 	@Autowired
