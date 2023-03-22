@@ -89,7 +89,7 @@ public class FiveController {
 			List<FiveRankDto> fiveRankDtoList = fiveService.getRank(userId);
 			resultMap.put("list", fiveRankDtoList);
 		} catch (Exception e) {
-			logger.error("(관리자) 이미지 저장 실패 : {}", e);
+			logger.error("Hi-five 랭킹 조회 실패 : {}", e);
 			resultMap.put("message", FAIL);
 			status = HttpStatus.INTERNAL_SERVER_ERROR;
 		}
