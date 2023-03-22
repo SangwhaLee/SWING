@@ -51,8 +51,8 @@ public class User {
 	@OneToMany(mappedBy = "user")
 	private List<History> historyList = new ArrayList<>();
 	
-	@OneToMany(mappedBy = "user")
-	private List<Room> roomList = new ArrayList<>();
+	@OneToOne(mappedBy = "leader")
+	private Room room;
 	
 	@OneToMany(mappedBy = "user")
 	private List<UserGame> userGameList = new ArrayList<>();

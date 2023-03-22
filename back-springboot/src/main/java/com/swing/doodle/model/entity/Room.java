@@ -26,7 +26,7 @@ public class Room {
 	
 	private int closed;
 	
-	@ManyToOne
+	@OneToOne
 	@JoinColumn(name = "leaderId")
 	private User leader;
 	
