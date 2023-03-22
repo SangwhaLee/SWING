@@ -9,6 +9,8 @@ import java.io.IOException;
 public interface UserService {
 	UserDto login(User user) throws IOException;
 	String upload (MultipartFile image) throws IOException;
-	int getSentencyCnt(String userId) throws IOException;
-	void setSentencyCnt(String userId, int sentencyCnt) throws IOException;
+	int getSentencyCnt(String userId);
+	void setSentencyCnt(String userId, int sentencyCnt);
+	int getFiveCnt(String userId);
+	void setFiveCnt(String userId, int sentencyCnt);
 }

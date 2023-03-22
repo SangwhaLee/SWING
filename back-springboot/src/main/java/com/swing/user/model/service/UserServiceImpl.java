@@ -42,18 +42,28 @@ public class UserServiceImpl implements UserService {
 	}
 	
 	@Override
-	public int getSentencyCnt(String userId) throws IOException {
+	public int getSentencyCnt(String userId) {
 		User user = userRepository.findByUserId(userId);
-		if(user!=null){
-			return user.getSentencyCnt();
-		}
-		return 0;
+		return user == null ? 0 : user.getSentencyCnt();
 	}
 	
 	@Override
-	public void setSentencyCnt(String userId, int sentencyCnt) throws IOException {
+	public void setSentencyCnt(String userId, int sentencyCnt) {
 		User user = userRepository.findByUserId(userId);
 		user.setSentencyCnt(sentencyCnt);
+		userRepository.save(user);
+	}
+	
+	@Override
+	public int getFiveCnt (String userId) {
+		User user = userRepository.findByUserId(userId);
+		return user == null ? 0 : user.getFiveCnt();
+	}
+	
+	@Override
+	public void setFiveCnt (String userId, int fiveCnt) {
+		User user = userRepository.findByUserId(userId);
+		user.setFiveCnt(fiveCnt);
 		userRepository.save(user);
 	}
 	
