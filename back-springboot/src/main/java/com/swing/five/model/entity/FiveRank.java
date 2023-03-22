@@ -16,7 +16,7 @@ public class FiveRank {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer fiveRankId;
 	
-	@ManyToOne
+	@OneToOne
 	@JoinColumn(name = "userId")
 	private User user;
 	

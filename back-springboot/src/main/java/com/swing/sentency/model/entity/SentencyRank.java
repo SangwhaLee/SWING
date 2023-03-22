@@ -16,7 +16,7 @@ public class SentencyRank {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer sentencyRankId;
 	
-	@ManyToOne
+	@OneToOne
 	@JoinColumn(name = "userId")
 	private User user;
 	

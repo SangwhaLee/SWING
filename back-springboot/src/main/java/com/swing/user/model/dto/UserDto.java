@@ -1,5 +1,6 @@
 package com.swing.user.model.dto;
 
+import com.swing.doodle.model.dto.GameDto;
 import com.swing.doodle.model.dto.HistoryDto;
 import com.swing.doodle.model.dto.RoomDto;
 import com.swing.doodle.model.dto.UserGameDto;
@@ -28,29 +29,20 @@ public class UserDto {
 	private int fiveCnt;
 	private int coupon;
 	private int first;
-	private List<FiveRankDto> fiveRankList;
-	private List<SentencyRankDto> sentencyRankList;
+	private FiveRankDto fiveRank;
+	private SentencyRankDto sentencyRank;
 	private List<WordNoteDto> wordNoteList;
 	private List<SentenceNoteDto> sentenceNoteList;
-	private List<HistoryDto> historyList;
-	private List<RoomDto> roomList;
-	private List<UserGameDto> userGameList;
+	private List<GameDto> gameList;
 	
 	public static UserDto toDto(User user) {
-		List<FiveRankDto> fiveRankList = new ArrayList<>();
-		user.getFiveRankList().forEach(x -> fiveRankList.add(FiveRankDto.toDto(x)));
-		List<SentencyRankDto> sentencyRankList = new ArrayList<>();
-		user.getSentencyRankList().forEach(x -> sentencyRankList.add(SentencyRankDto.toDto(x)));
+
 		List<WordNoteDto> wordNoteList = new ArrayList<>();
 		user.getWordNoteList().forEach(x -> wordNoteList.add(WordNoteDto.toDto(x)));
 		List<SentenceNoteDto> sentenceNoteList = new ArrayList<>();
 		user.getSentenceNoteList().forEach(x -> sentenceNoteList.add(SentenceNoteDto.toDto(x)));
-		List<HistoryDto> historyList = new ArrayList<>();
-		user.getHistoryList().forEach(x -> historyList.add(HistoryDto.toDto(x)));
-		List<RoomDto> roomList = new ArrayList<>();
-		user.getRoomList().forEach(x -> roomList.add(RoomDto.toDto(x)));
-		List<UserGameDto> userGameList = new ArrayList<>();
-		user.getUserGameList().forEach(x -> userGameList.add(UserGameDto.toDto(x)));
+		List<GameDto> gameList = new ArrayList<>();
+		user.getUserGameList().forEach(x -> gameList.add(GameDto.toDto(x.getGame())));
 		
 		return new UserDto(
 				user.getUserId(),
@@ -60,13 +52,11 @@ public class UserDto {
 				user.getFiveCnt(),
 				user.getCoupon(),
 				0,
-				fiveRankList,
-				sentencyRankList,
+				FiveRankDto.toDto(user.getFiveRank()),
+				SentencyRankDto.toDto(user.getSentencyRank()),
 				wordNoteList,
 				sentenceNoteList,
-				historyList,
-				roomList,
-				userGameList
+				gameList
 		);
 	}
 }

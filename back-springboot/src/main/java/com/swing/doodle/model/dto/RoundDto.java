@@ -1,6 +1,7 @@
 package com.swing.doodle.model.dto;
 
-import com.swing.five.model.entity.Word;
+import com.swing.doodle.model.entity.Round;
+import com.swing.five.model.dto.WordDto;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -16,8 +17,20 @@ import java.util.List;
 public class RoundDto {
 	
 	private Integer roundId;
-	private GameDto game;
+//	private GameDto game;
 	private int roundNo;
-	private Word keyword;
-	private List<HistoryDto> histories = new ArrayList<>();
+	private WordDto keyword;
+	private List<HistoryDto> historyList = new ArrayList<>();
+	
+	public static RoundDto toDto(Round round){
+		List<HistoryDto> historyList = new ArrayList<>();
+		round.getHistoryList().forEach(x->historyList.add(HistoryDto.toDto(x)));
+		
+		return new RoundDto(
+				round.getRoundId(),
+				round.getRoundNo(),
+				WordDto.toDto(round.getKeyword()),
+				historyList
+		);
+	}
 }
