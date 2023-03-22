@@ -49,7 +49,7 @@ public class SentencyController {
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error("사진 업로드 실패 : {}", e);
-			resultMap.put("message", e.getMessage());
+			resultMap.put("message", FAIL);
 			status = HttpStatus.INTERNAL_SERVER_ERROR;
 		}
 		
@@ -63,12 +63,11 @@ public class SentencyController {
 			@PathVariable @ApiParam(value = "점수", required = true) Integer score) {
 		
 		Map<String, Object> resultMap = new HashMap<>();
-		HttpStatus status;
+		HttpStatus status = HttpStatus.OK;
 		
 		try {
 			sentencyService.saveResult(userId, score);
 			resultMap.put("message", SUCCESS);
-			status = HttpStatus.OK;
 			// 결과 저장 성공한 경우, 성공 메시지 반환, 200 응답 코드
 		} catch (Exception e) {
 			logger.error("게임 결과 저장 실패 : {}", e);
@@ -84,13 +83,12 @@ public class SentencyController {
 	public ResponseEntity<?> getSentency() {
 		
 		Map<String, Object> resultMap = new HashMap<>();
-		HttpStatus status;
+		HttpStatus status = HttpStatus.OK;
 		
 		try {
 			Sentence sentence = sentencyService.getSentency();
 			resultMap.put("message", SUCCESS);
 			resultMap.put("sentence", SentenceDto.toDto(sentence));
-			status = HttpStatus.OK;
 			// 결과 저장 성공한 경우, 성공 메시지 반환, 200 응답 코드
 		} catch (Exception e) {
 			logger.error("게임 결과 저장 실패 : {}", e);

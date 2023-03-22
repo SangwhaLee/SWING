@@ -78,10 +78,10 @@ public class FiveController {
 	}
 	
 	@ApiOperation(value = "결과 저장", notes = "게임 결과 저장 API", response = Map.class)
-	@PostMapping("")
+	@PutMapping("/{userId}/{score}")
 	public ResponseEntity<?> saveResult (
-			@RequestBody @ApiParam(value = "유저 ID", required = true) String userId,
-			@RequestBody @ApiParam(value = "점수", required = true) int score) {
+			@PathVariable @ApiParam(value = "유저 ID", required = true) String userId,
+			@PathVariable @ApiParam(value = "점수", required = true) int score) {
 		
 		Map<String, Object> resultMap = new HashMap<>();
 		HttpStatus status = HttpStatus.OK;
