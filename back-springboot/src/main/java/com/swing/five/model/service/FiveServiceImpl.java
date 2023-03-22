@@ -1,6 +1,7 @@
 package com.swing.five.model.service;
 
 import com.swing.five.model.dto.FiveRankDto;
+import com.swing.five.model.dto.WordDto;
 import com.swing.five.model.entity.FiveRank;
 import com.swing.five.model.entity.Word;
 import com.swing.five.model.repository.FiveRankRepository;
@@ -44,6 +45,13 @@ public class FiveServiceImpl implements FiveService {
 	}
 	
 	@Override
+	public List<WordDto> getFive () {
+		List<WordDto> wordDtoList = new ArrayList<>();
+		wordRepository.findFive().forEach(x -> wordDtoList.add(WordDto.toDto(x)));
+		return wordDtoList;
+	}
+	
+	@Override
 	public FiveRank saveResult (String userId, int score) {
 		FiveRank fiveRank = new FiveRank();
 		fiveRank.setUser(userRepository.findByUserId(userId));
@@ -59,5 +67,6 @@ public class FiveServiceImpl implements FiveService {
 		fiveRankDtoList.add(FiveRankDto.toDto(fiveRankRepository.findByUserUserId(userId)));
 		return fiveRankDtoList;
 	}
+	
 	
 }
