@@ -53,8 +53,7 @@ public class FiveServiceImpl implements FiveService {
 	
 	@Override
 	public FiveRank saveResult (String userId, int score) {
-		FiveRank fiveRank = new FiveRank();
-		fiveRank.setUser(userRepository.findByUserId(userId));
+		FiveRank fiveRank = fiveRankRepository.findByUser_UserId(userId);
 		fiveRank.setScore(score);
 		return fiveRankRepository.save(fiveRank);
 	}
@@ -64,7 +63,7 @@ public class FiveServiceImpl implements FiveService {
 		List<FiveRankDto> fiveRankDtoList = new ArrayList<>();
 		List<FiveRank> fiveRankList = fiveRankRepository.findTop7ByOrderByScoreDesc();
 		fiveRankList.forEach(x -> fiveRankDtoList.add(FiveRankDto.toDto(x)));
-		fiveRankDtoList.add(FiveRankDto.toDto(fiveRankRepository.findByUserUserId(userId)));
+		fiveRankDtoList.add(FiveRankDto.toDto(fiveRankRepository.findByUser_UserId(userId)));
 		return fiveRankDtoList;
 	}
 	

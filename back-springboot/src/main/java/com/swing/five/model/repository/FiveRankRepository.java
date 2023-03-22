@@ -12,5 +12,5 @@ public interface FiveRankRepository extends JpaRepository<FiveRank, Integer> {
 	
 	List<FiveRank> findTop7ByOrderByScoreDesc ();
 	
-	FiveRank findByUserUserId (String userId);
+	FiveRank findByUser_UserId (String userId);
 }

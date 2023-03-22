@@ -107,8 +107,10 @@ public class FiveController {
 		HttpStatus status = HttpStatus.OK;
 		
 		try {
+			System.out.println("서비스 가기 전");
 			List<FiveRankDto> fiveRankDtoList = fiveService.getRank(userId);
 			resultMap.put("list", fiveRankDtoList);
+			resultMap.put("message", SUCCESS);
 		} catch (Exception e) {
 			logger.error("Hi-five 랭킹 조회 실패 : {}", e);
 			resultMap.put("message", FAIL);
