@@ -66,7 +66,7 @@ public class FiveController {
 		
 		try {
 			List<WordDto> wordDtoList = fiveService.getFive();
-			resultMap.put("list", wordDtoList);
+			resultMap.put("wordList", wordDtoList);
 			resultMap.put("message", SUCCESS);
 		} catch (Exception e) {
 			logger.error("이미지 5개 조회 실패 : {}", e);
@@ -107,9 +107,8 @@ public class FiveController {
 		HttpStatus status = HttpStatus.OK;
 		
 		try {
-			System.out.println("서비스 가기 전");
 			List<FiveRankDto> fiveRankDtoList = fiveService.getRank(userId);
-			resultMap.put("list", fiveRankDtoList);
+			resultMap.put("fiveRankList", fiveRankDtoList);
 			resultMap.put("message", SUCCESS);
 		} catch (Exception e) {
 			logger.error("Hi-five 랭킹 조회 실패 : {}", e);
