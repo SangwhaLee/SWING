@@ -24,13 +24,14 @@ public class UserServiceImpl implements UserService {
 		
 		User user = userRepository.findByUserId(loginUser.getUserId());
 		
-		if(user==null){ // 새로 가입
+		if(user==null) { // 새로 가입
 			loginUser.setNickname(loginUser.getUserId());
 			loginUser.setCoupon(0);
 			loginUser.setSentencyCnt(3);
 			loginUser.setFiveCnt(1);
+			//fiveRank 추가
+			//sentencyRank 추가
 		}
-		
 		
 		return null;
 	}
@@ -38,6 +39,22 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public String upload (MultipartFile image) throws IOException {
 		return uploadFeedImages(image);
+	}
+	
+	@Override
+	public int getSentencyCnt(String userId) throws IOException {
+		User user = userRepository.findByUserId(userId);
+		if(user!=null){
+			return user.getSentencyCnt();
+		}
+		return 0;
+	}
+	
+	@Override
+	public void setSentencyCnt(String userId, int sentencyCnt) throws IOException {
+		User user = userRepository.findByUserId(userId);
+		user.setSentencyCnt(sentencyCnt);
+		userRepository.save(user);
 	}
 	
 	/**
