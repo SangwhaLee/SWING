@@ -80,4 +80,50 @@ public class UserController {
 		
 	}
 	
+	@ApiOperation(value = "sentency 1일 도전횟수 조회", notes = "sentency 도전횟수 조회 API", response = Map.class)
+	@GetMapping("/sentency/{userId}")
+	public ResponseEntity<?> getSentencyCnt(
+			@PathVariable @ApiParam(value = "유저 아이디") String userId) {
+
+		Map<String, Object> resultMap = new HashMap<>();
+		HttpStatus status;
+
+		try {
+			int sentencyCnt = userService.getSentencyCnt(userId);
+			resultMap.put("message", SUCCESS);
+			resultMap.put("sentencyCnt", sentencyCnt);
+			status = HttpStatus.OK;
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("sentency 일일 도전횟수 조회 실패 : {}", e);
+			resultMap.put("message", e.getMessage());
+			status = HttpStatus.INTERNAL_SERVER_ERROR;
+		}
+
+		return new ResponseEntity<>(resultMap, status);
+
+	}
+	@ApiOperation(value = "sentency 1일 도전횟수 수정", notes = "sentency 도전횟수 수정 API", response = Map.class)
+	@PutMapping("/sentency/{userId}/{sentencyCnt}")
+	public ResponseEntity<?> setSentencyCnt(
+			@PathVariable @ApiParam(value = "유저 아이디") String userId,
+			@PathVariable @ApiParam(value = "수정 값") int sentencyCnt) {
+		
+		Map<String, Object> resultMap = new HashMap<>();
+		HttpStatus status;
+		
+		try {
+			userService.setSentencyCnt(userId,sentencyCnt);
+			resultMap.put("message", SUCCESS);
+			status = HttpStatus.OK;
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("sentency 일일 도전횟수 수정 실패 : {}", e);
+			resultMap.put("message", e.getMessage());
+			status = HttpStatus.INTERNAL_SERVER_ERROR;
+		}
+		
+		return new ResponseEntity<>(resultMap, status);
+		
+	}
 }
