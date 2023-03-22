@@ -31,5 +31,5 @@ public class Round {
 	private Word keyword;
 	
 	@OneToMany(mappedBy = "round")
-	private List<History> histories = new ArrayList<>();
+	private List<History> historyList = new ArrayList<>();
 }

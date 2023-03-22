@@ -12,6 +12,7 @@ import lombok.*;
 import javax.persistence.Entity;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.persistence.OneToOne;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -35,11 +36,11 @@ public class User {
 	
 	private int coupon;
 	
-	@OneToMany(mappedBy = "user")
-	private List<FiveRank> fiveRankList = new ArrayList<>();
+	@OneToOne(mappedBy = "user")
+	private FiveRank fiveRank;
 	
-	@OneToMany(mappedBy = "user")
-	private List<SentencyRank> sentencyRankList = new ArrayList<>();
+	@OneToOne(mappedBy = "user")
+	private SentencyRank sentencyRank;
 	
 	@OneToMany(mappedBy = "user")
 	private List<WordNote> wordNoteList = new ArrayList<>();

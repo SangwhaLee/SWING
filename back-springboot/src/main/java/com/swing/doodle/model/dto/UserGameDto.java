@@ -11,9 +11,7 @@ import lombok.*;
 public class UserGameDto {
 
 	private Integer userGameId;
-
 	private GameDto game;
-	
 	private User user;
 	
 	
