@@ -23,13 +23,13 @@ import java.util.Map;
 @Api(tags = {"회원 관리 API"})
 public class UserController {
 	
+	@Autowired
+	private UserService userService;
+	
 	public static final Logger logger = LoggerFactory.getLogger(UserController.class);
 	private static final String SUCCESS = "success";
 	private static final String FAIL = "fail";
 	private static final String ALREADY_EXIST = "already exists";
-	
-	@Autowired
-	private UserService userService;
 	
 	@ApiOperation(value = "소셜 로그인", notes = "소셜 로그인 API", response = Map.class)
 	@PostMapping("")
