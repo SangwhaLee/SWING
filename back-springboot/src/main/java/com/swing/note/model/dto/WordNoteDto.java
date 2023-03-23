@@ -29,7 +29,7 @@ public class WordNoteDto {
 		WordDto wordDto = WordDto.toDto(wordNote.getWord());
 		
 		return new WordNoteDto(
-			wordNote.getWordNoteId(),
+				wordNote.getWordNoteId(),
 				userDto.getUserId(),
 				userDto.getNickname(),
 				userDto.getProfileImageUrl(),
