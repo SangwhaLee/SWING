@@ -3,6 +3,7 @@ package com.swing.note.model.entity;
 import com.swing.five.model.entity.Word;
 import com.swing.user.model.entity.User;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 
@@ -25,5 +26,6 @@ public class WordNote {
 	@JoinColumn(name = "wordId")
 	private Word word;
 	
+	@ColumnDefault("0")
 	private int check;
 }
