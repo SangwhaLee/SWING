@@ -42,9 +42,9 @@ public class UserServiceImpl implements UserService {
 	}
 	
 	@Override
-	public int getSentencyCnt(String userId) {
+	public User getSentencyCnt(String userId) {
 		User user = userRepository.findByUserId(userId);
-		return user == null ? 0 : user.getSentencyCnt();
+		return user;
 	}
 	
 	@Override

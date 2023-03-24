@@ -86,9 +86,10 @@ public class UserController {
 		HttpStatus status = HttpStatus.OK;
 		
 		try {
-			int sentencyCnt = userService.getSentencyCnt(userId);
+			User user = userService.getSentencyCnt(userId);
 			resultMap.put("message", SUCCESS);
-			resultMap.put("sentencyCnt", sentencyCnt);
+			resultMap.put("sentencyCnt", user.getSentencyCnt());
+			resultMap.put("coupon", user.getCoupon());
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error("sentency 일일 도전횟수 조회 실패 : {}", e);
