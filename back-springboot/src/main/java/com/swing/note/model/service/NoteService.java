@@ -8,4 +8,6 @@ public interface NoteService {
 	boolean saveWord (String userId, int wordId);
 	
 	List<GetWordNoteDto> getWords (String userId, int key);
+	
+	void checkWord (int wordNoteId);
 }

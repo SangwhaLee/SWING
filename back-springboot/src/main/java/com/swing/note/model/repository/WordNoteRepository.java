@@ -17,4 +17,6 @@ public interface WordNoteRepository extends JpaRepository<WordNote, Integer> {
 	List<WordNote> findFiveByUser_UserId (@Param("userId") String userId);
 	
 	WordNote findByUser_UserIdAndWord_WordId (String userId, int wordId);
+	
+	WordNote findByWordNoteId (int wordNoteId);
 }

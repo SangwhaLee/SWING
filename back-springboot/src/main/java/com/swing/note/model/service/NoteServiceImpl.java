@@ -1,12 +1,10 @@
 package com.swing.note.model.service;
 
-import com.swing.five.model.entity.Word;
 import com.swing.five.model.repository.WordRepository;
 import com.swing.note.model.dto.GetWordNoteDto;
 import com.swing.note.model.entity.WordNote;
 import com.swing.note.model.repository.SentenceNoteRepository;
 import com.swing.note.model.repository.WordNoteRepository;
-import com.swing.user.model.entity.User;
 import com.swing.user.model.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -52,5 +50,11 @@ public class NoteServiceImpl implements NoteService {
 		return wordNoteList.stream().map(x -> GetWordNoteDto.toDto(x)).collect(toList());
 	}
 	
+	@Override
+	public void checkWord (int wordNoteId) {
+		WordNote wordNote = wordNoteRepository.findByWordNoteId(wordNoteId);
+		wordNote.setChecked(wordNote.getChecked() == 0 ? 1 : 0);
+		wordNoteRepository.save(wordNote);
+	}
 	
 }
