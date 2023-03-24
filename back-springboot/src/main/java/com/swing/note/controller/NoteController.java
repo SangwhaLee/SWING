@@ -1,7 +1,6 @@
 package com.swing.note.controller;
 
 import com.swing.note.model.dto.GetWordNoteDto;
-import com.swing.note.model.dto.WordNoteDto;
 import com.swing.note.model.service.NoteService;
 import com.swing.user.controller.UserController;
 import io.swagger.annotations.Api;
@@ -32,6 +31,28 @@ public class NoteController {
 	private static final String FAIL = "fail";
 	private static final String ALREADY_EXIST = "already exists";
 	
+	@ApiOperation(value = "틀린 단어 저장", notes = "틀린 단어 저장 API", response = Map.class)
+	@PostMapping("/word/{userId}/{wordId}")
+	public ResponseEntity<?> saveWord (
+			@PathVariable @ApiParam(value = "유저 ID", required = true) String userId,
+			@PathVariable @ApiParam(value = "단어 등록 번호", required = true) int wordId) {
+		
+		Map<String, Object> resultMap = new HashMap<>();
+		HttpStatus status = HttpStatus.OK;
+		
+		try {
+			if (noteService.saveWord(userId, wordId)) resultMap.put("message", SUCCESS);
+			else resultMap.put("message", ALREADY_EXIST);
+		} catch (Exception e) {
+			logger.error("틀린 단어 저장 실패 : {}", e);
+			resultMap.put("message", FAIL);
+			status = HttpStatus.INTERNAL_SERVER_ERROR;
+		}
+		
+		return new ResponseEntity<>(resultMap, status);
+		
+	}
+	
 	@ApiOperation(value = "틀린 단어 조회", notes = "틀린 단어 조회 API, key가 0 -> 전체 조회, 1 -> 5개 랜덤 조회", response = Map.class)
 	@GetMapping("/word/{userId}/{key}")
 	public ResponseEntity<?> getWords (
@@ -46,12 +67,13 @@ public class NoteController {
 			resultMap.put("wordNoteList", getWordNoteDtoList);
 			resultMap.put("message", SUCCESS);
 		} catch (Exception e) {
-			logger.error("단어 조회 실패 : {}", e);
+			logger.error("틀린 단어 조회 실패 : {}", e);
 			resultMap.put("message", FAIL);
 			status = HttpStatus.INTERNAL_SERVER_ERROR;
 		}
 		
 		return new ResponseEntity<>(resultMap, status);
+		
 	}
 	
 }

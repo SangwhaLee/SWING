@@ -22,7 +22,7 @@ public class WordNoteDto {
 	private String content;
 	private String meaningKr;
 	private String meaningEn;
-	private int check;
+	private int checked;
 	
 	public static WordNoteDto toDto(WordNote wordNote) {
 		UserDto userDto = UserDto.toDto(wordNote.getUser());
@@ -38,7 +38,7 @@ public class WordNoteDto {
 				wordDto.getContent(),
 				wordDto.getMeaningKr(),
 				wordDto.getMeaningEn(),
-				wordNote.getCheck()
+				wordNote.getChecked()
 		);
 	}
 }

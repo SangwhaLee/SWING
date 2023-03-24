@@ -15,4 +15,6 @@ public interface WordNoteRepository extends JpaRepository<WordNote, Integer> {
 	
 	@Query(value = "SELECT * FROM word_note WHERE user_id = :userId ORDER BY RAND() LIMIT 5", nativeQuery = true)
 	List<WordNote> findFiveByUser_UserId (@Param("userId") String userId);
+	
+	WordNote findByUser_UserIdAndWord_WordId (String userId, int wordId);
 }

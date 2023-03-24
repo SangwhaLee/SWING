@@ -27,5 +27,5 @@ public class WordNote {
 	private Word word;
 	
 	@ColumnDefault("0")
-	private int check;
+	private int checked;
 }
