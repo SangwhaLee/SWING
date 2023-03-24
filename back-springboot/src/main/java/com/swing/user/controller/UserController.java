@@ -100,6 +100,7 @@ public class UserController {
 		return new ResponseEntity<>(resultMap, status);
 		
 	}
+
 	
 	@ApiOperation(value = "sentency 1일 도전횟수 수정", notes = "sentency 도전횟수 수정 API", response = Map.class)
 	@PutMapping("/sentency/{userId}/{sentencyCnt}")
@@ -170,4 +171,26 @@ public class UserController {
 		
 	}
 	
+	@ApiOperation(value = "sentency 쿠폰 개수 수정", notes = "sentency 쿠폰 개수 수정 API", response = Map.class)
+	@PutMapping("/coupon/{userId}/{couponCnt}")
+	public ResponseEntity<?> setCouponCnt(
+			@PathVariable @ApiParam(value = "유저 아이디") String userId,
+			@PathVariable @ApiParam(value = "수정 값") int couponCnt) {
+		
+		Map<String, Object> resultMap = new HashMap<>();
+		HttpStatus status = HttpStatus.OK;
+		
+		try {
+			userService.setCouponCnt(userId,couponCnt);
+			resultMap.put("message", SUCCESS);
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("쿠폰 개수 수정 실패 : {}", e);
+			resultMap.put("message", FAIL);
+			status = HttpStatus.INTERNAL_SERVER_ERROR;
+		}
+		
+		return new ResponseEntity<>(resultMap, status);
+		
+	}
 }
