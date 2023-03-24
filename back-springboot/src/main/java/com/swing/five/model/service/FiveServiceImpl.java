@@ -1,10 +1,14 @@
 package com.swing.five.model.service;
 
 import com.swing.five.model.dto.FiveRankDto;
+import com.swing.five.model.dto.FiveResultDto;
+import com.swing.five.model.dto.FiveStatDto;
 import com.swing.five.model.dto.WordDto;
 import com.swing.five.model.entity.FiveRank;
+import com.swing.five.model.entity.FiveStat;
 import com.swing.five.model.entity.Word;
 import com.swing.five.model.repository.FiveRankRepository;
+import com.swing.five.model.repository.FiveStatRepository;
 import com.swing.five.model.repository.WordRepository;
 import com.swing.user.model.repository.UserRepository;
 import com.swing.util.S3Upload;
@@ -31,6 +35,9 @@ public class FiveServiceImpl implements FiveService {
 	@Autowired
 	private FiveRankRepository fiveRankRepository;
 	
+	@Autowired
+	private FiveStatRepository fiveStatRepository;
+	
 	@Override
 	public Word image (MultipartFile multipartFile, String content, String meaningKr, String meaningEn) throws IOException {
 		if (wordRepository.findByMeaningKr(meaningKr) == null) return null;
@@ -52,10 +59,37 @@ public class FiveServiceImpl implements FiveService {
 	}
 	
 	@Override
-	public FiveRank saveResult (String userId, int score) {
-		FiveRank fiveRank = fiveRankRepository.findByUser_UserId(userId);
-		fiveRank.setScore(score);
-		return fiveRankRepository.save(fiveRank);
+	public void saveRank (String userId, int dayScore) {
+		FiveRank fiveRank = new FiveRank();
+		fiveRank.setUser(userRepository.findByUserId(userId));
+		fiveRank.setScore(dayScore);
+		fiveRankRepository.save(fiveRank);
+	}
+	
+	@Override
+	public void saveResult (FiveResultDto fiveResultDto) {
+		// save to Five Rank
+		FiveRank fiveRank = fiveRankRepository.findByUser_UserId(fiveResultDto.getUserId());
+		fiveRank.setScore(fiveRank.getScore());
+		fiveRankRepository.save(fiveRank);
+		
+		// save to Five Stat
+		FiveStat oldStat = fiveStatRepository.findByUser_UserId(fiveResultDto.getUserId());
+		if (oldStat == null) {
+			FiveStat newStat = new FiveStat();
+			newStat.setUser(userRepository.findByUserId(fiveResultDto.getUserId()));
+			newStat.setTotalScore(fiveResultDto.getDayScore());
+			newStat.setTotalTry(fiveResultDto.getDayTry());
+			newStat.setTotalCorrect(fiveResultDto.getDayCorrect());
+			newStat.setStreak(fiveResultDto.getDayCorrect() == 5 ? 1 : 0);
+			fiveStatRepository.save(newStat);
+		} else {
+			oldStat.setTotalScore(oldStat.getTotalScore() + fiveResultDto.getDayScore());
+			oldStat.setTotalTry(oldStat.getTotalTry() + fiveResultDto.getDayTry());
+			oldStat.setTotalCorrect(oldStat.getTotalCorrect() + fiveResultDto.getDayCorrect());
+			oldStat.setStreak(fiveResultDto.getDayCorrect() == 5 ? oldStat.getStreak() + 1 : 0);
+			fiveStatRepository.save(oldStat);
+		}
 	}
 	
 	@Override
@@ -67,5 +101,9 @@ public class FiveServiceImpl implements FiveService {
 		return fiveRankDtoList;
 	}
 	
+	@Override
+	public FiveStatDto getStat (String userId) {
+		return FiveStatDto.toDto(fiveStatRepository.findByUser_UserId(userId));
+	}
 	
 }

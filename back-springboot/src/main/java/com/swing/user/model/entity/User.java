@@ -4,6 +4,7 @@ import com.swing.doodle.model.entity.History;
 import com.swing.doodle.model.entity.Room;
 import com.swing.doodle.model.entity.UserGame;
 import com.swing.five.model.entity.FiveRank;
+import com.swing.five.model.entity.FiveStat;
 import com.swing.note.model.entity.SentenceNote;
 import com.swing.note.model.entity.WordNote;
 import com.swing.sentency.model.entity.SentencyRank;
@@ -56,4 +57,7 @@ public class User {
 	
 	@OneToMany(mappedBy = "user")
 	private List<UserGame> userGameList = new ArrayList<>();
+	
+	@OneToOne(mappedBy = "user")
+	private FiveStat fiveStat;
 }

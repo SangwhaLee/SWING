@@ -1,6 +1,8 @@
 package com.swing.five.controller;
 
 import com.swing.five.model.dto.FiveRankDto;
+import com.swing.five.model.dto.FiveResultDto;
+import com.swing.five.model.dto.FiveStatDto;
 import com.swing.five.model.dto.WordDto;
 import com.swing.five.model.service.FiveService;
 import io.swagger.annotations.Api;
@@ -78,16 +80,16 @@ public class FiveController {
 	}
 	
 	@ApiOperation(value = "결과 저장", notes = "게임 결과 저장 API", response = Map.class)
-	@PutMapping("/{userId}/{score}")
+	@PutMapping("")
 	public ResponseEntity<?> saveResult (
-			@PathVariable @ApiParam(value = "유저 ID", required = true) String userId,
-			@PathVariable @ApiParam(value = "점수", required = true) int score) {
+			@RequestBody @ApiParam(value = "오늘 결과 정보", required = true) FiveResultDto fiveResultDto) {
 		
 		Map<String, Object> resultMap = new HashMap<>();
 		HttpStatus status = HttpStatus.OK;
 		
 		try {
-			fiveService.saveResult(userId, score);
+			fiveService.saveRank(fiveResultDto.getUserId(), fiveResultDto.getDayScore());
+			fiveService.saveResult(fiveResultDto);
 			resultMap.put("message", SUCCESS);
 		} catch (Exception e) {
 			logger.error("게임 결과 저장 실패 : {}", e);
@@ -98,17 +100,19 @@ public class FiveController {
 		return new ResponseEntity<>(resultMap, status);
 	}
 	
-	@ApiOperation(value = "Hi-five 랭킹 조회", notes = "Hi-five 랭킹 조회 API", response = Map.class)
+	@ApiOperation(value = "Hi-five 랭킹, 스탯 조회", notes = "Hi-five 랭킹, 스탯 조회 API", response = Map.class)
 	@GetMapping("/{userId}")
-	public ResponseEntity<?> getRank (
-			@PathVariable @ApiParam(value = "Hi-five 랭킹 조회할 유저 ID", required = true) String userId) {
+	public ResponseEntity<?> getRankAndStat (
+			@PathVariable @ApiParam(value = "Hi-five 랭킹, 스탯 조회할 유저 ID", required = true) String userId) {
 		
 		Map<String, Object> resultMap = new HashMap<>();
 		HttpStatus status = HttpStatus.OK;
 		
 		try {
 			List<FiveRankDto> fiveRankDtoList = fiveService.getRank(userId);
+			FiveStatDto fiveStatDto = fiveService.getStat(userId);
 			resultMap.put("fiveRankList", fiveRankDtoList);
+			resultMap.put("fiveStat", fiveStatDto);
 			resultMap.put("message", SUCCESS);
 		} catch (Exception e) {
 			logger.error("Hi-five 랭킹 조회 실패 : {}", e);
