@@ -1,5 +1,6 @@
 package com.swing.note.controller;
 
+import com.swing.note.model.dto.GetSentenceNoteDto;
 import com.swing.note.model.dto.GetWordNoteDto;
 import com.swing.note.model.service.NoteService;
 import com.swing.user.controller.UserController;
@@ -30,6 +31,12 @@ public class NoteController {
 	private static final String SUCCESS = "success";
 	private static final String FAIL = "fail";
 	private static final String ALREADY_EXIST = "already exists";
+	
+	/*
+	 *******************
+	 ** APIs for Word **
+	 *******************
+	 */
 	
 	@ApiOperation(value = "틀린 단어 저장", notes = "틀린 단어 저장 API", response = Map.class)
 	@PostMapping("/word/{userId}/{wordId}")
@@ -109,7 +116,100 @@ public class NoteController {
 			noteService.deleteWord(wordNoteId);
 			resultMap.put("message", SUCCESS);
 		} catch (Exception e) {
-			logger.error("틀린 단어 체크 실패 : {}", e);
+			logger.error("틀린 단어 삭제 실패 : {}", e);
+			resultMap.put("message", FAIL);
+			status = HttpStatus.INTERNAL_SERVER_ERROR;
+		}
+		
+		return new ResponseEntity<>(resultMap, status);
+		
+	}
+	
+	/*
+	 ***********************
+	 ** APIs for Sentence **
+	 ***********************
+	 */
+	
+	@ApiOperation(value = "틀린 문장 저장", notes = "틀린 문장 저장 API", response = Map.class)
+	@PostMapping("/sentence/{userId}/{sentenceId}")
+	public ResponseEntity<?> saveSentence (
+			@PathVariable @ApiParam(value = "유저 ID", required = true) String userId,
+			@PathVariable @ApiParam(value = "문장 등록 번호", required = true) int sentenceId) {
+		
+		Map<String, Object> resultMap = new HashMap<>();
+		HttpStatus status = HttpStatus.OK;
+		
+		try {
+			if (noteService.saveSentence(userId, sentenceId)) resultMap.put("message", SUCCESS);
+			else resultMap.put("message", ALREADY_EXIST);
+		} catch (Exception e) {
+			logger.error("틀린 문장 저장 실패 : {}", e);
+			resultMap.put("message", FAIL);
+			status = HttpStatus.INTERNAL_SERVER_ERROR;
+		}
+		
+		return new ResponseEntity<>(resultMap, status);
+		
+	}
+	
+	@ApiOperation(value = "틀린 문장 조회", notes = "틀린 문장 조회 API", response = Map.class)
+	@GetMapping("/sentence/{userId}/{key}")
+	public ResponseEntity<?> getSentences (
+			@PathVariable @ApiParam(value = "유저 ID", required = true) String userId,
+			@PathVariable @ApiParam(value = "0(전체 조회), 1(랜덤 1개 조회)", required = true) int key) {
+		
+		Map<String, Object> resultMap = new HashMap<>();
+		HttpStatus status = HttpStatus.OK;
+		
+		try {
+			List<GetSentenceNoteDto> getSentenceNoteDtoList = noteService.getSentences(userId, key);
+			resultMap.put("sentenceNoteList", getSentenceNoteDtoList);
+			resultMap.put("message", SUCCESS);
+		} catch (Exception e) {
+			logger.error("틀린 문장 조회 실패 : {}", e);
+			resultMap.put("message", FAIL);
+			status = HttpStatus.INTERNAL_SERVER_ERROR;
+		}
+		
+		return new ResponseEntity<>(resultMap, status);
+		
+	}
+	
+	@ApiOperation(value = "틀린 문장 체크", notes = "틀린 문장 체크 API", response = Map.class)
+	@PutMapping("/sentence/{sentenceNoteId}")
+	public ResponseEntity<?> checkSentence (
+			@PathVariable @ApiParam(value = "오답노트 등록 번호", required = true) int sentenceNoteId) {
+		
+		Map<String, Object> resultMap = new HashMap<>();
+		HttpStatus status = HttpStatus.OK;
+		
+		try {
+			noteService.checkSentence(sentenceNoteId);
+			resultMap.put("message", SUCCESS);
+		} catch (Exception e) {
+			logger.error("틀린 문장 체크 실패 : {}", e);
+			resultMap.put("message", FAIL);
+			status = HttpStatus.INTERNAL_SERVER_ERROR;
+		}
+		
+		return new ResponseEntity<>(resultMap, status);
+		
+	}
+	
+	@ApiOperation(value = "틀린 문장 삭제", notes = "틀린 문장 삭제 API", response = Map.class)
+	@DeleteMapping("/sentence/{sentenceNoteId}")
+	public ResponseEntity<?> deleteSentence (
+			@PathVariable @ApiParam(value = "오답노트 등록 번호", required = true) int sentenceNoteId) {
+		
+		Map<String, Object> resultMap = new HashMap<>();
+		HttpStatus status = HttpStatus.OK;
+		
+		try {
+			noteService.deleteSentence(sentenceNoteId);
+			resultMap.put("message", SUCCESS);
+		} catch (Exception e) {
+			logger.error("틀린 문장 삭제 실패 : {}", e);
 			resultMap.put("message", FAIL);
 			status = HttpStatus.INTERNAL_SERVER_ERROR;
 		}
