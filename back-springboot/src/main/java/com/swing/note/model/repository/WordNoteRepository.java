@@ -10,6 +10,9 @@ import java.util.List;
 
 @Repository
 public interface WordNoteRepository extends JpaRepository<WordNote, Integer> {
-	@Query(value = "SELECT word_id FROM word_note WHERE user_id = :userId", nativeQuery = true)
+	@Query(value = "SELECT * FROM word_note WHERE user_id = :userId", nativeQuery = true)
 	List<WordNote> findAllByUser_UserId (@Param("userId") String userId);
+	
+	@Query(value = "SELECT * FROM word_note WHERE user_id = :userId ORDER BY RAND() LIMIT 5", nativeQuery = true)
+	List<WordNote> findFiveByUser_UserId (@Param("userId") String userId);
 }
