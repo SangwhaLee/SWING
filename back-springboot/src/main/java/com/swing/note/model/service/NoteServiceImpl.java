@@ -57,4 +57,9 @@ public class NoteServiceImpl implements NoteService {
 		wordNoteRepository.save(wordNote);
 	}
 	
+	@Override
+	public void deleteWord (int wordNoteId) {
+		wordNoteRepository.delete(wordNoteRepository.findByWordNoteId(wordNoteId));
+	}
+	
 }

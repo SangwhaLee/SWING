@@ -10,4 +10,6 @@ public interface NoteService {
 	List<GetWordNoteDto> getWords (String userId, int key);
 	
 	void checkWord (int wordNoteId);
+	
+	void deleteWord (int wordNoteId);
 }
