@@ -3,6 +3,7 @@ package com.swing.note.model.entity;
 import com.swing.sentency.model.entity.Sentence;
 import com.swing.user.model.entity.User;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 
@@ -25,5 +26,6 @@ public class SentenceNote {
 	@JoinColumn(name = "sentenceId")
 	private Sentence sentence;
 	
-	private int check;
+	@ColumnDefault("0")
+	private int checked;
 }
