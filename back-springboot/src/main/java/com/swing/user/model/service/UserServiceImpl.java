@@ -67,6 +67,14 @@ public class UserServiceImpl implements UserService {
 		userRepository.save(user);
 	}
 	
+	@Override
+	public void setCouponCnt(String userId, int couponCnt) {
+		User user = userRepository.findByUserId(userId);
+		user.setCoupon(couponCnt);
+		
+		userRepository.save(user);
+	}
+	
 	/**
 	 * 이미지 업로드 처리 메서드
 	 */
