@@ -97,4 +97,25 @@ public class NoteController {
 		
 	}
 	
+	@ApiOperation(value = "틀린 단어 삭제", notes = "틀린 단어 삭제 API", response = Map.class)
+	@DeleteMapping("/word/{wordNoteId}")
+	public ResponseEntity<?> deleteWord (
+			@PathVariable @ApiParam(value = "오답노트 등록 번호", required = true) int wordNoteId) {
+		
+		Map<String, Object> resultMap = new HashMap<>();
+		HttpStatus status = HttpStatus.OK;
+		
+		try {
+			noteService.deleteWord(wordNoteId);
+			resultMap.put("message", SUCCESS);
+		} catch (Exception e) {
+			logger.error("틀린 단어 체크 실패 : {}", e);
+			resultMap.put("message", FAIL);
+			status = HttpStatus.INTERNAL_SERVER_ERROR;
+		}
+		
+		return new ResponseEntity<>(resultMap, status);
+		
+	}
+	
 }
