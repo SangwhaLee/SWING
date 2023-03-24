@@ -53,11 +53,11 @@ public class NoteController {
 		
 	}
 	
-	@ApiOperation(value = "틀린 단어 조회", notes = "틀린 단어 조회 API, key가 0 -> 전체 조회, 1 -> 5개 랜덤 조회", response = Map.class)
+	@ApiOperation(value = "틀린 단어 조회", notes = "틀린 단어 조회 API", response = Map.class)
 	@GetMapping("/word/{userId}/{key}")
 	public ResponseEntity<?> getWords (
 			@PathVariable @ApiParam(value = "유저 ID", required = true) String userId,
-			@PathVariable @ApiParam(value = "전체 조회 / 5개 랜덤 조회 판단할 key", required = true) int key) {
+			@PathVariable @ApiParam(value = "0(전체 조회), 1(랜덤 5개 조회)", required = true) int key) {
 		
 		Map<String, Object> resultMap = new HashMap<>();
 		HttpStatus status = HttpStatus.OK;
@@ -68,6 +68,27 @@ public class NoteController {
 			resultMap.put("message", SUCCESS);
 		} catch (Exception e) {
 			logger.error("틀린 단어 조회 실패 : {}", e);
+			resultMap.put("message", FAIL);
+			status = HttpStatus.INTERNAL_SERVER_ERROR;
+		}
+		
+		return new ResponseEntity<>(resultMap, status);
+		
+	}
+	
+	@ApiOperation(value = "틀린 단어 체크", notes = "틀린 단어 체크 API", response = Map.class)
+	@PutMapping("/word/{wordNoteId}")
+	public ResponseEntity<?> checkWord (
+			@PathVariable @ApiParam(value = "오답노트 등록 번호", required = true) int wordNoteId) {
+		
+		Map<String, Object> resultMap = new HashMap<>();
+		HttpStatus status = HttpStatus.OK;
+		
+		try {
+			noteService.checkWord(wordNoteId);
+			resultMap.put("message", SUCCESS);
+		} catch (Exception e) {
+			logger.error("틀린 단어 체크 실패 : {}", e);
 			resultMap.put("message", FAIL);
 			status = HttpStatus.INTERNAL_SERVER_ERROR;
 		}
