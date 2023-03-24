@@ -13,4 +13,6 @@ public interface WordRepository extends JpaRepository<Word, Integer> {
 	
 	@Query(value = "SELECT * FROM word ORDER BY RAND() LIMIT 5", nativeQuery = true)
 	List<Word> findFive ();
+	
+	Word findByWordId (int wordId);
 }
