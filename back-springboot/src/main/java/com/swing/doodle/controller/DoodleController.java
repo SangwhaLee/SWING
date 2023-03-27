@@ -83,4 +83,28 @@ public class DoodleController {
 		
 	}
 	
+	@ApiOperation(value = "방 검색", notes = "방 검색 API", response = Map.class)
+	@GetMapping("/room/{type}/{keyword}")
+	public ResponseEntity<?> searchRooms(
+			@PathVariable @ApiParam(value = "검색어 타입") String type,
+			@PathVariable @ApiParam(value = "검색어") String keyword) {
+		
+		Map<String, Object> resultMap = new HashMap<>();
+		HttpStatus status = HttpStatus.OK;
+		
+		try {
+			List<RoomDto> roomDtoList = doodleService.searchRooms(type, keyword);
+			resultMap.put("message", SUCCESS);
+			resultMap.put("roomList", roomDtoList);
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("방 검색 실패 : {}", e);
+			resultMap.put("message", FAIL);
+			status = HttpStatus.INTERNAL_SERVER_ERROR;
+		}
+		
+		return new ResponseEntity<>(resultMap, status);
+		
+	}
+	
 }
