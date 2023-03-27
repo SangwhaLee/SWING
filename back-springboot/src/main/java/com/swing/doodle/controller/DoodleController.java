@@ -61,7 +61,7 @@ public class DoodleController {
 		
 	}
 	
-	@ApiOperation(value = "방 조회", notes = "방 조회 API", response = Map.class)
+	@ApiOperation(value = "방 전체 조회", notes = "방 전체 조회 API", response = Map.class)
 	@GetMapping("/room")
 	public ResponseEntity<?> getAllRooms() {
 		
@@ -74,7 +74,7 @@ public class DoodleController {
 			resultMap.put("roomList", roomDtoList);
 		} catch (Exception e) {
 			e.printStackTrace();
-			logger.error("방 조회 실패 : {}", e);
+			logger.error("방 전체 조회 실패 : {}", e);
 			resultMap.put("message", FAIL);
 			status = HttpStatus.INTERNAL_SERVER_ERROR;
 		}
@@ -99,6 +99,28 @@ public class DoodleController {
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error("방 검색 실패 : {}", e);
+			resultMap.put("message", FAIL);
+			status = HttpStatus.INTERNAL_SERVER_ERROR;
+		}
+		
+		return new ResponseEntity<>(resultMap, status);
+		
+	}
+	
+	@ApiOperation(value = "방 삭제", notes = "방 삭제 API", response = Map.class)
+	@DeleteMapping("/room/{roomId}")
+	public ResponseEntity<?> deleteRoom(
+			@PathVariable @ApiParam(value = "검색어 타입") int roomId) {
+		
+		Map<String, Object> resultMap = new HashMap<>();
+		HttpStatus status = HttpStatus.OK;
+		
+		try {
+			doodleService.deleteRoom(roomId);
+			resultMap.put("message", SUCCESS);
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("방 삭제 실패 : {}", e);
 			resultMap.put("message", FAIL);
 			status = HttpStatus.INTERNAL_SERVER_ERROR;
 		}

@@ -46,4 +46,10 @@ public class DoodleServiceImpl implements DoodleService {
 		if ("roomId".equals(type)) return roomRepository.findAllByRoomIdLike(Integer.parseInt(keyword)).stream().map(RoomDto::toDto).collect(toList());
 		else return roomRepository.findAllByNameContaining(keyword).stream().map(RoomDto::toDto).collect(toList());
 	}
+	
+	@Override
+	public void deleteRoom (int roomId) {
+		roomRepository.delete(roomRepository.findByRoomId(roomId));
+	}
+	
 }
