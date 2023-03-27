@@ -14,5 +14,7 @@ public interface DoodleService {
 	
 	void deleteRoom (int roomId);
 	
-	int modifyMode (int roomId);
+	int modifyMode (int roomId, int mode);
+	
+	int start (int roomId);
 }
