@@ -12,6 +12,6 @@ import lombok.Setter;
 public class CreateRoomDto {
 	private String name;
 	private String code;
-	private String leader;
+	private String leaderId;
 	private int mode;
 }

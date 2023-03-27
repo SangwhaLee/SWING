@@ -30,6 +30,6 @@ public class Room {
 	
 	private int mode;
 	
-	@OneToMany(mappedBy = "room")
-	private List<Game> games = new ArrayList<>();
+//	@OneToMany(mappedBy = "room")
+//	private List<Game> games = new ArrayList<>();
 }
