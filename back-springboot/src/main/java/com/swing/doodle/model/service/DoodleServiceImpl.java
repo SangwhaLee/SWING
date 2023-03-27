@@ -4,6 +4,8 @@ import com.swing.doodle.model.dto.CreateRoomDto;
 import com.swing.doodle.model.dto.RoomDto;
 import com.swing.doodle.model.entity.Room;
 import com.swing.doodle.model.repository.RoomRepository;
+import com.swing.five.model.dto.WordDto;
+import com.swing.five.model.repository.WordRepository;
 import com.swing.user.model.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,6 +22,9 @@ public class DoodleServiceImpl implements DoodleService {
 	
 	@Autowired
 	private UserRepository userRepository;
+	
+	@Autowired
+	private WordRepository wordRepository;
 	
 	@Override
 	public int createRoom (CreateRoomDto createRoomDto) {
@@ -61,11 +66,16 @@ public class DoodleServiceImpl implements DoodleService {
 	}
 	
 	@Override
-	public int start (int roomId) {
+	public int lockRoom (int roomId) {
 		Room room = roomRepository.findByRoomId(roomId);
 		room.setStarted(room.getStarted() == 1 ? 0 : 1);
 		roomRepository.save(room);
 		return room.getStarted();
+	}
+	
+	@Override
+	public List<WordDto> getFive () {
+		return wordRepository.findFive().stream().map(WordDto::toDto).collect(toList());
 	}
 	
 }

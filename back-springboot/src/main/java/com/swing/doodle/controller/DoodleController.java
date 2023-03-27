@@ -3,6 +3,7 @@ package com.swing.doodle.controller;
 import com.swing.doodle.model.dto.CreateRoomDto;
 import com.swing.doodle.model.dto.RoomDto;
 import com.swing.doodle.model.service.DoodleService;
+import com.swing.five.model.dto.WordDto;
 import com.swing.user.controller.UserController;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -62,7 +63,7 @@ public class DoodleController {
 	}
 	
 	@ApiOperation(value = "방 전체 조회", notes = "방 전체 조회 API", response = Map.class)
-	@GetMapping("/room")
+	@GetMapping("/rooms")
 	public ResponseEntity<?> getAllRooms() {
 		
 		Map<String, Object> resultMap = new HashMap<>();
@@ -84,7 +85,7 @@ public class DoodleController {
 	}
 	
 	@ApiOperation(value = "방 검색", notes = "방 검색 API", response = Map.class)
-	@GetMapping("/room/{type}/{keyword}")
+	@GetMapping("/rooms/{type}/{keyword}")
 	public ResponseEntity<?> searchRooms(
 			@PathVariable @ApiParam(value = "검색어 타입") String type,
 			@PathVariable @ApiParam(value = "검색어") String keyword) {
@@ -153,21 +154,43 @@ public class DoodleController {
 		
 	}
 	
-	@ApiOperation(value = "게임 시작", notes = "게임 시작 API", response = Map.class)
-	@PutMapping("/room/start/{roomId}")
-	public ResponseEntity<?> start(
+	@ApiOperation(value = "게임 시작(방 잠금 설정)", notes = "게임 시작(방 잠금 설정) API", response = Map.class)
+	@PutMapping("/start/{roomId}")
+	public ResponseEntity<?> lockRoom(
 			@PathVariable @ApiParam(value = "방 번호") int roomId) {
 		
 		Map<String, Object> resultMap = new HashMap<>();
 		HttpStatus status = HttpStatus.OK;
 		
 		try {
-			int started = doodleService.start(roomId);
+			int started = doodleService.lockRoom(roomId);
 			resultMap.put("message", SUCCESS);
 			resultMap.put("started", started);
 		} catch (Exception e) {
 			e.printStackTrace();
-			logger.error("게임 시작 실패 : {}", e);
+			logger.error("게임 시작(방 잠금 설정) 실패 : {}", e);
+			resultMap.put("message", FAIL);
+			status = HttpStatus.INTERNAL_SERVER_ERROR;
+		}
+		
+		return new ResponseEntity<>(resultMap, status);
+		
+	}
+	
+	@ApiOperation(value = "게임 시작(사진 5개 조회)", notes = "게임 시작(사진 5개 조회) API", response = Map.class)
+	@GetMapping("/start")
+	public ResponseEntity<?> getFive() {
+		
+		Map<String, Object> resultMap = new HashMap<>();
+		HttpStatus status = HttpStatus.OK;
+		
+		try {
+			List<WordDto> wordDtoList = doodleService.getFive();
+			resultMap.put("message", SUCCESS);
+			resultMap.put("wordList", wordDtoList);
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("게임 시작(사진 5개 조회) 실패 : {}", e);
 			resultMap.put("message", FAIL);
 			status = HttpStatus.INTERNAL_SERVER_ERROR;
 		}
