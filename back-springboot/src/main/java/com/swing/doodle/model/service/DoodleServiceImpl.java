@@ -52,4 +52,12 @@ public class DoodleServiceImpl implements DoodleService {
 		roomRepository.delete(roomRepository.findByRoomId(roomId));
 	}
 	
+	@Override
+	public int modifyMode (int roomId) {
+		Room room = roomRepository.findByRoomId(roomId);
+		room.setMode(room.getMode() == 0 ? 1 : 0);
+		roomRepository.save(room);
+		return room.getMode();
+	}
+	
 }

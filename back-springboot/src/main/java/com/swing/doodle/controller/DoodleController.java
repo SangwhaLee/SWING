@@ -129,4 +129,27 @@ public class DoodleController {
 		
 	}
 	
+	@ApiOperation(value = "방 모드 변경", notes = "방 모드 변경 API", response = Map.class)
+	@PutMapping("/room/{roomId}")
+	public ResponseEntity<?> modifyMode(
+			@PathVariable @ApiParam(value = "방 번호") int roomId) {
+		
+		Map<String, Object> resultMap = new HashMap<>();
+		HttpStatus status = HttpStatus.OK;
+		
+		try {
+			int mode = doodleService.modifyMode(roomId);
+			resultMap.put("message", SUCCESS);
+			resultMap.put("mode", mode);
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("방 모드 변경 실패 : {}", e);
+			resultMap.put("message", FAIL);
+			status = HttpStatus.INTERNAL_SERVER_ERROR;
+		}
+		
+		return new ResponseEntity<>(resultMap, status);
+		
+	}
+	
 }

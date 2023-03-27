@@ -13,4 +13,6 @@ public interface DoodleService {
 	List<RoomDto> searchRooms (String type, String keyword);
 	
 	void deleteRoom (int roomId);
+	
+	int modifyMode (int roomId);
 }
