@@ -53,11 +53,19 @@ public class DoodleServiceImpl implements DoodleService {
 	}
 	
 	@Override
-	public int modifyMode (int roomId) {
+	public int modifyMode (int roomId, int mode) {
 		Room room = roomRepository.findByRoomId(roomId);
-		room.setMode(room.getMode() == 0 ? 1 : 0);
+		room.setMode(mode);
 		roomRepository.save(room);
 		return room.getMode();
+	}
+	
+	@Override
+	public int start (int roomId) {
+		Room room = roomRepository.findByRoomId(roomId);
+		room.setStarted(room.getStarted() == 1 ? 0 : 1);
+		roomRepository.save(room);
+		return room.getStarted();
 	}
 	
 }

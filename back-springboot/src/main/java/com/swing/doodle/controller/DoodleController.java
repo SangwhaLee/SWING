@@ -130,20 +130,44 @@ public class DoodleController {
 	}
 	
 	@ApiOperation(value = "방 모드 변경", notes = "방 모드 변경 API", response = Map.class)
-	@PutMapping("/room/{roomId}")
+	@PutMapping("/room/{roomId}/{mode}")
 	public ResponseEntity<?> modifyMode(
+			@PathVariable @ApiParam(value = "방 번호") int roomId,
+			@PathVariable @ApiParam(value = "모드") int mode) {
+		
+		Map<String, Object> resultMap = new HashMap<>();
+		HttpStatus status = HttpStatus.OK;
+		
+		try {
+			int changedMode = doodleService.modifyMode(roomId, mode);
+			resultMap.put("message", SUCCESS);
+			resultMap.put("changedMode", changedMode);
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("방 모드 변경 실패 : {}", e);
+			resultMap.put("message", FAIL);
+			status = HttpStatus.INTERNAL_SERVER_ERROR;
+		}
+		
+		return new ResponseEntity<>(resultMap, status);
+		
+	}
+	
+	@ApiOperation(value = "게임 시작", notes = "게임 시작 API", response = Map.class)
+	@PutMapping("/room/start/{roomId}")
+	public ResponseEntity<?> start(
 			@PathVariable @ApiParam(value = "방 번호") int roomId) {
 		
 		Map<String, Object> resultMap = new HashMap<>();
 		HttpStatus status = HttpStatus.OK;
 		
 		try {
-			int mode = doodleService.modifyMode(roomId);
+			int started = doodleService.start(roomId);
 			resultMap.put("message", SUCCESS);
-			resultMap.put("mode", mode);
+			resultMap.put("started", started);
 		} catch (Exception e) {
 			e.printStackTrace();
-			logger.error("방 모드 변경 실패 : {}", e);
+			logger.error("게임 시작 실패 : {}", e);
 			resultMap.put("message", FAIL);
 			status = HttpStatus.INTERNAL_SERVER_ERROR;
 		}
