@@ -9,4 +9,6 @@ public interface DoodleService {
 	int createRoom (CreateRoomDto createRoomDto);
 	
 	List<RoomDto> getAllRooms ();
+	
+	List<RoomDto> searchRooms (String type, String keyword);
 }
