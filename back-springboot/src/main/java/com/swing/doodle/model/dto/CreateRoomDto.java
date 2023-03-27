@@ -1,6 +1,5 @@
 package com.swing.doodle.model.dto;
 
-import com.swing.doodle.model.entity.Room;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -10,20 +9,9 @@ import lombok.Setter;
 @Setter
 @AllArgsConstructor
 @NoArgsConstructor
-public class RoomDto {
-	private Integer roomId;
+public class CreateRoomDto {
 	private String name;
 	private String code;
 	private String leader;
 	private int mode;
-	
-	public static RoomDto toDto(Room room){
-		return new RoomDto(
-				room.getRoomId(),
-				room.getName(),
-				room.getCode(),
-				room.getLeader().getNickname(),
-				room.getMode()
-		);
-	}
 }

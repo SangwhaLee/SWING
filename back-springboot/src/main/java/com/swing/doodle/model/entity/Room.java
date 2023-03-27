@@ -22,9 +22,7 @@ public class Room {
 	
 	private String name;
 	
-	private int code;
-	
-	private int closed;
+	private String code;
 	
 	@OneToOne
 	@JoinColumn(name = "leaderId")
