@@ -59,11 +59,20 @@ public class SentencyServiceImpl implements SentencyService {
 	@Override
 	public SentencyRank saveResult(String userId, int score) {
 		SentencyRank sentencyRank = sentencyRankRepository.findByUser_UserId(userId);
-		if(sentencyRank.getScore()<score){
-			sentencyRank.setScore(score);
+		if(sentencyRank==null){
 			User user = userRepository.findByUserId(userId);
-			user.setSentencyRank(sentencyRank);
-			userRepository.save(user);
+			sentencyRank = new SentencyRank();
+			sentencyRank.setUser(user);
+			sentencyRank.setScore(score);
+//			user.setSentencyRank(sentencyRank);
+//			userRepository.save(user);
+			return sentencyRankRepository.save(sentencyRank);
+		}
+		else if(sentencyRank.getScore()<score){
+			sentencyRank.setScore(score);
+//			User user = userRepository.findByUserId(userId);
+//			user.setSentencyRank(sentencyRank);
+//			userRepository.save(user);
 			return sentencyRankRepository.save(sentencyRank);
 		}
 		return sentencyRank;
