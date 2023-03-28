@@ -11,12 +11,13 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class RoomDto {
-	private Integer roomId;
+	private int roomId;
 	private String name;
 	private String code;
 	private int started;
 	private String leaderNickname;
 	private int mode;
+	private int userCnt;
 	
 	public static RoomDto toDto(Room room){
 		return new RoomDto(
@@ -25,7 +26,8 @@ public class RoomDto {
 				room.getCode(),
 				room.getStarted(),
 				room.getLeader().getNickname(),
-				room.getMode()
+				room.getMode(),
+				room.getUserCnt()
 		);
 	}
 }
