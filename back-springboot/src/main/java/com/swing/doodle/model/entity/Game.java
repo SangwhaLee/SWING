@@ -22,10 +22,14 @@ public class Game {
 	@JoinColumn(name = "roomId")
 	private Room room;
 	
-	@OneToMany(mappedBy = "game")
+	@OneToMany(mappedBy = "game",
+			cascade = CascadeType.ALL,
+			orphanRemoval = true)
 	private List<Round> rounds = new ArrayList<>();
 	
-	@OneToMany(mappedBy = "game")
+	@OneToMany(mappedBy = "game",
+			cascade = CascadeType.ALL,
+			orphanRemoval = true)
 	private List<UserGame> userGames = new ArrayList<>();
 	
 	private DateTime playTime;

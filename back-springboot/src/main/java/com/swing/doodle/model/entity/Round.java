@@ -27,9 +27,11 @@ public class Round {
 	private int roundNo;
 	
 	@ManyToOne
-	@JoinColumn(name = "keywordId")
-	private Word keyword;
+	@JoinColumn(name = "wordId")
+	private Word word;
 	
-	@OneToMany(mappedBy = "round")
+	@OneToMany(mappedBy = "round",
+			cascade = CascadeType.ALL,
+			orphanRemoval = true)
 	private List<History> historyList = new ArrayList<>();
 }

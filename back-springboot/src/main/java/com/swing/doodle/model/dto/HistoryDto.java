@@ -12,9 +12,10 @@ import lombok.Setter;
 @NoArgsConstructor
 public class HistoryDto {
 
-	Integer historyId;
+	int historyId;
 	String nickname;
 	String profileImageUrl;
+	int roundNo;
 	double time;
 	String gameImageUrl;
 	
@@ -23,6 +24,7 @@ public class HistoryDto {
 				history.getHistoryId(),
 				history.getUser().getNickname(),
 				history.getUser().getProfileImageUrl(),
+				history.getRound().getRoundNo(),
 				history.getTime(),
 				history.getGameImageUrl()
 				);

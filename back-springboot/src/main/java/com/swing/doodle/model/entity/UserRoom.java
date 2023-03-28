@@ -11,18 +11,16 @@ import javax.persistence.*;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
-public class UserGame {
+public class UserRoom {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer userGameId;
+	private Integer userRoomId;
 	
-	@ManyToOne
+	@OneToOne
 	@JoinColumn(name = "userId")
 	private User user;
 	
 	@ManyToOne
-	@JoinColumn(name = "gameId")
-	private Game game;
-	
-	private int rank;
+	@JoinColumn(name = "roomId")
+	private Room room;
 }

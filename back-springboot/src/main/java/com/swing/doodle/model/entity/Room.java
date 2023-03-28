@@ -8,6 +8,8 @@ import lombok.Setter;
 import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -32,6 +34,11 @@ public class Room {
 	
 	private int mode;
 	
-//	@OneToMany(mappedBy = "room")
-//	private List<Game> games = new ArrayList<>();
+	@ColumnDefault("1")
+	private int userCnt;
+	
+	@OneToMany(mappedBy = "room",
+			cascade = CascadeType.ALL,
+			orphanRemoval = true)
+	private List<UserRoom> userRoomList = new ArrayList<>();
 }
