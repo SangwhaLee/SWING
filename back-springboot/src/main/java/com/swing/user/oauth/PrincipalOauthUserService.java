@@ -4,6 +4,7 @@ import com.swing.five.model.entity.FiveRank;
 import com.swing.five.model.repository.FiveRankRepository;
 import com.swing.sentency.model.entity.SentencyRank;
 import com.swing.sentency.model.repository.SentencyRankRepository;
+import com.swing.user.model.dto.UserDto;
 import com.swing.user.model.entity.User;
 import com.swing.user.model.repository.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -65,7 +66,7 @@ public class PrincipalOauthUserService extends DefaultOAuth2UserService {
 		//처음 서비스를 이용한 회원일 경우
 		if(userEntity == null) {
 			System.out.println(userId);
-			userEntity = new User(userId,userId,null,3,1,0,null,null,null,null,null,null,null,null);
+			userEntity = new User(userId,userId,null,3,1,0,null,null,null,null,null,null,null,null,null);
 //			FiveRank fiveRank = new FiveRank();
 //			fiveRank.setUser(userEntity);
 //			fiveRank.setScore(0);
@@ -82,6 +83,6 @@ public class PrincipalOauthUserService extends DefaultOAuth2UserService {
 			userRepository.save(userEntity);
 		}
 		
-		return new PrincipalDetails(userEntity, oAuth2User.getAttributes());
+		return new PrincipalDetails(UserDto.toDto(userEntity), oAuth2User.getAttributes());
 	}
 }

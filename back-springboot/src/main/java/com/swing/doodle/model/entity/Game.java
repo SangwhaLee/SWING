@@ -17,10 +17,8 @@ public class Game {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer gameId;
-	
-	@ManyToOne
-	@JoinColumn(name = "roomId")
-	private Room room;
+
+	private String roomName;
 	
 	@OneToMany(mappedBy = "game")
 	private List<Round> rounds = new ArrayList<>();

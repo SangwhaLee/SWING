@@ -14,7 +14,7 @@ public class RoomDto {
 	private Integer roomId;
 	private String name;
 	private int code;
-	private int closed;
+	private int started;
 	private String leader;
 	private int mode;
 	
@@ -24,7 +24,7 @@ public class RoomDto {
 				room.getRoomId(),
 				room.getName(),
 				room.getCode(),
-				room.getClosed(),
+				room.getStarted(),
 				room.getLeader().getNickname(),
 				room.getMode()
 		);

@@ -23,6 +23,7 @@ import java.util.List;
 @AllArgsConstructor
 @NoArgsConstructor
 @ToString
+@Builder
 public class User {
 	@Id
 	private String userId;
@@ -36,6 +37,7 @@ public class User {
 	private int fiveCnt;
 	
 	private int coupon;
+	private String refreshToken;
 	
 	@OneToOne(mappedBy = "user")
 	private FiveRank fiveRank;

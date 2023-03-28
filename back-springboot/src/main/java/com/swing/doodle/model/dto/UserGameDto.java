@@ -14,5 +14,5 @@ public class UserGameDto {
 	private GameDto game;
 	private User user;
 	
-	
+	private int rank;
 }

@@ -1,5 +1,6 @@
 package com.swing.user.oauth;
 
+import com.swing.user.model.dto.UserDto;
 import com.swing.user.model.entity.User;
 import lombok.Data;
 import org.springframework.security.core.GrantedAuthority;
@@ -19,17 +20,17 @@ import java.util.Map;
 @Data
 public class PrincipalDetails implements UserDetails , OAuth2User {
 	
-	private User user;
+	private UserDto user;
 	private Map<String, Object> attributes;
 	
 	
 	//일반 로그인 생성자
-	public PrincipalDetails(User user) {
+	public PrincipalDetails(UserDto user) {
 		this.user = user;
 	}
 	
 	//OAuth 로그인 생성자
-	public PrincipalDetails(User user, Map<String, Object> attributes ) {
+	public PrincipalDetails(UserDto user, Map<String, Object> attributes ) {
 		this.user = user;
 		this.attributes = attributes;
 	}

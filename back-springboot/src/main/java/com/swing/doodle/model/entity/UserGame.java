@@ -23,4 +23,6 @@ public class UserGame {
 	@ManyToOne
 	@JoinColumn(name = "userId")
 	private User user;
+
+	private int rank;
 }

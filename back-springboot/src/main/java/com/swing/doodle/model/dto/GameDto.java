@@ -14,7 +14,7 @@ import java.util.List;
 @ToString
 public class GameDto {
 	private Integer gameId;
-	private RoomDto room;
+	private String roomName;
 	private List<RoundDto> roundList = new ArrayList<>();
 	private DateTime playTime;
 	
@@ -24,7 +24,7 @@ public class GameDto {
 		
 		return new GameDto(
 				game.getGameId(),
-				RoomDto.toDto(game.getRoom()),
+				game.getRoomName(),
 				roundList,
 				game.getPlayTime()
 		);

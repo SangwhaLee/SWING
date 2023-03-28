@@ -24,14 +24,12 @@ public class Room {
 	
 	private int code;
 	
-	private int closed;
+	private int started;
 	
 	@OneToOne
 	@JoinColumn(name = "leaderId")
 	private User leader;
 	
 	private int mode;
-	
-	@OneToMany(mappedBy = "room")
-	private List<Game> games = new ArrayList<>();
+
 }
