@@ -25,17 +25,14 @@ public class Room {
 	
 	private String code;
 	
-	@ColumnDefault("0")
-	private int started;
-	
 	@OneToOne
 	@JoinColumn(name = "leaderId")
 	private User leader;
 	
 	private int mode;
 	
-	@ColumnDefault("1")
-	private int userCnt;
+	@ColumnDefault("0")
+	private int started;
 	
 	@OneToMany(mappedBy = "room",
 			cascade = CascadeType.ALL,

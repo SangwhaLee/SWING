@@ -17,7 +17,6 @@ public class RoomDto {
 	private int started;
 	private String leaderNickname;
 	private int mode;
-	private int userCnt;
 	
 	public static RoomDto toDto(Room room){
 		return new RoomDto(
@@ -26,8 +25,7 @@ public class RoomDto {
 				room.getCode(),
 				room.getStarted(),
 				room.getLeader().getNickname(),
-				room.getMode(),
-				room.getUserCnt()
+				room.getMode()
 		);
 	}
 }
