@@ -227,7 +227,7 @@ public class DoodleController {
 	@ApiOperation(value = "라운드 결과 조회", notes = "라운드 결과 조회 API", response = Map.class)
 	@PostMapping("/round/{roundId}")
 	public ResponseEntity<?> getRoundResult(
-			@PathVariable @ApiParam(value = "유저 ID") int roundId) {
+			@PathVariable @ApiParam(value = "라운드 ID") int roundId) {
 		
 		Map<String, Object> resultMap = new HashMap<>();
 		HttpStatus status = HttpStatus.OK;

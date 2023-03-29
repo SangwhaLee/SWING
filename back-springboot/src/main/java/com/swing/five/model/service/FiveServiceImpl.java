@@ -10,6 +10,7 @@ import com.swing.five.model.entity.Word;
 import com.swing.five.model.repository.FiveRankRepository;
 import com.swing.five.model.repository.FiveStatRepository;
 import com.swing.five.model.repository.WordRepository;
+import com.swing.five.model.repository.WordTodayRepository;
 import com.swing.user.model.repository.UserRepository;
 import com.swing.util.S3Upload;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,6 +34,9 @@ public class FiveServiceImpl implements FiveService {
 	private WordRepository wordRepository;
 	
 	@Autowired
+	private WordTodayRepository wordTodayRepository;
+	
+	@Autowired
 	private FiveRankRepository fiveRankRepository;
 	
 	@Autowired
@@ -54,7 +58,7 @@ public class FiveServiceImpl implements FiveService {
 	@Override
 	public List<WordDto> getFive () {
 		List<WordDto> wordDtoList = new ArrayList<>();
-		wordRepository.findFive().forEach(x -> wordDtoList.add(WordDto.toDto(x)));
+		wordTodayRepository.findAll().forEach(x -> wordDtoList.add(WordDto.toDto(x)));
 		return wordDtoList;
 	}
 	
