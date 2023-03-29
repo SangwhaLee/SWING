@@ -7,8 +7,8 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.IOException;
 
 public interface UserService {
-	UserDto login(User user) throws IOException;
-	
+
+	UserDto getUserInfo(String userId);
 	boolean deleteUser(String userId);
 	String upload (MultipartFile image) throws IOException;
 	User getSentencyCnt(String userId);
