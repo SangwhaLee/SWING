@@ -19,21 +19,12 @@ public class UserServiceImpl implements UserService {
 	@Autowired
 	private UserRepository userRepository;
 	
+	
 	@Override
-	public UserDto login(User loginUser) throws IOException {
+	public UserDto getUserInfo(String userId) {
+		User user = userRepository.findByUserId(userId);
 		
-		User user = userRepository.findByUserId(loginUser.getUserId());
-		
-		if(user==null) { // 새로 가입
-			loginUser.setNickname(loginUser.getUserId());
-			loginUser.setCoupon(0);
-			loginUser.setSentencyCnt(3);
-			loginUser.setFiveCnt(1);
-			//fiveRank 추가
-			//sentencyRank 추가
-		}
-		
-		return null;
+		return user == null ? null : UserDto.toDto(userRepository.findByUserId(userId));
 	}
 	
 	@Override

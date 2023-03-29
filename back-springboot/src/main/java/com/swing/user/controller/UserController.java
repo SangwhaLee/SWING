@@ -30,7 +30,34 @@ public class UserController {
 	private static final String SUCCESS = "success";
 	private static final String FAIL = "fail";
 	private static final String ALREADY_EXIST = "already exists";
-	
+	@ApiOperation(value = "회원정보 조회", notes = "회원정보 조회 API", response = Map.class)
+	@GetMapping("/{userId}")
+	public ResponseEntity<?> getUserInfo(
+			@PathVariable @ApiParam(value = "유저 정보") String userId) {
+		
+		Map<String, Object> resultMap = new HashMap<>();
+		HttpStatus status = HttpStatus.OK;
+		
+		try {
+			UserDto userDto = userService.getUserInfo(userId);
+			if(userDto != null){
+				resultMap.put("message", SUCCESS);
+				resultMap.put("user", userDto);
+			}
+			else{
+				resultMap.put("message", FAIL);
+				status = HttpStatus.ACCEPTED;
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("회원정보 조회 실패 : {}", e);
+			resultMap.put("message", FAIL);
+			status = HttpStatus.INTERNAL_SERVER_ERROR;
+		}
+		
+		return new ResponseEntity<>(resultMap, status);
+		
+	}
 	@ApiOperation(value = "회원 탈퇴", notes = "회원 탈퇴 API", response = Map.class)
 	@DeleteMapping("/{userId}")
 	public ResponseEntity<?> deleteUser(
@@ -45,30 +72,8 @@ public class UserController {
 			}
 			else{
 				resultMap.put("message",FAIL);
+				status = HttpStatus.ACCEPTED;
 			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			logger.error("사진 업로드 실패 : {}", e);
-			resultMap.put("message", FAIL);
-			status = HttpStatus.INTERNAL_SERVER_ERROR;
-		}
-		
-		return new ResponseEntity<>(resultMap, status);
-		
-	}
-	
-	@ApiOperation(value = "소셜 로그인", notes = "소셜 로그인 API", response = Map.class)
-	@PostMapping("")
-	public ResponseEntity<?> login(
-			@RequestPart @ApiParam(value = "유저 정보") User user) {
-		
-		Map<String, Object> resultMap = new HashMap<>();
-		HttpStatus status = HttpStatus.OK;
-		
-		try {
-			UserDto userDto = userService.login(user);
-			resultMap.put("message", SUCCESS);
-			resultMap.put("user", userDto);
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error("사진 업로드 실패 : {}", e);
