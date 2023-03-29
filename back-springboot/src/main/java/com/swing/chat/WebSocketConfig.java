@@ -13,7 +13,7 @@ public class WebSocketConfig implements WebSocketMessageBrokerConfigurer {
 	@Override
 	public void registerStompEndpoints(StompEndpointRegistry registry) {
 		// end-point 연결(/index 와 핸드쉐이크 과정을 통해 커넥션 연결), SockJS 사용
-		registry.addEndpoint("/index").setAllowedOriginPatterns("*").withSockJS();
+		registry.addEndpoint("/speedoodle/room").setAllowedOriginPatterns("*").withSockJS();
 	}
 	
 	@Override
