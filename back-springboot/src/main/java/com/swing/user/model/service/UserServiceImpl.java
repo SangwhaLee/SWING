@@ -28,6 +28,11 @@ public class UserServiceImpl implements UserService {
 	}
 	
 	@Override
+	public boolean checkDuplicate(String nickname) {
+		return !userRepository.existsByNickname(nickname);
+	}
+	
+	@Override
 	public boolean deleteUser(String userId) {
 		User user = userRepository.findByUserId(userId);
 		if(user==null)
