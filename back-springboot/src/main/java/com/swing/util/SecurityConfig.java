@@ -56,7 +56,7 @@
 					.failureHandler(oAuth2FailureHandler);
 			http
 					.logout()
-					.logoutSuccessUrl("http://localhost:3000");
+					.logoutSuccessUrl("http://j8a405.p.ssafy.io:3000");
 			
 			return http.build();
 		}
@@ -83,10 +83,10 @@
 		}
 
 		private static final String[] PERMIT_URL_ARRAY = {
-				//"/**", //다 허용 일단 나중에 수정해야 함
+				"/**", //다 허용 일단 나중에 수정해야 함
 				/* swagger v3 */
 				"/v3/api-docs/**",
-				//"/swagger-ui/**",
+				"/swagger-ui/**",
 				"/oauth2/**"
 		};
 
