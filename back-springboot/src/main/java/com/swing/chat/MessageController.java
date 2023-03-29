@@ -17,7 +17,7 @@ public class MessageController {
 	@MessageMapping("/send")
 	public void sendMsg(@Payload Map<String,Object> data) {
 		System.out.println(data.entrySet());
-		simpMessagingTemplate.convertAndSend("/sub/23", data);
+		simpMessagingTemplate.convertAndSend("/sub/" + data.get("room_id"), data);
 	}
 	
 }
