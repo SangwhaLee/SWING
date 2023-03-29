@@ -1,9 +1,6 @@
 package com.swing.doodle.model.service;
 
-import com.swing.doodle.model.dto.CreateRoomDto;
-import com.swing.doodle.model.dto.RoomDto;
-import com.swing.doodle.model.dto.RoundInfoDto;
-import com.swing.doodle.model.dto.RoundResultSaveDto;
+import com.swing.doodle.model.dto.*;
 
 import java.io.IOException;
 import java.util.List;
@@ -23,5 +20,7 @@ public interface DoodleService {
 	
 	List<RoundInfoDto> getFive (String roomName);
 	
-	void saveRoundResult (RoundResultSaveDto roundResultSaveDto) throws IOException;
+	void saveRoundResult (SaveRoundResultDto roundResultSaveDto) throws IOException;
+	
+	List<GetRoundResultDto> getRoundResult (int roundId);
 }

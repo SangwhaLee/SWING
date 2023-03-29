@@ -1,9 +1,6 @@
 package com.swing.doodle.controller;
 
-import com.swing.doodle.model.dto.CreateRoomDto;
-import com.swing.doodle.model.dto.RoomDto;
-import com.swing.doodle.model.dto.RoundInfoDto;
-import com.swing.doodle.model.dto.RoundResultSaveDto;
+import com.swing.doodle.model.dto.*;
 import com.swing.doodle.model.service.DoodleService;
 import com.swing.user.controller.UserController;
 import io.swagger.annotations.Api;
@@ -214,11 +211,34 @@ public class DoodleController {
 		HttpStatus status = HttpStatus.OK;
 		
 		try {
-			doodleService.saveRoundResult(new RoundResultSaveDto(userId, roundId, time, image));
+			doodleService.saveRoundResult(new SaveRoundResultDto(userId, roundId, time, image));
 			resultMap.put("message", SUCCESS);
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error("라운드 결과 저장 실패 : {}", e);
+			resultMap.put("message", FAIL);
+			status = HttpStatus.INTERNAL_SERVER_ERROR;
+		}
+		
+		return new ResponseEntity<>(resultMap, status);
+		
+	}
+	
+	@ApiOperation(value = "라운드 결과 조회", notes = "라운드 결과 조회 API", response = Map.class)
+	@PostMapping("/round/{roundId}")
+	public ResponseEntity<?> getRoundResult(
+			@PathVariable @ApiParam(value = "유저 ID") int roundId) {
+		
+		Map<String, Object> resultMap = new HashMap<>();
+		HttpStatus status = HttpStatus.OK;
+		
+		try {
+			List<GetRoundResultDto> getRoundResultDtoList = doodleService.getRoundResult(roundId);
+			resultMap.put("message", SUCCESS);
+			resultMap.put("roundResultList", getRoundResultDtoList);
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("라운드 결과 조회 실패 : {}", e);
 			resultMap.put("message", FAIL);
 			status = HttpStatus.INTERNAL_SERVER_ERROR;
 		}

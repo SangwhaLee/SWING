@@ -1,9 +1,6 @@
 package com.swing.doodle.model.service;
 
-import com.swing.doodle.model.dto.CreateRoomDto;
-import com.swing.doodle.model.dto.RoomDto;
-import com.swing.doodle.model.dto.RoundInfoDto;
-import com.swing.doodle.model.dto.RoundResultSaveDto;
+import com.swing.doodle.model.dto.*;
 import com.swing.doodle.model.entity.Game;
 import com.swing.doodle.model.entity.History;
 import com.swing.doodle.model.entity.Room;
@@ -14,6 +11,7 @@ import com.swing.doodle.model.repository.RoomRepository;
 import com.swing.doodle.model.repository.RoundRepository;
 import com.swing.five.model.entity.Word;
 import com.swing.five.model.repository.WordRepository;
+import com.swing.user.model.entity.User;
 import com.swing.user.model.repository.UserRepository;
 import com.swing.util.S3Upload;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -129,13 +127,28 @@ public class DoodleServiceImpl implements DoodleService {
 	}
 	
 	@Override
-	public void saveRoundResult (RoundResultSaveDto roundResultSaveDto) throws IOException {
+	public void saveRoundResult (SaveRoundResultDto roundResultSaveDto) throws IOException {
 		History history = new History();
 		history.setUser(userRepository.findByUserId(roundResultSaveDto.getUserId()));
 		history.setRound(roundRepository.findByRoundId(roundResultSaveDto.getRoundId()));
 		history.setTime(roundResultSaveDto.getTime());
 		history.setGameImageUrl(s3Upload.uploadFiles(roundResultSaveDto.getImage(), "images/doodle"));
 		historyRepository.save(history);
+	}
+	
+	@Override
+	public List<GetRoundResultDto> getRoundResult (int roundId) {
+		List<GetRoundResultDto> getRoundResultDtoList = new ArrayList<>();
+		List<History> historyList = historyRepository.findAllByRound_RoundId(roundId);
+		for (History history : historyList) {
+			getRoundResultDtoList.add(new GetRoundResultDto(
+					history.getUser().getNickname(),
+					history.getUser().getProfileImageUrl(),
+					history.getTime(),
+					history.getGameImageUrl()
+			));
+		}
+		return getRoundResultDtoList;
 	}
 	
 }
