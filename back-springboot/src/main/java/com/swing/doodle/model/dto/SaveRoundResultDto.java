@@ -10,7 +10,7 @@ import org.springframework.web.multipart.MultipartFile;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
-public class RoundResultSaveDto {
+public class SaveRoundResultDto {
 	private String userId;
 	private int roundId;
 	private double time;
