@@ -31,28 +31,28 @@ public class UserController {
 	private static final String FAIL = "fail";
 	private static final String ALREADY_EXIST = "already exists";
 	
-	@ApiOperation(value = "소셜 로그인", notes = "소셜 로그인 API", response = Map.class)
-	@PostMapping("")
-	public ResponseEntity<?> login(
-			@RequestPart @ApiParam(value = "유저 정보") User user) {
-		
-		Map<String, Object> resultMap = new HashMap<>();
-		HttpStatus status = HttpStatus.OK;
-		
-		try {
-			UserDto userDto = userService.login(user);
-			resultMap.put("message", SUCCESS);
-			resultMap.put("user", userDto);
-		} catch (Exception e) {
-			e.printStackTrace();
-			logger.error("사진 업로드 실패 : {}", e);
-			resultMap.put("message", FAIL);
-			status = HttpStatus.INTERNAL_SERVER_ERROR;
-		}
-		
-		return new ResponseEntity<>(resultMap, status);
-		
-	}
+//	@ApiOperation(value = "소셜 로그인", notes = "소셜 로그인 API", response = Map.class)
+//	@PostMapping("")
+//	public ResponseEntity<?> login(
+//			@RequestPart @ApiParam(value = "유저 정보") User user) {
+//
+//		Map<String, Object> resultMap = new HashMap<>();
+//		HttpStatus status = HttpStatus.OK;
+//
+//		try {
+//			UserDto userDto = userService.login(user);
+//			resultMap.put("message", SUCCESS);
+//			resultMap.put("user", userDto);
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//			logger.error("사진 업로드 실패 : {}", e);
+//			resultMap.put("message", FAIL);
+//			status = HttpStatus.INTERNAL_SERVER_ERROR;
+//		}
+//
+//		return new ResponseEntity<>(resultMap, status);
+//
+//	}
 	
 	@ApiOperation(value = "사진 업로드 테스트", notes = "사진 업로드 테스트 API", response = Map.class)
 	@GetMapping("")
