@@ -1,5 +1,6 @@
 package com.swing.user.oauth.handler;
 
+import com.swing.user.model.dto.UserDto;
 import com.swing.user.model.entity.User;
 import com.swing.user.model.repository.UserRepository;
 import com.swing.user.model.service.JwtService;
@@ -9,6 +10,7 @@ import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
+import org.springframework.web.util.UriComponentsBuilder;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -43,17 +45,20 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 			String refreshToken = jwtService.createRefreshToken(user.getUserId());
 			user.setRefreshToken(refreshToken);
 			userRepository.save(user);
-			return "http://localhost:3000?refreshToken="+refreshToken+"&accessToken="+accessToken;
-//			return UriComponentsBuilder.fromUriString("/oauth")
-//					.queryParam("access-token", accessToken)
-//					.queryParam("refresh-token",refreshToken)
-//					.queryParam("user", UserDto.toDto(user))
-//					.build()
-//					.encode()
-//					.toUriString();
+			return UriComponentsBuilder.fromHttpUrl("http://localhost:3000")
+					.queryParam("access-token", accessToken)
+					.queryParam("refresh-token",refreshToken)
+					.queryParam("user", UserDto.toDto(user))
+					.build()
+					.encode()
+					.toUriString();
 		}
 		// user를 찾을 수 없으면 login으로 튕기게 처리
-		return "http://localhost:3000/login";
+		return UriComponentsBuilder.fromHttpUrl("http://localhost:3000")
+				.path("/login")
+				.build()
+				.encode()
+				.toUriString();
 
     }
 	

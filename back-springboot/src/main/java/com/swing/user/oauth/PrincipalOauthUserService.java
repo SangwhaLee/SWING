@@ -65,21 +65,8 @@ public class PrincipalOauthUserService extends DefaultOAuth2UserService {
 		User userEntity = userRepository.findByUserId(userId);
 		//처음 서비스를 이용한 회원일 경우
 		if(userEntity == null) {
-			System.out.println(userId);
 			userEntity = new User(userId,userId,null,3,1,0,null,null,null,null,null,null,null,null,null);
-//			FiveRank fiveRank = new FiveRank();
-//			fiveRank.setUser(userEntity);
-//			fiveRank.setScore(0);
-//			fiveRank = fiveRankRepository.save(fiveRank);
-//
-//			SentencyRank sentencyRank = new SentencyRank();
-//			sentencyRank.setUser(userEntity);
-//			sentencyRank.setScore(0);
-//			sentencyRank = sentencyRankRepository.save(sentencyRank);
-//
-//			userEntity.setFiveRank(fiveRank);
-//			userEntity.setSentencyRank(sentencyRank);
-//
+
 			userRepository.save(userEntity);
 		}
 		

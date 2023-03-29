@@ -18,6 +18,7 @@ public class OAuth2FailureHandler extends SimpleUrlAuthenticationFailureHandler 
 	@Override
 	public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
 			AuthenticationException exception) throws IOException, ServletException {
+		System.out.println("failure handler");
 		String targetUrl = UriComponentsBuilder.fromUriString("/")
 				.queryParam("error", exception.getLocalizedMessage())
 				.build().toUriString();

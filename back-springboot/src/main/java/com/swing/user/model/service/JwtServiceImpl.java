@@ -15,6 +15,7 @@ import org.springframework.security.core.userdetails.User;
 import org.springframework.stereotype.Service;
 
 import javax.annotation.PostConstruct;
+import javax.servlet.http.HttpServletRequest;
 import java.nio.charset.StandardCharsets;
 import java.security.Key;
 import java.util.Arrays;
@@ -88,21 +89,20 @@ public class JwtServiceImpl implements JwtService {
 
 	// 유효기간이 다되어가면 refresh token검사해서 갱신해줘야 함!!
 	@Override
-	public void validateToken(String jwtToken) {
-		Jws<Claims> claims = null;
+	public boolean validateToken(String token) {
 		try {
-			claims = Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(jwtToken);
-			logger.debug("claims: {}", claims);
-		} catch (SignatureException | MalformedJwtException e) {
-			logger.error("SignatureException : ", e.getMessage());
-			throw new TokenValidFailedException("사용할 수 없는 Signature입니다.");
+			Jwts.parserBuilder().setSigningKey(key).build().parseClaimsJws(token);
+			return true;
+		} catch (io.jsonwebtoken.security.SecurityException | MalformedJwtException e) {
+			logger.info("잘못된 JWT 서명입니다.");
 		} catch (ExpiredJwtException e) {
-			logger.error("Expired JWT token : ", e.getMessage());
-			throw new TokenValidFailedException("사용 기간이 만료된 토큰입니다.");
-		} catch (Exception e) {
-			logger.error("Unexpected error : ", e.getMessage());
-			throw new TokenValidFailedException("토큰 검증 중 예상치 못한 오류가 발생했습니다.");
+			logger.info("만료된 JWT 토큰입니다.");
+		} catch (UnsupportedJwtException e) {
+			logger.info("지원되지 않는 JWT 토큰입니다.");
+		} catch (IllegalArgumentException e) {
+			logger.info("JWT 토큰이 잘못되었습니다.");
 		}
+		return false;
 	}
 
 	@Override
@@ -120,19 +120,21 @@ public class JwtServiceImpl implements JwtService {
 	}
 
 	@Override
-	public long getUserId(String jwtToken) {
-		return Long.parseLong(String.valueOf(this.get(jwtToken).get("userId")));
+	public String getUserId(String jwtToken) {
+		return String.valueOf(this.get(jwtToken).get("userId"));
 	}
-
+	@Override
 	public Authentication getAuthentication(String token) {
 		validateToken(token);
 		Map<String, Object> claims = get(token);
 		Collection<? extends GrantedAuthority> authorities = Arrays
-				.stream(new String[] { claims.get("role").toString() }).map(SimpleGrantedAuthority::new)
+				.stream(new String[] { "ROLE_USER" }).map(SimpleGrantedAuthority::new)
 				.collect(Collectors.toList());
-		logger.debug("claims subject := [{}]", claims.get("subject"));
-		User principal = new User((String) claims.get("subject"), "", authorities);
+		logger.debug("claims subject := [{}]", claims.get("userId"));
+		User principal = new User((String)claims.get("userId"), "", authorities);
 		return new UsernamePasswordAuthenticationToken(principal, token, authorities);
 	}
-
+	public String resolveToken(HttpServletRequest req) {
+		return req.getHeader("Access-Token");
+	}
 }
