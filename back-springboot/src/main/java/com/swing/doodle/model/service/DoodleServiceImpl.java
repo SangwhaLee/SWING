@@ -11,10 +11,10 @@ import com.swing.doodle.model.repository.RoomRepository;
 import com.swing.doodle.model.repository.RoundRepository;
 import com.swing.five.model.entity.Word;
 import com.swing.five.model.repository.WordRepository;
-import com.swing.user.model.entity.User;
 import com.swing.user.model.repository.UserRepository;
 import com.swing.util.S3Upload;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
 import java.io.IOException;
@@ -48,6 +48,12 @@ public class DoodleServiceImpl implements DoodleService {
 	@Autowired
 	private S3Upload s3Upload;
 	
+	/*
+	 *******************
+	 ** APIs for Room **
+	 *******************
+	 */
+	
 	@Override
 	public int createRoom (CreateRoomDto createRoomDto) {
 		if (roomRepository.findByLeader_UserId(createRoomDto.getLeaderId()) != null) return -1;
@@ -64,14 +70,14 @@ public class DoodleServiceImpl implements DoodleService {
 	@Override
 	public List<RoomDto> getAllRooms () {
 		// 모든 방 Entity 조회 후 RoomDTO로 변환 후 리스트로 반환
-		return roomRepository.findAll().stream().map(RoomDto::toDto).collect(toList());
+		return roomRepository.findAll(Sort.by(Sort.Direction.DESC, "roomId")).stream().map(RoomDto::toDto).collect(toList());
 	}
 	
 	@Override
 	public List<RoomDto> searchRooms (String type, String keyword) {
 		// 검색어로 방 Entity 조회 후 RoomDTO로 변환 후 리스트로 반환
-		if ("roomId".equals(type)) return roomRepository.findAllByRoomIdLike(Integer.parseInt(keyword)).stream().map(RoomDto::toDto).collect(toList());
-		else return roomRepository.findAllByNameContaining(keyword).stream().map(RoomDto::toDto).collect(toList());
+		if ("roomId".equals(type)) return roomRepository.findAllByRoomIdLikeOrderByRoomIdDesc(Integer.parseInt(keyword)).stream().map(RoomDto::toDto).collect(toList());
+		else return roomRepository.findAllByNameContainingOrderByRoomIdDesc(keyword).stream().map(RoomDto::toDto).collect(toList());
 	}
 	
 	@Override
@@ -94,6 +100,12 @@ public class DoodleServiceImpl implements DoodleService {
 		roomRepository.save(room);
 		return room.getStarted();
 	}
+	
+	/*
+	 *******************
+	 ** APIs for Game **
+	 *******************
+	 */
 	
 	@Override
 	public List<RoundInfoDto> getFive (String roomName) {

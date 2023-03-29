@@ -8,12 +8,11 @@ import java.util.List;
 
 @Repository
 public interface RoomRepository extends JpaRepository<Room, Integer> {
-	
 	Room findByLeader_UserId (String leaderId);
 	
-	List<Room> findAllByRoomIdLike (int keyword);
+	List<Room> findAllByRoomIdLikeOrderByRoomIdDesc (int keyword);
 	
-	List<Room> findAllByNameContaining (String keyword);
+	List<Room> findAllByNameContainingOrderByRoomIdDesc (String keyword);
 	
 	Room findByRoomId (int roomId);
 }
