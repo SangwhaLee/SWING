@@ -58,6 +58,35 @@ public class UserController {
 		return new ResponseEntity<>(resultMap, status);
 		
 	}
+	
+	@ApiOperation(value = "닉네임 중복 확인", notes = "닉네임 중복 확인 API", response = Map.class)
+	@GetMapping("/nickname/{nickname}")
+	public ResponseEntity<?> checkDuplicate(
+			@PathVariable @ApiParam(value = "유저아이디") String nickname) {
+		
+		Map<String, Object> resultMap = new HashMap<>();
+		HttpStatus status = HttpStatus.OK;
+		
+		try {
+			if(userService.checkDuplicate(nickname)){
+				resultMap.put("possible",true);
+			}
+			else{
+				resultMap.put("possible",false);
+			}
+			resultMap.put("message", SUCCESS);
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			logger.error("사진 업로드 실패 : {}", e);
+			resultMap.put("message", FAIL);
+			status = HttpStatus.INTERNAL_SERVER_ERROR;
+		}
+		
+		return new ResponseEntity<>(resultMap, status);
+		
+	}
+	
 	@ApiOperation(value = "회원 탈퇴", notes = "회원 탈퇴 API", response = Map.class)
 	@DeleteMapping("/{userId}")
 	public ResponseEntity<?> deleteUser(

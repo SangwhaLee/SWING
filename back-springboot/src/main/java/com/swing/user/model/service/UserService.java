@@ -9,6 +9,7 @@ import java.io.IOException;
 public interface UserService {
 
 	UserDto getUserInfo(String userId);
+	boolean checkDuplicate(String nickname);
 	boolean deleteUser(String userId);
 	String upload (MultipartFile image) throws IOException;
 	User getSentencyCnt(String userId);
