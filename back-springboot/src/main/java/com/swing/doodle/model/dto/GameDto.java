@@ -4,6 +4,7 @@ import com.swing.doodle.model.entity.Game;
 import lombok.*;
 import org.joda.time.DateTime;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -16,8 +17,8 @@ import static java.util.stream.Collectors.toList;
 @ToString
 public class GameDto {
 	private Integer gameId;
-	private RoomDto room;
-	private DateTime playTime;
+	private String roomName;
+	private LocalDateTime playTime;
 	private List<RoundDto> roundList = new ArrayList<>();
 	private List<UserGameDto> userGameDtoList = new ArrayList<>();
 	
@@ -27,7 +28,7 @@ public class GameDto {
 		
 		return new GameDto(
 				game.getGameId(),
-				RoomDto.toDto(game.getRoom()),
+				game.getRoomName(),
 				game.getPlayTime(),
 				roundDtoList,
 				userGameDtoList

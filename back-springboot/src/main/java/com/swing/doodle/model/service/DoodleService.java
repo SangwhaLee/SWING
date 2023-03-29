@@ -2,7 +2,7 @@ package com.swing.doodle.model.service;
 
 import com.swing.doodle.model.dto.CreateRoomDto;
 import com.swing.doodle.model.dto.RoomDto;
-import com.swing.five.model.dto.WordDto;
+import com.swing.doodle.model.dto.RoundInfoDto;
 
 import java.util.List;
 
@@ -19,5 +19,5 @@ public interface DoodleService {
 	
 	int lockRoom (int roomId);
 	
-	List<WordDto> getFive ();
+	List<RoundInfoDto> getFive (String roomName);
 }

@@ -2,8 +2,8 @@ package com.swing.doodle.controller;
 
 import com.swing.doodle.model.dto.CreateRoomDto;
 import com.swing.doodle.model.dto.RoomDto;
+import com.swing.doodle.model.dto.RoundInfoDto;
 import com.swing.doodle.model.service.DoodleService;
-import com.swing.five.model.dto.WordDto;
 import com.swing.user.controller.UserController;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -177,20 +177,21 @@ public class DoodleController {
 		
 	}
 	
-	@ApiOperation(value = "게임 시작(사진 5개 조회)", notes = "게임 시작(사진 5개 조회) API", response = Map.class)
-	@GetMapping("/start")
-	public ResponseEntity<?> getFive() {
+	@ApiOperation(value = "게임 시작(라운드 5개 생성)", notes = "게임 시작(라운드 5개 생성) API", response = Map.class)
+	@GetMapping("/start/{roomName}")
+	public ResponseEntity<?> getFive(
+			@PathVariable @ApiParam(value = "방 제목") String roomName) {
 		
 		Map<String, Object> resultMap = new HashMap<>();
 		HttpStatus status = HttpStatus.OK;
 		
 		try {
-			List<WordDto> wordDtoList = doodleService.getFive();
+			List<RoundInfoDto> roundInfoDtoList = doodleService.getFive(roomName);
 			resultMap.put("message", SUCCESS);
-			resultMap.put("wordList", wordDtoList);
+			resultMap.put("roundInfoList", roundInfoDtoList);
 		} catch (Exception e) {
 			e.printStackTrace();
-			logger.error("게임 시작(사진 5개 조회) 실패 : {}", e);
+			logger.error("게임 시작(라운드 5개 생성) 실패 : {}", e);
 			resultMap.put("message", FAIL);
 			status = HttpStatus.INTERNAL_SERVER_ERROR;
 		}
