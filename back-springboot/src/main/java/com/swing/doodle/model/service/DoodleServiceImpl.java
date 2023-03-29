@@ -2,14 +2,22 @@ package com.swing.doodle.model.service;
 
 import com.swing.doodle.model.dto.CreateRoomDto;
 import com.swing.doodle.model.dto.RoomDto;
+import com.swing.doodle.model.dto.RoundInfoDto;
+import com.swing.doodle.model.entity.Game;
 import com.swing.doodle.model.entity.Room;
+import com.swing.doodle.model.entity.Round;
+import com.swing.doodle.model.repository.GameRepository;
 import com.swing.doodle.model.repository.RoomRepository;
-import com.swing.five.model.dto.WordDto;
+import com.swing.doodle.model.repository.RoundRepository;
+import com.swing.five.model.entity.Word;
 import com.swing.five.model.repository.WordRepository;
 import com.swing.user.model.repository.UserRepository;
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import static java.util.stream.Collectors.toList;
@@ -25,6 +33,12 @@ public class DoodleServiceImpl implements DoodleService {
 	
 	@Autowired
 	private WordRepository wordRepository;
+	
+	@Autowired
+	private GameRepository gameRepository;
+	
+	@Autowired
+	private RoundRepository roundRepository;
 	
 	@Override
 	public int createRoom (CreateRoomDto createRoomDto) {
@@ -74,8 +88,34 @@ public class DoodleServiceImpl implements DoodleService {
 	}
 	
 	@Override
-	public List<WordDto> getFive () {
-		return wordRepository.findFive().stream().map(WordDto::toDto).collect(toList());
+	public List<RoundInfoDto> getFive (String roomName) {
+		// 게임 생성 후 저장
+		Game game = new Game();
+		game.setRoomName(roomName);
+		game.setPlayTime(LocalDateTime.now());
+		gameRepository.save(game);
+		
+		// Round 생성
+		// 단어 5개 받아오기
+		List<Word> wordList = wordRepository.findFive();
+		List<RoundInfoDto> roundInfoDtoList = new ArrayList<>();
+		for (int i = 1; i <= 5; i++) {
+			Round round = new Round();
+			round.setGame(game);
+			round.setRoundNo(i);
+			round.setWord(wordList.get(i - 1));
+			roundRepository.save(round);
+			
+			roundInfoDtoList.add(new RoundInfoDto(
+					round.getRoundId(),
+					i,
+					round.getWord().getContent(),
+					round.getWord().getMeaningKr(),
+					round.getWord().getMeaningEn()
+			));
+		}
+		
+		return roundInfoDtoList;
 	}
 	
 }
