@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.hibernate.annotations.ColumnDefault;
 
 import javax.persistence.*;
 import java.util.ArrayList;
@@ -22,14 +23,19 @@ public class Room {
 	
 	private String name;
 	
-	private int code;
-	
-	private int started;
+	private String code;
 	
 	@OneToOne
 	@JoinColumn(name = "leaderId")
 	private User leader;
 	
 	private int mode;
-
+	
+	@ColumnDefault("0")
+	private int started;
+	
+	@OneToMany(mappedBy = "room",
+			cascade = CascadeType.ALL,
+			orphanRemoval = true)
+	private List<UserRoom> userRoomList = new ArrayList<>();
 }

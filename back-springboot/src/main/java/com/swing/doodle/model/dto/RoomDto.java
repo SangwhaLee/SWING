@@ -11,15 +11,14 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class RoomDto {
-	private Integer roomId;
+	private int roomId;
 	private String name;
-	private int code;
+	private String code;
 	private int started;
-	private String leader;
+	private String leaderNickname;
 	private int mode;
 	
 	public static RoomDto toDto(Room room){
-
 		return new RoomDto(
 				room.getRoomId(),
 				room.getName(),

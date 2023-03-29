@@ -16,8 +16,8 @@ import java.util.List;
 @NoArgsConstructor
 public class RoundDto {
 	
-	private Integer roundId;
-//	private GameDto game;
+	private int roundId;
+	private GameDto game;
 	private int roundNo;
 	private WordDto keyword;
 	private List<HistoryDto> historyList = new ArrayList<>();
@@ -28,8 +28,9 @@ public class RoundDto {
 		
 		return new RoundDto(
 				round.getRoundId(),
+				GameDto.toDto(round.getGame()),
 				round.getRoundNo(),
-				WordDto.toDto(round.getKeyword()),
+				WordDto.toDto(round.getWord()),
 				historyList
 		);
 	}

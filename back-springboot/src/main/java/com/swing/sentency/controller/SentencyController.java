@@ -1,7 +1,6 @@
 package com.swing.sentency.controller;
 
 import com.swing.five.controller.FiveController;
-import com.swing.five.model.dto.FiveRankDto;
 import com.swing.sentency.model.dto.SentenceDto;
 import com.swing.sentency.model.dto.SentencyRankDto;
 import com.swing.sentency.model.entity.Sentence;
@@ -29,10 +28,12 @@ public class SentencyController {
 	
 	@Autowired
 	private SentencyService sentencyService;
+	
 	public static final Logger logger = LoggerFactory.getLogger(FiveController.class);
 	private static final String SUCCESS = "success";
 	private static final String FAIL = "fail";
 	private static final String ALREADY_EXIST = "already exists";
+	
 	@ApiOperation(value = "sentency 사진 업로드", notes = "sentency 사진 업로드 API", response = Map.class)
 	@PutMapping("/image")
 	public ResponseEntity<?> upload(
@@ -56,6 +57,7 @@ public class SentencyController {
 		return new ResponseEntity<>(resultMap, status);
 		
 	}
+	
 	@ApiOperation(value = "결과 저장", notes = "게임 결과 저장 API", response = Map.class)
 	@PutMapping("/{userId}/{score}")
 	public ResponseEntity<?> saveResult(
@@ -78,6 +80,7 @@ public class SentencyController {
 		
 		return new ResponseEntity<>(resultMap, status);
 	}
+	
 	@ApiOperation(value = "이미지 불러오기(게임 시작)", notes = "게임 이미지 불러오는 API", response = Map.class)
 	@GetMapping("")
 	public ResponseEntity<?> getSentency() {
@@ -99,6 +102,7 @@ public class SentencyController {
 		
 		return new ResponseEntity<>(resultMap, status);
 	}
+	
 	@ApiOperation(value = "Sentency 랭킹 조회", notes = "Sentency 랭킹 조회 API", response = Map.class)
 	@GetMapping("/{userId}")
 	public ResponseEntity<?> getRank (
@@ -119,4 +123,5 @@ public class SentencyController {
 		
 		return new ResponseEntity<>(resultMap, status);
 	}
+	
 }

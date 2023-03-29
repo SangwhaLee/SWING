@@ -4,6 +4,7 @@ import lombok.*;
 import org.joda.time.DateTime;
 
 import javax.persistence.*;
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -17,14 +18,18 @@ public class Game {
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer gameId;
-
+	
 	private String roomName;
 	
-	@OneToMany(mappedBy = "game")
+	@OneToMany(mappedBy = "game",
+			cascade = CascadeType.ALL,
+			orphanRemoval = true)
 	private List<Round> rounds = new ArrayList<>();
 	
-	@OneToMany(mappedBy = "game")
+	@OneToMany(mappedBy = "game",
+			cascade = CascadeType.ALL,
+			orphanRemoval = true)
 	private List<UserGame> userGames = new ArrayList<>();
 	
-	private DateTime playTime;
+	private LocalDateTime playTime;
 }

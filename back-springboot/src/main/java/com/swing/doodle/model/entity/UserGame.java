@@ -12,17 +12,17 @@ import javax.persistence.*;
 @NoArgsConstructor
 @ToString
 public class UserGame {
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer userGameId;
-	
-	@ManyToOne
-	@JoinColumn(name = "gameId")
-	private Game game;
-	
-	@ManyToOne
-	@JoinColumn(name = "userId")
-	private User user;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    private Integer userGameId;
 
-	private int rank;
+    @ManyToOne
+    @JoinColumn(name = "userId")
+    private User user;
+
+    @ManyToOne
+    @JoinColumn(name = "gameId")
+    private Game game;
+
+    private int rank;
 }
