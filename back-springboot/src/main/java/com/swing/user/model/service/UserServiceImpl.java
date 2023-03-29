@@ -37,6 +37,15 @@ public class UserServiceImpl implements UserService {
 	}
 	
 	@Override
+	public boolean deleteUser(String userId) {
+		User user = userRepository.findByUserId(userId);
+		if(user==null)
+			return false;
+		userRepository.delete(user);
+		return true;
+	}
+	
+	@Override
 	public String upload (MultipartFile image) throws IOException {
 		return uploadFeedImages(image);
 	}

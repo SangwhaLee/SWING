@@ -8,6 +8,8 @@ import java.io.IOException;
 
 public interface UserService {
 	UserDto login(User user) throws IOException;
+	
+	boolean deleteUser(String userId);
 	String upload (MultipartFile image) throws IOException;
 	User getSentencyCnt(String userId);
 	void setSentencyCnt(String userId, int sentencyCnt);
