@@ -34,6 +34,7 @@ public class User {
 	private int fiveCnt;
 	
 	private int coupon;
+	private String refreshToken;
 	
 	@OneToOne(mappedBy = "user",
 			cascade = CascadeType.REMOVE,
