@@ -3,19 +3,23 @@ package com.swing.doodle.model.service;
 import com.swing.doodle.model.dto.CreateRoomDto;
 import com.swing.doodle.model.dto.RoomDto;
 import com.swing.doodle.model.dto.RoundInfoDto;
+import com.swing.doodle.model.dto.RoundResultSaveDto;
 import com.swing.doodle.model.entity.Game;
+import com.swing.doodle.model.entity.History;
 import com.swing.doodle.model.entity.Room;
 import com.swing.doodle.model.entity.Round;
 import com.swing.doodle.model.repository.GameRepository;
+import com.swing.doodle.model.repository.HistoryRepository;
 import com.swing.doodle.model.repository.RoomRepository;
 import com.swing.doodle.model.repository.RoundRepository;
 import com.swing.five.model.entity.Word;
 import com.swing.five.model.repository.WordRepository;
 import com.swing.user.model.repository.UserRepository;
-import org.joda.time.DateTime;
+import com.swing.util.S3Upload;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -39,6 +43,12 @@ public class DoodleServiceImpl implements DoodleService {
 	
 	@Autowired
 	private RoundRepository roundRepository;
+	
+	@Autowired
+	private HistoryRepository historyRepository;
+	
+	@Autowired
+	private S3Upload s3Upload;
 	
 	@Override
 	public int createRoom (CreateRoomDto createRoomDto) {
@@ -116,6 +126,16 @@ public class DoodleServiceImpl implements DoodleService {
 		}
 		
 		return roundInfoDtoList;
+	}
+	
+	@Override
+	public void saveRoundResult (RoundResultSaveDto roundResultSaveDto) throws IOException {
+		History history = new History();
+		history.setUser(userRepository.findByUserId(roundResultSaveDto.getUserId()));
+		history.setRound(roundRepository.findByRoundId(roundResultSaveDto.getRoundId()));
+		history.setTime(roundResultSaveDto.getTime());
+		history.setGameImageUrl(s3Upload.uploadFiles(roundResultSaveDto.getImage(), "images/doodle"));
+		historyRepository.save(history);
 	}
 	
 }
