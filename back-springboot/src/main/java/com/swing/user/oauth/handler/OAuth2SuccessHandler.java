@@ -45,7 +45,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 			String refreshToken = jwtService.createRefreshToken(user.getUserId());
 			user.setRefreshToken(refreshToken);
 			userRepository.save(user);
-			return UriComponentsBuilder.fromHttpUrl("http://localhost:3000")
+			return UriComponentsBuilder.fromHttpUrl("http://j8a405.p.ssafy.io:3000")
 					.queryParam("access-token", accessToken)
 					.queryParam("refresh-token",refreshToken)
 					.queryParam("user", UserDto.toDto(user))
@@ -54,7 +54,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 					.toUriString();
 		}
 		// user를 찾을 수 없으면 login으로 튕기게 처리
-		return UriComponentsBuilder.fromHttpUrl("http://localhost:3000")
+		return UriComponentsBuilder.fromHttpUrl("http://j8a405.p.ssafy.io:3000")
 				.path("/login")
 				.build()
 				.encode()
