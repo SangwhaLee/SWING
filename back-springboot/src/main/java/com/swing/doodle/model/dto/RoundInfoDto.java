@@ -10,6 +10,7 @@ import lombok.Setter;
 @AllArgsConstructor
 @NoArgsConstructor
 public class RoundInfoDto {
+	private int gameId;
 	private int roundId;
 	private int roundNo;
 	private String content;

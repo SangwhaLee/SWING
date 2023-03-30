@@ -24,5 +24,6 @@ public class UserGame {
 	@JoinColumn(name = "gameId")
 	private Game game;
 	
+	@Column(name = "`rank`")
 	private int rank;
 }

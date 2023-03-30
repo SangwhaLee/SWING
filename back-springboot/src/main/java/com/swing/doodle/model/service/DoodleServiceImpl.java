@@ -2,10 +2,7 @@ package com.swing.doodle.model.service;
 
 import com.swing.doodle.model.dto.*;
 import com.swing.doodle.model.entity.*;
-import com.swing.doodle.model.repository.GameRepository;
-import com.swing.doodle.model.repository.HistoryRepository;
-import com.swing.doodle.model.repository.RoomRepository;
-import com.swing.doodle.model.repository.RoundRepository;
+import com.swing.doodle.model.repository.*;
 import com.swing.five.model.entity.Word;
 import com.swing.five.model.repository.WordRepository;
 import com.swing.user.model.repository.UserRepository;
@@ -17,7 +14,9 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 import static java.util.stream.Collectors.toList;
 
@@ -41,6 +40,9 @@ public class DoodleServiceImpl implements DoodleService {
 	
 	@Autowired
 	private HistoryRepository historyRepository;
+	
+	@Autowired
+	private UserGameRepository userGameRepository;
 	
 	@Autowired
 	private S3Upload s3Upload;
@@ -124,6 +126,7 @@ public class DoodleServiceImpl implements DoodleService {
 			roundRepository.save(round);
 			
 			roundInfoDtoList.add(new RoundInfoDto(
+					game.getGameId(),
 					round.getRoundId(),
 					i,
 					round.getWord().getContent(),
@@ -139,8 +142,7 @@ public class DoodleServiceImpl implements DoodleService {
 	public void saveRoundResult (SaveRoundResultDto roundResultSaveDto) throws IOException {
 		History history = new History();
 		history.setUser(userRepository.findByUserId(roundResultSaveDto.getUserId()));
-		Round round = roundRepository.findByRoundId(roundResultSaveDto.getRoundId());
-		history.setRound(round);
+		history.setRound(roundRepository.findByRoundId(roundResultSaveDto.getRoundId()));
 		history.setGameImageUrl(s3Upload.uploadFiles(roundResultSaveDto.getImage(), "images/doodle"));
 		historyRepository.save(history);
 	}
@@ -157,6 +159,24 @@ public class DoodleServiceImpl implements DoodleService {
 			));
 		}
 		return getRoundResultDtoList;
+	}
+	
+	@Override
+	public void saveGameResult (String userId, int gameId, int rank) {
+		UserGame userGame = new UserGame();
+		userGame.setUser(userRepository.findByUserId(userId));
+		userGame.setGame(gameRepository.findByGameId(gameId));
+		userGame.setRank(rank);
+		userGameRepository.save(userGame);
+	}
+	
+	@Override
+	public Map<String, Object> getGameResult (String userId, int gameId) {
+		Map<String, Object> resultMap = new HashMap<>();
+		
+		
+		
+		return resultMap;
 	}
 	
 }

@@ -224,7 +224,7 @@ public class DoodleController {
 	}
 	
 	@ApiOperation(value = "라운드 결과 조회", notes = "라운드 결과 조회 API", response = Map.class)
-	@PostMapping("/round/{roundId}")
+	@GetMapping("/round/{roundId}")
 	public ResponseEntity<?> getRoundResult(
 			@PathVariable @ApiParam(value = "라운드 ID") int roundId) {
 		
@@ -238,6 +238,55 @@ public class DoodleController {
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error("라운드 결과 조회 실패 : {}", e);
+			resultMap.put("message", FAIL);
+			status = HttpStatus.INTERNAL_SERVER_ERROR;
+		}
+		
+		return new ResponseEntity<>(resultMap, status);
+		
+	}
+	
+	@ApiOperation(value = "게임 결과 저장", notes = "게임 결과 저장 API", response = Map.class)
+	@PostMapping("/game/{userId}/{gameId}/{rank}")
+	public ResponseEntity<?> saveRoundResult(
+			@PathVariable @ApiParam(value = "유저 ID") String userId,
+			@PathVariable @ApiParam(value = "게임 ID") int gameId,
+			@PathVariable @ApiParam(value = "순위") int rank) {
+		
+		Map<String, Object> resultMap = new HashMap<>();
+		HttpStatus status = HttpStatus.OK;
+		
+		try {
+			doodleService.saveGameResult(userId, gameId, rank);
+			resultMap.put("message", SUCCESS);
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("게임 결과 저장 실패 : {}", e);
+			resultMap.put("message", FAIL);
+			status = HttpStatus.INTERNAL_SERVER_ERROR;
+		}
+		
+		return new ResponseEntity<>(resultMap, status);
+		
+	}
+	
+	@ApiOperation(value = "게임 결과 조회", notes = "게임 결과 조회 API", response = Map.class)
+	@GetMapping("/game/{userId}/{gameId}")
+	public ResponseEntity<?> getGameResult(
+			@PathVariable @ApiParam(value = "유저 ID") String userId,
+			@PathVariable @ApiParam(value = "게임 ID") int gameId) {
+		
+		Map<String, Object> resultMap = new HashMap<>();
+		HttpStatus status = HttpStatus.OK;
+		
+		try {
+			Map<String, Object> rankAndImages = doodleService.getGameResult(userId, gameId);
+			resultMap.put("message", SUCCESS);
+			resultMap.put("myRank", rankAndImages.get("rank"));
+			resultMap.put("gameResult", rankAndImages.get("result"));
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("게임 결과 조회 실패 : {}", e);
 			resultMap.put("message", FAIL);
 			status = HttpStatus.INTERNAL_SERVER_ERROR;
 		}
