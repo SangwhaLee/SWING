@@ -1,7 +1,5 @@
 package com.swing.sentency.model.service;
 
-import com.swing.five.model.dto.FiveRankDto;
-import com.swing.five.model.entity.FiveRank;
 import com.swing.sentency.model.dto.SentencyRankDto;
 import com.swing.sentency.model.entity.Sentence;
 import com.swing.sentency.model.entity.SentencyRank;
@@ -33,11 +31,9 @@ public class SentencyServiceImpl implements SentencyService {
 	
 	@Override
 	public Sentence getSentency(){
-		int r = (int)Math.floor(Math.random()*78);
 		
-		Sentence sentence = sentenceRepository.findBySentenceId(r);
+		return sentenceRepository.findSentence();
 		
-		return sentence;
 	}
 	
 	@Override
@@ -59,20 +55,18 @@ public class SentencyServiceImpl implements SentencyService {
 	@Override
 	public SentencyRank saveResult(String userId, int score) {
 		SentencyRank sentencyRank = sentencyRankRepository.findByUser_UserId(userId);
+		
 		if(sentencyRank==null){
 			User user = userRepository.findByUserId(userId);
 			sentencyRank = new SentencyRank();
 			sentencyRank.setUser(user);
 			sentencyRank.setScore(score);
-//			user.setSentencyRank(sentencyRank);
-//			userRepository.save(user);
+
 			return sentencyRankRepository.save(sentencyRank);
 		}
 		else if(sentencyRank.getScore()<score){
 			sentencyRank.setScore(score);
-//			User user = userRepository.findByUserId(userId);
-//			user.setSentencyRank(sentencyRank);
-//			userRepository.save(user);
+
 			return sentencyRankRepository.save(sentencyRank);
 		}
 		return sentencyRank;
@@ -80,9 +74,13 @@ public class SentencyServiceImpl implements SentencyService {
 	@Override
 	public List<SentencyRankDto> getRank (String userId) {
 		List<SentencyRankDto> sentencyRankDtoList = new ArrayList<>();
+		
 		List<SentencyRank> sentencyRankList = sentencyRankRepository.findTop7ByOrderByScoreDesc();
+		
 		sentencyRankList.forEach(x -> sentencyRankDtoList.add(SentencyRankDto.toDto(x)));
+		
 		sentencyRankDtoList.add(SentencyRankDto.toDto(sentencyRankRepository.findByUser_UserId(userId)));
+		
 		return sentencyRankDtoList;
 	}
 }
