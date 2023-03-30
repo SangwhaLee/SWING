@@ -1,5 +1,6 @@
 package com.swing.user.model.service;
 
+import com.swing.user.model.dto.ModifyDto;
 import com.swing.user.model.dto.UserDto;
 import com.swing.user.model.entity.User;
 import com.swing.user.model.repository.UserRepository;
@@ -13,6 +14,7 @@ import java.io.IOException;
 @Service
 public class UserServiceImpl implements UserService {
 	
+	private final String DEFAULT_IMAGE_URL = "https://a405-swing.s3.ap-northeast-2.amazonaws.com/images/profile/default.png";
 	@Autowired
 	private S3Upload s3Upload;
 	
@@ -25,6 +27,26 @@ public class UserServiceImpl implements UserService {
 		User user = userRepository.findByUserId(userId);
 		
 		return user == null ? null : UserDto.toDto(userRepository.findByUserId(userId));
+	}
+	
+	@Override
+	public UserDto setUserInfo(ModifyDto modifyDto, MultipartFile image) throws IOException {
+		User user = userRepository.findByUserId(modifyDto.getUserId());
+		
+		if(!image.isEmpty()){
+			String url = upload(image);
+			
+			user.setProfileImageUrl(url);
+		}
+		if(modifyDto.getNickname()!=null){
+			user.setNickname(modifyDto.getNickname());
+		}
+		
+		if(modifyDto.isDefaultImage()){
+			user.setProfileImageUrl(DEFAULT_IMAGE_URL);
+		}
+		
+		return	UserDto.toDto(userRepository.save(user));
 	}
 	
 	@Override

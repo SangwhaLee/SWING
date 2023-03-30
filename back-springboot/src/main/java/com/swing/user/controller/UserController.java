@@ -1,5 +1,6 @@
 package com.swing.user.controller;
 
+import com.swing.user.model.dto.ModifyDto;
 import com.swing.user.model.dto.UserDto;
 import com.swing.user.model.entity.User;
 import com.swing.user.model.service.UserService;
@@ -14,6 +15,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.transaction.Transactional;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -33,7 +35,7 @@ public class UserController {
 	@ApiOperation(value = "회원정보 조회", notes = "회원정보 조회 API", response = Map.class)
 	@GetMapping("/{userId}")
 	public ResponseEntity<?> getUserInfo(
-			@PathVariable @ApiParam(value = "유저 정보") String userId) {
+			@PathVariable @ApiParam(value = "회원 정보") String userId) {
 		
 		Map<String, Object> resultMap = new HashMap<>();
 		HttpStatus status = HttpStatus.OK;
@@ -62,7 +64,7 @@ public class UserController {
 	@ApiOperation(value = "닉네임 중복 확인", notes = "닉네임 중복 확인 API", response = Map.class)
 	@GetMapping("/nickname/{nickname}")
 	public ResponseEntity<?> checkDuplicate(
-			@PathVariable @ApiParam(value = "유저아이디") String nickname) {
+			@PathVariable @ApiParam(value = "중복확인할 닉네임") String nickname) {
 		
 		Map<String, Object> resultMap = new HashMap<>();
 		HttpStatus status = HttpStatus.OK;
@@ -86,11 +88,36 @@ public class UserController {
 		return new ResponseEntity<>(resultMap, status);
 		
 	}
-	
+	@ApiOperation(value = "회원 정보 수정", notes = "회원 정보 수정 API", response = Map.class)
+	@PutMapping("")
+	@Transactional
+	public ResponseEntity<?> setUserInfo(
+			@RequestPart @ApiParam(value = "회원 정보", required = true) ModifyDto modifyDto,
+			@RequestPart @ApiParam(value = "프로필이미지") MultipartFile image
+			) {
+		
+		Map<String, Object> resultMap = new HashMap<>();
+		HttpStatus status = HttpStatus.OK;
+		
+		try {
+			UserDto user = userService.setUserInfo(modifyDto, image);
+			resultMap.put("user",user);
+			resultMap.put("message", SUCCESS);
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			logger.error("회원 정보 수정 실패 : {}", e);
+			resultMap.put("message", FAIL);
+			status = HttpStatus.INTERNAL_SERVER_ERROR;
+		}
+		
+		return new ResponseEntity<>(resultMap, status);
+		
+	}
 	@ApiOperation(value = "회원 탈퇴", notes = "회원 탈퇴 API", response = Map.class)
 	@DeleteMapping("/{userId}")
 	public ResponseEntity<?> deleteUser(
-			@PathVariable @ApiParam(value = "유저아이디") String userId) {
+			@PathVariable @ApiParam(value = "회원 아이디") String userId) {
 		
 		Map<String, Object> resultMap = new HashMap<>();
 		HttpStatus status = HttpStatus.OK;
@@ -105,7 +132,7 @@ public class UserController {
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
-			logger.error("사진 업로드 실패 : {}", e);
+			logger.error("회원 탈퇴 실패 : {}", e);
 			resultMap.put("message", FAIL);
 			status = HttpStatus.INTERNAL_SERVER_ERROR;
 		}
