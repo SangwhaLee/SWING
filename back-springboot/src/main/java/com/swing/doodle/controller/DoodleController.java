@@ -204,14 +204,13 @@ public class DoodleController {
 	public ResponseEntity<?> saveRoundResult(
 			@RequestPart @ApiParam(value = "유저 ID") String userId,
 			@RequestPart @ApiParam(value = "라운드 ID") int roundId,
-			@RequestPart @ApiParam(value = "걸린 시간") double time,
 			@RequestPart @ApiParam(value = "그린 이미지") MultipartFile image) {
 		
 		Map<String, Object> resultMap = new HashMap<>();
 		HttpStatus status = HttpStatus.OK;
 		
 		try {
-			doodleService.saveRoundResult(new SaveRoundResultDto(userId, roundId, time, image));
+			doodleService.saveRoundResult(new SaveRoundResultDto(userId, roundId, image));
 			resultMap.put("message", SUCCESS);
 		} catch (Exception e) {
 			e.printStackTrace();

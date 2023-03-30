@@ -1,10 +1,7 @@
 package com.swing.doodle.model.service;
 
 import com.swing.doodle.model.dto.*;
-import com.swing.doodle.model.entity.Game;
-import com.swing.doodle.model.entity.History;
-import com.swing.doodle.model.entity.Room;
-import com.swing.doodle.model.entity.Round;
+import com.swing.doodle.model.entity.*;
 import com.swing.doodle.model.repository.GameRepository;
 import com.swing.doodle.model.repository.HistoryRepository;
 import com.swing.doodle.model.repository.RoomRepository;
@@ -142,8 +139,8 @@ public class DoodleServiceImpl implements DoodleService {
 	public void saveRoundResult (SaveRoundResultDto roundResultSaveDto) throws IOException {
 		History history = new History();
 		history.setUser(userRepository.findByUserId(roundResultSaveDto.getUserId()));
-		history.setRound(roundRepository.findByRoundId(roundResultSaveDto.getRoundId()));
-		history.setTime(roundResultSaveDto.getTime());
+		Round round = roundRepository.findByRoundId(roundResultSaveDto.getRoundId());
+		history.setRound(round);
 		history.setGameImageUrl(s3Upload.uploadFiles(roundResultSaveDto.getImage(), "images/doodle"));
 		historyRepository.save(history);
 	}
@@ -156,7 +153,6 @@ public class DoodleServiceImpl implements DoodleService {
 			getRoundResultDtoList.add(new GetRoundResultDto(
 					history.getUser().getNickname(),
 					history.getUser().getProfileImageUrl(),
-					history.getTime(),
 					history.getGameImageUrl()
 			));
 		}

@@ -13,6 +13,5 @@ import org.springframework.web.multipart.MultipartFile;
 public class SaveRoundResultDto {
 	private String userId;
 	private int roundId;
-	private double time;
 	private MultipartFile image;
 }

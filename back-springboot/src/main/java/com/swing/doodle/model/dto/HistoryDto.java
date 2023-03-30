@@ -16,7 +16,6 @@ public class HistoryDto {
 	String nickname;
 	String profileImageUrl;
 	int roundNo;
-	double time;
 	String gameImageUrl;
 	
 	public static HistoryDto toDto(History history){
@@ -25,7 +24,6 @@ public class HistoryDto {
 				history.getUser().getNickname(),
 				history.getUser().getProfileImageUrl(),
 				history.getRound().getRoundNo(),
-				history.getTime(),
 				history.getGameImageUrl()
 				);
 	}
