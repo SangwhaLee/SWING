@@ -1,5 +1,6 @@
 package com.swing.user.model.service;
 
+import com.swing.user.model.dto.ModifyDto;
 import com.swing.user.model.dto.UserDto;
 import com.swing.user.model.entity.User;
 import org.springframework.web.multipart.MultipartFile;
@@ -9,6 +10,7 @@ import java.io.IOException;
 public interface UserService {
 
 	UserDto getUserInfo(String userId);
+	UserDto setUserInfo(ModifyDto modifyDto, MultipartFile image) throws IOException;
 	boolean checkDuplicate(String nickname);
 	boolean deleteUser(String userId);
 	String upload (MultipartFile image) throws IOException;
