@@ -173,8 +173,19 @@ public class DoodleServiceImpl implements DoodleService {
 	@Override
 	public Map<String, Object> getGameResult (String userId, int gameId) {
 		Map<String, Object> resultMap = new HashMap<>();
+		List<Round> roundList = roundRepository.findAllByGame_GameIdOrderByRoundId(gameId);
+		UserGame userGame = userGameRepository.findByUser_UserIdAndGame_GameId(userId, gameId);
+		resultMap.put("rank", userGame.getRank());
 		
-		
+		for (int i = 1; i <= 5; i++) {
+			int roundId = roundList.get(i - 1).getRoundId();
+			List<GetRoundResultDto> getRoundResultDtoList = historyRepository.
+					findAllByRound_RoundId(roundId).
+					stream().
+					map(GetRoundResultDto::toDto).
+					collect(toList());
+			resultMap.put(i + "", getRoundResultDtoList);
+		}
 		
 		return resultMap;
 	}

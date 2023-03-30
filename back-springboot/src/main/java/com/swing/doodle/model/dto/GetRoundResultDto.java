@@ -1,5 +1,6 @@
 package com.swing.doodle.model.dto;
 
+import com.swing.doodle.model.entity.History;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -14,4 +15,12 @@ public class GetRoundResultDto {
 	String nickname;
 	String profileImageUrl;
 	String roundImageUrl;
+	
+	public static GetRoundResultDto toDto (History history) {
+		return new GetRoundResultDto(
+				history.getUser().getNickname(),
+				history.getUser().getProfileImageUrl(),
+				history.getGameImageUrl()
+		);
+	}
 }
