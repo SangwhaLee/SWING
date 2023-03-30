@@ -34,8 +34,10 @@ public class JwtFilter extends GenericFilterBean {
 		if (StringUtils.hasText(jwt) && jwtService.validateToken(jwt)) {
 			Authentication authentication = jwtService.getAuthentication(jwt);
 			SecurityContextHolder.getContext().setAuthentication(authentication);
-			logger.debug("Security Context에 '{}' 인증 정보를 저장했습니다, uri: {}", authentication.getName(), requestURI);
+//			System.out.printf("--Security Context에 '%s' 인증 정보를 저장했습니다, uri: %s", authentication.getName(), requestURI);
+			logger.debug("--Security Context에 '{}' 인증 정보를 저장했습니다, uri: {}", authentication.getName(), requestURI);
 		} else {
+//			System.out.printf("유효한 JWT 토큰이 없습니다, uri: %s", requestURI);
 			logger.debug("유효한 JWT 토큰이 없습니다, uri: {}", requestURI);
 		}
 		
@@ -45,6 +47,7 @@ public class JwtFilter extends GenericFilterBean {
 	//Request Header에서 토큰 정보를 꺼내오는 로직
 	private String resolveToken(HttpServletRequest request) {
 		String bearerToken = request.getHeader(AUTHORIZATION_HEADER);
+		//System.out.println("Token = "+bearerToken+"\n");
 		if (StringUtils.hasText(bearerToken)) {
 			return bearerToken;
 		}
