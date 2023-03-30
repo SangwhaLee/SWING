@@ -4,6 +4,7 @@ import com.swing.doodle.model.dto.*;
 
 import java.io.IOException;
 import java.util.List;
+import java.util.Map;
 
 public interface DoodleService {
 	int createRoom (CreateRoomDto createRoomDto);
@@ -23,4 +24,8 @@ public interface DoodleService {
 	void saveRoundResult (SaveRoundResultDto roundResultSaveDto) throws IOException;
 	
 	List<GetRoundResultDto> getRoundResult (int roundId);
+	
+	void saveGameResult (String userId, int gameId, int rank);
+	
+	Map<String, Object> getGameResult (String userId, int gameId);
 }
