@@ -8,6 +8,7 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.web.authentication.SimpleUrlAuthenticationSuccessHandler;
 import org.springframework.stereotype.Component;
 import org.springframework.web.util.UriComponentsBuilder;
@@ -16,6 +17,7 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.security.Security;
 
 @Component
 @RequiredArgsConstructor
@@ -45,7 +47,15 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 			String refreshToken = jwtService.createRefreshToken(user.getUserId());
 			user.setRefreshToken(refreshToken);
 			userRepository.save(user);
-			return UriComponentsBuilder.fromHttpUrl("http://j8a405.p.ssafy.io:3000")
+			Authentication accessAuth = jwtService.getAuthentication(accessToken);
+			Authentication refreshAuth = jwtService.getAuthentication(refreshToken);
+			SecurityContextHolder.getContext().setAuthentication(accessAuth);
+			//System.out.printf("Security Context에 '%s' 인증 정보를 저장했습니다\n", accessAuth.getName());
+			
+			SecurityContextHolder.getContext().setAuthentication(refreshAuth);
+			//System.out.printf("Security Context에 '%s' 인증 정보를 저장했습니다\n", refreshAuth.getName());
+			
+			return UriComponentsBuilder.fromHttpUrl("http://localhost:3000")
 					.queryParam("access-token", accessToken)
 					.queryParam("refresh-token",refreshToken)
 					.queryParam("user", UserDto.toDto(user))
@@ -54,7 +64,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 					.toUriString();
 		}
 		// user를 찾을 수 없으면 login으로 튕기게 처리
-		return UriComponentsBuilder.fromHttpUrl("http://j8a405.p.ssafy.io:3000")
+		return UriComponentsBuilder.fromHttpUrl("http://localhost:3000")
 				.path("/login")
 				.build()
 				.encode()
