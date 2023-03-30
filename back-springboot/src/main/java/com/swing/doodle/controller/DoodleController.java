@@ -283,7 +283,11 @@ public class DoodleController {
 			Map<String, Object> rankAndImages = doodleService.getGameResult(userId, gameId);
 			resultMap.put("message", SUCCESS);
 			resultMap.put("myRank", rankAndImages.get("rank"));
-			resultMap.put("gameResult", rankAndImages.get("result"));
+			resultMap.put("round1", rankAndImages.get("1"));
+			resultMap.put("round2", rankAndImages.get("2"));
+			resultMap.put("round3", rankAndImages.get("3"));
+			resultMap.put("round4", rankAndImages.get("4"));
+			resultMap.put("round5", rankAndImages.get("5"));
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error("게임 결과 조회 실패 : {}", e);
