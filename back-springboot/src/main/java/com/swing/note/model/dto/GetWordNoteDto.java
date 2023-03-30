@@ -13,10 +13,7 @@ import lombok.ToString;
 @AllArgsConstructor
 public class GetWordNoteDto {
 	private Integer wordNoteId;
-	private Integer wordId;
-	private String wordImageUrl;
 	private String content;
-	private String meaningKr;
 	private String meaningEn;
 	private int checked;
 	
@@ -25,10 +22,7 @@ public class GetWordNoteDto {
 		
 		return new GetWordNoteDto(
 				wordNote.getWordNoteId(),
-				wordDto.getWordId(),
-				wordDto.getWordImageUrl(),
 				wordDto.getContent(),
-				wordDto.getMeaningKr(),
 				wordDto.getMeaningEn(),
 				wordNote.getChecked()
 		);

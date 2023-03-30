@@ -13,7 +13,6 @@ import lombok.ToString;
 @AllArgsConstructor
 public class GetSentenceNoteDto {
 	private Integer sentenceNoteId;
-	private Integer sentenceId;
 	private String sentenceImageUrl;
 	private String content;
 	private String meaningKr;
@@ -24,7 +23,6 @@ public class GetSentenceNoteDto {
 		
 		return new GetSentenceNoteDto(
 				sentenceNote.getSentenceNoteId(),
-				sentenceDto.getSentenceId(),
 				sentenceDto.getSentenceImageUrl(),
 				sentenceDto.getContent(),
 				sentenceDto.getMeaningKr(),
