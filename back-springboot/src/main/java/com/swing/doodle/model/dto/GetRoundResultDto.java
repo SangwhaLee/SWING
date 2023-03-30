@@ -13,6 +13,5 @@ import org.springframework.web.multipart.MultipartFile;
 public class GetRoundResultDto {
 	String nickname;
 	String profileImageUrl;
-	double time;
 	String roundImageUrl;
 }

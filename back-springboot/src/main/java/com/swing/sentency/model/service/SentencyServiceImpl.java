@@ -18,8 +18,10 @@ import java.util.List;
 
 @Service
 public class SentencyServiceImpl implements SentencyService {
+	
 	@Autowired
 	private S3Upload s3Upload;
+	
 	@Autowired
 	private UserRepository userRepository;
 	
@@ -31,9 +33,7 @@ public class SentencyServiceImpl implements SentencyService {
 	
 	@Override
 	public Sentence getSentency(){
-		
 		return sentenceRepository.findSentence();
-		
 	}
 	
 	@Override
@@ -71,6 +71,7 @@ public class SentencyServiceImpl implements SentencyService {
 		}
 		return sentencyRank;
 	}
+	
 	@Override
 	public List<SentencyRankDto> getRank (String userId) {
 		List<SentencyRankDto> sentencyRankDtoList = new ArrayList<>();
@@ -83,4 +84,5 @@ public class SentencyServiceImpl implements SentencyService {
 		
 		return sentencyRankDtoList;
 	}
+	
 }

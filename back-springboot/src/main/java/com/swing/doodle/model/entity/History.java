@@ -26,7 +26,5 @@ public class History {
 	@JoinColumn(name = "roundId")
 	private Round round;
 	
-	private double time;
-	
 	private String gameImageUrl;
 }
