@@ -1,16 +1,22 @@
 package com.swing.doodle.controller;
 
+import com.swing.chat.MessageType;
 import com.swing.doodle.model.dto.*;
 import com.swing.doodle.model.service.DoodleService;
 import com.swing.user.controller.UserController;
+import com.swing.user.model.dto.ChatUserDto;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
+import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.messaging.handler.annotation.MessageMapping;
+import org.springframework.messaging.handler.annotation.Payload;
+import org.springframework.messaging.simp.SimpMessagingTemplate;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -20,6 +26,7 @@ import java.util.Map;
 
 @CrossOrigin(origins = {"*"}, maxAge = 6000)
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/doodle")
 @Api(tags = {"Speedoodle 관리 API"})
 public class DoodleController {
@@ -31,6 +38,14 @@ public class DoodleController {
 	private static final String SUCCESS = "success";
 	private static final String FAIL = "fail";
 	private static final String ALREADY_EXIST = "already exists";
+	
+	private final SimpMessagingTemplate simpMessagingTemplate;
+	
+	@MessageMapping("/send")
+	public void sendMsg(@Payload Map<String,Object> data) {
+		System.out.println(data.entrySet());
+		simpMessagingTemplate.convertAndSend("/sub/" + data.get("roomId"), data);
+	}
 	
 	@ApiOperation(value = "방 생성", notes = "방 생성 API", response = Map.class)
 	@PostMapping("/room")
@@ -53,6 +68,43 @@ public class DoodleController {
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error("방 생성 실패 : {}", e);
+			resultMap.put("message", FAIL);
+			status = HttpStatus.INTERNAL_SERVER_ERROR;
+		}
+		
+		return new ResponseEntity<>(resultMap, status);
+		
+	}
+	
+	@ApiOperation(value = "방 입장", notes = "방 입장 API", response = Map.class)
+	@PostMapping("/room/enter/{roomId}/{userId}")
+	public ResponseEntity<?> enterRoom(
+			@PathVariable @ApiParam(value = "방 ID") int roomId,
+			@PathVariable @ApiParam(value = "유저 ID") String userId) {
+		
+		Map<String, Object> resultMap = new HashMap<>();
+		Map<String, Object> data = new HashMap<>();
+		HttpStatus status = HttpStatus.OK;
+		
+		try {
+			// 새로 들어온 사람 정보
+			ChatUserDto newUser = doodleService.enterRoom(roomId, userId);
+			if (newUser == null) resultMap.put("message", ALREADY_EXIST);
+			else {
+				// 기존 유저들 정보
+				List<ChatUserDto> chatUserDtoList = doodleService.getRoomUsers(roomId);
+				resultMap.put("message", SUCCESS);
+				resultMap.put("chatUserList", chatUserDtoList);
+				
+				data.put("messageType", MessageType.ENTER);
+				data.put("userId", newUser.getUserId());
+				data.put("nickname", newUser.getNickname());
+				data.put("profileImageUrl", newUser.getProfileImageUrl());
+				simpMessagingTemplate.convertAndSend("/sub/" + roomId, data);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("방 입장 실패 : {}", e);
 			resultMap.put("message", FAIL);
 			status = HttpStatus.INTERNAL_SERVER_ERROR;
 		}

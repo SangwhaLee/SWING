@@ -1,6 +1,7 @@
 package com.swing.doodle.model.service;
 
 import com.swing.doodle.model.dto.*;
+import com.swing.user.model.dto.ChatUserDto;
 
 import java.io.IOException;
 import java.util.List;
@@ -30,4 +31,8 @@ public interface DoodleService {
 	Map<String, Object> getGameResult (String userId, int gameId);
 	
 	List<GetGameHistoryDto> getGameHistory (String userId);
+	
+	ChatUserDto enterRoom (int roomId, String userId);
+	
+	List<ChatUserDto> getRoomUsers (int roomId);
 }
