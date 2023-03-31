@@ -1,6 +1,6 @@
 package com.swing.doodle.controller;
 
-import com.swing.chat.MessageType;
+import com.swing.doodle.model.type.MessageType;
 import com.swing.doodle.model.dto.*;
 import com.swing.doodle.model.service.DoodleService;
 import com.swing.user.controller.UserController;
@@ -43,7 +43,7 @@ public class DoodleController {
 	
 	@MessageMapping("/send")
 	public void sendMsg(@Payload Map<String,Object> data) {
-		System.out.println(data.entrySet());
+//		System.out.println(data.entrySet());
 		simpMessagingTemplate.convertAndSend("/sub/" + data.get("roomId"), data);
 	}
 	
@@ -100,6 +100,35 @@ public class DoodleController {
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error("방 입장 실패 : {}", e);
+			resultMap.put("message", FAIL);
+			status = HttpStatus.INTERNAL_SERVER_ERROR;
+		}
+		
+		return new ResponseEntity<>(resultMap, status);
+		
+	}
+	
+	@ApiOperation(value = "방 퇴장", notes = "방 퇴장 API", response = Map.class)
+	@DeleteMapping("/room/leave/{roomId}/{userId}")
+	public ResponseEntity<?> leaveRoom(
+			@PathVariable @ApiParam(value = "방 ID") int roomId,
+			@PathVariable @ApiParam(value = "유저 ID") String userId) {
+		
+		Map<String, Object> resultMap = new HashMap<>();
+		Map<String, Object> data = new HashMap<>();
+		HttpStatus status = HttpStatus.OK;
+		
+		try {
+			doodleService.leaveRoom(roomId, userId);
+			resultMap.put("message", SUCCESS);
+			
+			// 방에 있는 사람들한테 나간 유저 ID 전달
+			data.put("messageType", MessageType.LEAVE);
+			data.put("userId", userId);
+			simpMessagingTemplate.convertAndSend("/sub/" + roomId, data);
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("방 퇴장 실패 : {}", e);
 			resultMap.put("message", FAIL);
 			status = HttpStatus.INTERNAL_SERVER_ERROR;
 		}
