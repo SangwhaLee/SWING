@@ -53,10 +53,8 @@ public class DoodleController {
 			@RequestBody @ApiParam(value = "방 정보") CreateRoomDto createRoomDto) {
 		
 		Map<String, Object> resultMap = new HashMap<>();
+		Map<String, Object> data = new HashMap<>();
 		HttpStatus status = HttpStatus.OK;
-		
-		// Socket 파야돼
-		//////////////////////////////
 		
 		try {
 			int roomId = doodleService.createRoom(createRoomDto);
@@ -64,6 +62,14 @@ public class DoodleController {
 			else {
 				resultMap.put("message", SUCCESS);
 				resultMap.put("roomId", roomId);
+				
+				// 방장 정보
+				ChatUserDto newUser = doodleService.enterRoom(roomId, createRoomDto.getLeaderId());
+				data.put("messageType", MessageType.ENTER);
+				data.put("userId", newUser.getUserId());
+				data.put("nickname", newUser.getNickname());
+				data.put("profileImageUrl", newUser.getProfileImageUrl());
+				simpMessagingTemplate.convertAndSend("/sub/" + roomId, data);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -93,8 +99,10 @@ public class DoodleController {
 			else {
 				// 기존 유저들 정보
 				List<ChatUserDto> chatUserDtoList = doodleService.getRoomUsers(roomId);
+				RoomInfoDto roomInfoDto = doodleService.getRoomInfo(roomId);
 				resultMap.put("message", SUCCESS);
 				resultMap.put("chatUserList", chatUserDtoList);
+				resultMap.put("roomInfo", roomInfoDto);
 				
 				data.put("messageType", MessageType.ENTER);
 				data.put("userId", newUser.getUserId());
