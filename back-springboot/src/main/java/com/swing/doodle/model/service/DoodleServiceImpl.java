@@ -66,6 +66,12 @@ public class DoodleServiceImpl implements DoodleService {
 		room.setLeader(userRepository.findByUserId(createRoomDto.getLeaderId()));
 		room.setMode(createRoomDto.getMode());
 		roomRepository.save(room);
+		
+		UserRoom userRoom = new UserRoom();
+		userRoom.setRoom(room);
+		userRoom.setUser(userRepository.findByUserId(createRoomDto.getLeaderId()));
+		userRoomRepository.save(userRoom);
+		
 		return room.getRoomId();
 	}
 	
