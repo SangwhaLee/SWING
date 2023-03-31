@@ -13,6 +13,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 
+import javax.transaction.Transactional;
 import java.io.IOException;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
@@ -105,6 +106,19 @@ public class DoodleServiceImpl implements DoodleService {
 	public RoomInfoDto getRoomInfo (int roomId) {
 		Room room = roomRepository.findByRoomId(roomId);
 		return RoomInfoDto.toDto(room);
+	}
+	
+	@Override
+	@Transactional
+	public void leaveRoom(int roomId, String userId) {
+		UserRoom userRoom = userRoomRepository.findByUser_UserId(userId);
+		userRoomRepository.delete(userRoom);
+		
+		Integer cnt = userRoomRepository.countByRoom_RoomId(roomId);
+		if (cnt == 0) {
+			Room room = roomRepository.findByRoomId(roomId);
+			roomRepository.delete(room);
+		}
 	}
 	
 	@Override
