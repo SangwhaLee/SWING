@@ -5,6 +5,9 @@ import com.swing.doodle.model.entity.*;
 import com.swing.doodle.model.repository.*;
 import com.swing.five.model.entity.Word;
 import com.swing.five.model.repository.WordRepository;
+import com.swing.user.model.dto.ChatUserDto;
+import com.swing.user.model.dto.UserDto;
+import com.swing.user.model.entity.User;
 import com.swing.user.model.repository.UserRepository;
 import com.swing.util.S3Upload;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -73,6 +76,30 @@ public class DoodleServiceImpl implements DoodleService {
 		userRoomRepository.save(userRoom);
 		
 		return room.getRoomId();
+	}
+	
+	@Override
+	public ChatUserDto enterRoom (int roomId, String userId) {
+		if (userRoomRepository.findByUser_UserId(userId) != null) return null;
+		
+		User user = userRepository.findByUserId(userId);
+		Room room = roomRepository.findByRoomId(roomId);
+		UserRoom userRoom = new UserRoom();
+		userRoom.setRoom(room);
+		userRoom.setUser(user);
+		
+		return ChatUserDto.toDto(user);
+	}
+	
+	@Override
+	public List<ChatUserDto> getRoomUsers (int roomId) {
+		List<ChatUserDto> chatUserDtoList = new ArrayList<>();
+		List<UserRoom> userRoomList = userRoomRepository.findAllByRoom_RoomId(roomId);
+		for (UserRoom userRoom : userRoomList) {
+			chatUserDtoList.add(ChatUserDto.toDto(userRoom.getUser()));
+		}
+		
+		return chatUserDtoList;
 	}
 	
 	@Override

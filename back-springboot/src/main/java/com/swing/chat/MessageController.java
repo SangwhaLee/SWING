@@ -12,12 +12,12 @@ import java.util.Map;
 @RequiredArgsConstructor
 public class MessageController {
 	
-	private final SimpMessagingTemplate simpMessagingTemplate;
-	
-	@MessageMapping("/send")
-	public void sendMsg(@Payload Map<String,Object> data) {
-		System.out.println(data.entrySet());
-		simpMessagingTemplate.convertAndSend("/sub/" + data.get("roomId"), data);
-	}
+//	private final SimpMessagingTemplate simpMessagingTemplate;
+//
+//	@MessageMapping("/send")
+//	public void sendMsg(@Payload Map<String,Object> data) {
+//		System.out.println(data.entrySet());
+//		simpMessagingTemplate.convertAndSend("/sub/" + data.get("roomId"), data);
+//	}
 	
 }
