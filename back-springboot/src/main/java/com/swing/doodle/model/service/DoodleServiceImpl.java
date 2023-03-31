@@ -71,32 +71,18 @@ public class DoodleServiceImpl implements DoodleService {
 	
 	@Override
 	public List<RoomDto> getAllRooms () {
-//		// 모든 방 Entity 조회 후 RoomDTO로 변환 후 리스트로 반환
-//		return roomRepository.findAll(Sort.by(Sort.Direction.DESC, "roomId")).stream().map(RoomDto::toDto).collect(toList());
-		List<RoomDto> roomDtoList = new ArrayList<>();
 		List<Room> roomList = roomRepository.findAll(Sort.by(Sort.Direction.DESC, "roomId"));
-		roomList.forEach(x -> {
-			int userCnt = userRoomRepository.countByRoom_RoomId(x.getRoomId());
-			RoomDto roomDto = new RoomDto(
-					x.getRoomId(),
-					x.getName(),
-					x.getCode(),
-					x.getStarted(),
-					x.getLeader().getNickname(),
-					x.getMode(),
-					userCnt
-			);
-			roomDtoList.add(roomDto);
-		});
 		
-		return roomDtoList;
+		return roomListToRoomDtoList(roomList);
 	}
 	
 	@Override
 	public List<RoomDto> searchRooms (String type, String keyword) {
-		// 검색어로 방 Entity 조회 후 RoomDTO로 변환 후 리스트로 반환
-		if ("roomId".equals(type)) return roomRepository.findAllByRoomIdLikeOrderByRoomIdDesc(Integer.parseInt(keyword)).stream().map(RoomDto::toDto).collect(toList());
-		else return roomRepository.findAllByNameContainingOrderByRoomIdDesc(keyword).stream().map(RoomDto::toDto).collect(toList());
+		List<Room> roomList;
+		if ("roomId".equals(type)) roomList =  roomRepository.findAllByRoomIdLikeOrderByRoomIdDesc(Integer.parseInt(keyword));
+		else roomList = roomRepository.findAllByNameContainingOrderByRoomIdDesc(keyword);
+		
+		return roomListToRoomDtoList(roomList);
 	}
 	
 	@Override
@@ -221,6 +207,25 @@ public class DoodleServiceImpl implements DoodleService {
 			getGameHistoryDtoList.add(new GetGameHistoryDto(userGame.getRank(), game.getRoomName(), game.getPlayTime()));
 		}
 		return getGameHistoryDtoList;
+	}
+	
+	private List<RoomDto> roomListToRoomDtoList(List<Room> roomList) {
+		List<RoomDto> roomDtoList = new ArrayList<>();
+		roomList.forEach(x -> {
+			int userCnt = userRoomRepository.countByRoom_RoomId(x.getRoomId());
+			RoomDto roomDto = new RoomDto(
+					x.getRoomId(),
+					x.getName(),
+					x.getCode(),
+					x.getStarted(),
+					x.getLeader().getNickname(),
+					x.getMode(),
+					userCnt
+			);
+			roomDtoList.add(roomDto);
+		});
+		
+		return roomDtoList;
 	}
 	
 }
