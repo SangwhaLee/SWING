@@ -12,6 +12,7 @@
 	import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 	import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 	import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+	import org.springframework.security.config.http.SessionCreationPolicy;
 	import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 	import org.springframework.security.crypto.password.PasswordEncoder;
 	import org.springframework.security.web.SecurityFilterChain;
@@ -38,7 +39,11 @@
 			http
 					.httpBasic().disable() // rest api 이므로 기본설정 사용안함, 기본설정은 비인증시 로그인 폼화면으로 리다이렉트
 					.csrf().disable() // rest api만 가능한 jwt인증 기반의 사이트이므로 csrf는 disable처리 합니다.
+					.formLogin().disable()
+					.httpBasic().disable()
 					.cors().configurationSource(corsConfigurationSource())
+					.and()
+					.sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
 					.and()
 					.authorizeRequests()
 					.antMatchers(PERMIT_URL_ARRAY).permitAll()
@@ -55,8 +60,8 @@
 					.successHandler(oAuth2SuccessHandler)
 					.failureHandler(oAuth2FailureHandler);
 			http
-					.logout()
-					.logoutSuccessUrl("http://localhost:3000");
+					.logout();
+					//.logoutSuccessUrl("http://j8a405.p.ssafy.io:3000");
 			
 			return http.build();
 		}
@@ -83,7 +88,7 @@
 		}
 
 		private static final String[] PERMIT_URL_ARRAY = {
-				"/**", //다 허용 일단 나중에 수정해야 함
+				//"/**", //다 허용 일단 나중에 수정해야 함
 				/* swagger v3 */
 				"/v3/api-docs/**",
 				"/swagger-ui/**",

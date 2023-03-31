@@ -19,7 +19,7 @@ public class OAuth2FailureHandler extends SimpleUrlAuthenticationFailureHandler 
 	public void onAuthenticationFailure(HttpServletRequest request, HttpServletResponse response,
 			AuthenticationException exception) throws IOException, ServletException {
 		//System.out.println("failure handler");
-		String targetUrl = UriComponentsBuilder.fromHttpUrl("http://localhost:3000/error")
+		String targetUrl = UriComponentsBuilder.fromHttpUrl("http://j8a405.p.ssafy.io:3000/error")
 				.build().toUriString();
 		getRedirectStrategy().sendRedirect(request, response, targetUrl);
 	}

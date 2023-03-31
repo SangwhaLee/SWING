@@ -27,7 +27,6 @@ public class UserController {
 	
 	@Autowired
 	private UserService userService;
-	
 	public static final Logger logger = LoggerFactory.getLogger(UserController.class);
 	private static final String SUCCESS = "success";
 	private static final String FAIL = "fail";

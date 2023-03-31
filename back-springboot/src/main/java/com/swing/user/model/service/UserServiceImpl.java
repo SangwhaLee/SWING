@@ -21,7 +21,6 @@ public class UserServiceImpl implements UserService {
 	@Autowired
 	private UserRepository userRepository;
 	
-	
 	@Override
 	public UserDto getUserInfo(String userId) {
 		User user = userRepository.findByUserId(userId);
@@ -51,6 +50,7 @@ public class UserServiceImpl implements UserService {
 	
 	@Override
 	public boolean checkDuplicate(String nickname) {
+		
 		return !userRepository.existsByNickname(nickname);
 	}
 	
