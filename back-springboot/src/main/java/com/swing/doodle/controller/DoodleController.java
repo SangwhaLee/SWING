@@ -53,24 +53,14 @@ public class DoodleController {
 			@RequestBody @ApiParam(value = "방 정보") CreateRoomDto createRoomDto) {
 		
 		Map<String, Object> resultMap = new HashMap<>();
-		Map<String, Object> data = new HashMap<>();
 		HttpStatus status = HttpStatus.OK;
 		
 		try {
 			int roomId = doodleService.createRoom(createRoomDto);
 			if (roomId == -1) resultMap.put("message", ALREADY_EXIST);
 			else {
-				RoomInfoDto roomInfoDto = doodleService.getRoomInfo(roomId);
-				resultMap.put("roomInfo", roomInfoDto);
 				resultMap.put("message", SUCCESS);
-				
-				// 방장 정보
-				ChatUserDto newUser = doodleService.enterRoom(roomId, createRoomDto.getLeaderId());
-				data.put("messageType", MessageType.ENTER);
-				data.put("userId", newUser.getUserId());
-				data.put("nickname", newUser.getNickname());
-				data.put("profileImageUrl", newUser.getProfileImageUrl());
-				simpMessagingTemplate.convertAndSend("/sub/" + roomId, data);
+				resultMap.put("roomId", roomId);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -98,13 +88,9 @@ public class DoodleController {
 			ChatUserDto newUser = doodleService.enterRoom(roomId, userId);
 			if (newUser == null) resultMap.put("message", ALREADY_EXIST);
 			else {
-				// 기존 유저들 정보
-				List<ChatUserDto> chatUserDtoList = doodleService.getRoomUsers(roomId);
-				RoomInfoDto roomInfoDto = doodleService.getRoomInfo(roomId);
 				resultMap.put("message", SUCCESS);
-				resultMap.put("chatUserList", chatUserDtoList);
-				resultMap.put("roomInfo", roomInfoDto);
 				
+				// 기존 방에 있던 사람들한테 새로 들어온 유저 정보를 던짐
 				data.put("messageType", MessageType.ENTER);
 				data.put("userId", newUser.getUserId());
 				data.put("nickname", newUser.getNickname());
@@ -114,6 +100,31 @@ public class DoodleController {
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error("방 입장 실패 : {}", e);
+			resultMap.put("message", FAIL);
+			status = HttpStatus.INTERNAL_SERVER_ERROR;
+		}
+		
+		return new ResponseEntity<>(resultMap, status);
+		
+	}
+	
+	@ApiOperation(value = "방 정보 조회", notes = "방 정보 조회 API", response = Map.class)
+	@GetMapping("/room/info/{roomId}")
+	public ResponseEntity<?> getRoomInfo(
+			@PathVariable @ApiParam(value = "방 ID") int roomId) {
+		
+		Map<String, Object> resultMap = new HashMap<>();
+		HttpStatus status = HttpStatus.OK;
+		
+		try {
+			RoomInfoDto roomInfoDto = doodleService.getRoomInfo(roomId);
+			List<ChatUserDto> chatUserDtoList = doodleService.getRoomUsers(roomId);
+			resultMap.put("message", SUCCESS);
+			resultMap.put("roomInfo", roomInfoDto);
+			resultMap.put("chatUserList", chatUserDtoList);
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("방 정보 조회 실패 : {}", e);
 			resultMap.put("message", FAIL);
 			status = HttpStatus.INTERNAL_SERVER_ERROR;
 		}
