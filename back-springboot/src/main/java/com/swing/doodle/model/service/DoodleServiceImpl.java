@@ -45,6 +45,9 @@ public class DoodleServiceImpl implements DoodleService {
 	private UserGameRepository userGameRepository;
 	
 	@Autowired
+	private UserRoomRepository userRoomRepository;
+	
+	@Autowired
 	private S3Upload s3Upload;
 	
 	/*
@@ -68,8 +71,25 @@ public class DoodleServiceImpl implements DoodleService {
 	
 	@Override
 	public List<RoomDto> getAllRooms () {
-		// 모든 방 Entity 조회 후 RoomDTO로 변환 후 리스트로 반환
-		return roomRepository.findAll(Sort.by(Sort.Direction.DESC, "roomId")).stream().map(RoomDto::toDto).collect(toList());
+//		// 모든 방 Entity 조회 후 RoomDTO로 변환 후 리스트로 반환
+//		return roomRepository.findAll(Sort.by(Sort.Direction.DESC, "roomId")).stream().map(RoomDto::toDto).collect(toList());
+		List<RoomDto> roomDtoList = new ArrayList<>();
+		List<Room> roomList = roomRepository.findAll(Sort.by(Sort.Direction.DESC, "roomId"));
+		roomList.forEach(x -> {
+			int userCnt = userRoomRepository.countByRoom_RoomId(x.getRoomId());
+			RoomDto roomDto = new RoomDto(
+					x.getRoomId(),
+					x.getName(),
+					x.getCode(),
+					x.getStarted(),
+					x.getLeader().getNickname(),
+					x.getMode(),
+					userCnt
+			);
+			roomDtoList.add(roomDto);
+		});
+		
+		return roomDtoList;
 	}
 	
 	@Override
