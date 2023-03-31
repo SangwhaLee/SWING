@@ -63,6 +63,9 @@ public class DoodleController {
 				resultMap.put("message", SUCCESS);
 				resultMap.put("roomId", roomId);
 				
+				RoomInfoDto roomInfoDto = doodleService.getRoomInfo(roomId);
+				resultMap.put("roomInfo", roomInfoDto);
+				
 				// 방장 정보
 				ChatUserDto newUser = doodleService.enterRoom(roomId, createRoomDto.getLeaderId());
 				data.put("messageType", MessageType.ENTER);
