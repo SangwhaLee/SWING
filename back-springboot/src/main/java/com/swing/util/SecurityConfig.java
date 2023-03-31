@@ -61,7 +61,7 @@
 					.failureHandler(oAuth2FailureHandler);
 			http
 					.logout();
-					//.logoutSuccessUrl("http://j8a405.p.ssafy.io");
+					//.logoutSuccessUrl("http://j8a405.p.ssafy.io:3000");
 			
 			return http.build();
 		}
