@@ -60,11 +60,9 @@ public class DoodleController {
 			int roomId = doodleService.createRoom(createRoomDto);
 			if (roomId == -1) resultMap.put("message", ALREADY_EXIST);
 			else {
-				resultMap.put("message", SUCCESS);
-				resultMap.put("roomId", roomId);
-				
 				RoomInfoDto roomInfoDto = doodleService.getRoomInfo(roomId);
 				resultMap.put("roomInfo", roomInfoDto);
+				resultMap.put("message", SUCCESS);
 				
 				// 방장 정보
 				ChatUserDto newUser = doodleService.enterRoom(roomId, createRoomDto.getLeaderId());
