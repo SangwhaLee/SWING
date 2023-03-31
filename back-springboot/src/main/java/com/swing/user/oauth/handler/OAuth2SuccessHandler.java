@@ -56,7 +56,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 			SecurityContextHolder.getContext().setAuthentication(refreshAuth);
 			//System.out.printf("Security Context에 '%s' 인증 정보를 저장했습니다\n", refreshAuth.getName());
 			
-			return UriComponentsBuilder.fromHttpUrl("http://j8a405.p.ssafy.io:3000")
+			return UriComponentsBuilder.fromHttpUrl("http://j8a405.p.ssafy.io")
 					.queryParam("access-token", accessToken)
 					.queryParam("refresh-token",refreshToken)
 					.queryParam("user", UserDto.toDto(user))
@@ -65,7 +65,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 					.toUriString();
 		}
 		// user를 찾을 수 없으면 login으로 튕기게 처리
-		return UriComponentsBuilder.fromHttpUrl("http://j8a405.p.ssafy.io:3000")
+		return UriComponentsBuilder.fromHttpUrl("http://j8a405.p.ssafy.io")
 				.path("/login")
 				.build()
 				.encode()
