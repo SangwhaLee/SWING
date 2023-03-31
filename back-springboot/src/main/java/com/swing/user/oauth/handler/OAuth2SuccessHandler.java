@@ -45,6 +45,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 		if (user != null) {
 			String accessToken = jwtService.createAccessToken(user.getUserId());
 			String refreshToken = jwtService.createRefreshToken(user.getUserId());
+			user.setProfileImageUrl("https://a405-swing.s3.ap-northeast-2.amazonaws.com/images/profile/default.png");
 			user.setRefreshToken(refreshToken);
 			userRepository.save(user);
 			Authentication accessAuth = jwtService.getAuthentication(accessToken);
@@ -55,7 +56,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 			SecurityContextHolder.getContext().setAuthentication(refreshAuth);
 			//System.out.printf("Security Context에 '%s' 인증 정보를 저장했습니다\n", refreshAuth.getName());
 			
-			return UriComponentsBuilder.fromHttpUrl("http://localhost:3000")
+			return UriComponentsBuilder.fromHttpUrl("http://j8a405.p.ssafy.io:3000")
 					.queryParam("access-token", accessToken)
 					.queryParam("refresh-token",refreshToken)
 					.queryParam("user", UserDto.toDto(user))
@@ -64,7 +65,7 @@ public class OAuth2SuccessHandler extends SimpleUrlAuthenticationSuccessHandler 
 					.toUriString();
 		}
 		// user를 찾을 수 없으면 login으로 튕기게 처리
-		return UriComponentsBuilder.fromHttpUrl("http://localhost:3000")
+		return UriComponentsBuilder.fromHttpUrl("http://j8a405.p.ssafy.io:3000")
 				.path("/login")
 				.build()
 				.encode()
