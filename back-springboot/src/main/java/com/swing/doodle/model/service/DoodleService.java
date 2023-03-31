@@ -28,4 +28,6 @@ public interface DoodleService {
 	void saveGameResult (String userId, int gameId, int rank);
 	
 	Map<String, Object> getGameResult (String userId, int gameId);
+	
+	List<GetGameHistoryDto> getGameHistory (String userId);
 }

@@ -282,15 +282,34 @@ public class DoodleController {
 		try {
 			Map<String, Object> rankAndImages = doodleService.getGameResult(userId, gameId);
 			resultMap.put("message", SUCCESS);
-			resultMap.put("myRank", rankAndImages.get("rank"));
-			resultMap.put("round1", rankAndImages.get("1"));
-			resultMap.put("round2", rankAndImages.get("2"));
-			resultMap.put("round3", rankAndImages.get("3"));
-			resultMap.put("round4", rankAndImages.get("4"));
-			resultMap.put("round5", rankAndImages.get("5"));
+			resultMap.put("rank", rankAndImages.get("rank"));
+			resultMap.put("resultList", rankAndImages.get("resultList"));
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error("게임 결과 조회 실패 : {}", e);
+			resultMap.put("message", FAIL);
+			status = HttpStatus.INTERNAL_SERVER_ERROR;
+		}
+		
+		return new ResponseEntity<>(resultMap, status);
+		
+	}
+	
+	@ApiOperation(value = "게임 히스토리 10개 조회", notes = "게임 히스토리 10개 조회 API", response = Map.class)
+	@GetMapping("/history/{userId}")
+	public ResponseEntity<?> getGameResult(
+			@PathVariable @ApiParam(value = "유저 ID") String userId) {
+		
+		Map<String, Object> resultMap = new HashMap<>();
+		HttpStatus status = HttpStatus.OK;
+		
+		try {
+			List<GetGameHistoryDto> getGameHistoryDtoList = doodleService.getGameHistory(userId);
+			resultMap.put("message", SUCCESS);
+			resultMap.put("gameHistoryList", getGameHistoryDtoList);
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("게임 히스토리 10개 조회 실패 : {}", e);
 			resultMap.put("message", FAIL);
 			status = HttpStatus.INTERNAL_SERVER_ERROR;
 		}
