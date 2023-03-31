@@ -176,6 +176,7 @@ public class DoodleServiceImpl implements DoodleService {
 		List<Round> roundList = roundRepository.findAllByGame_GameIdOrderByRoundId(gameId);
 		UserGame userGame = userGameRepository.findByUser_UserIdAndGame_GameId(userId, gameId);
 		resultMap.put("rank", userGame.getRank());
+		List<List<GetRoundResultDto>> resultList = new ArrayList<>();
 		
 		for (int i = 1; i <= 5; i++) {
 			int roundId = roundList.get(i - 1).getRoundId();
@@ -184,10 +185,22 @@ public class DoodleServiceImpl implements DoodleService {
 					stream().
 					map(GetRoundResultDto::toDto).
 					collect(toList());
-			resultMap.put(i + "", getRoundResultDtoList);
+			resultList.add(getRoundResultDtoList);
 		}
+		resultMap.put("resultList", resultList);
 		
 		return resultMap;
+	}
+	
+	@Override
+	public List<GetGameHistoryDto> getGameHistory (String userId) {
+		List<GetGameHistoryDto> getGameHistoryDtoList = new ArrayList<>();
+		List<UserGame> userGameList = userGameRepository.findTop10ByUser_UserIdOrderByGame_GameIdDesc(userId);
+		for (UserGame userGame : userGameList) {
+			Game game = userGame.getGame();
+			getGameHistoryDtoList.add(new GetGameHistoryDto(userGame.getRank(), game.getRoomName(), game.getPlayTime()));
+		}
+		return getGameHistoryDtoList;
 	}
 	
 }
