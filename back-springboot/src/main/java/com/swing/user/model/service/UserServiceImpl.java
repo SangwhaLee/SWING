@@ -20,7 +20,32 @@ public class UserServiceImpl implements UserService {
 	
 	@Autowired
 	private UserRepository userRepository;
-	
+
+	@Override
+	public UserDto socialLogin(UserDto userDto, String refreshToken) {
+
+		User user = userRepository.findByUserId(userDto.getUserId());
+
+		if(user==null) {
+
+			user = new User();
+			// User Build
+			user.setUserId(userDto.getUserId());
+			user.setNickname(userDto.getUserId());
+
+			user.setProfileImageUrl(DEFAULT_IMAGE_URL);
+			user.setRefreshToken(refreshToken);
+
+			user = userRepository.save(user);
+		}
+		user.setRefreshToken(refreshToken);
+		userRepository.save(user);
+
+		return UserDto.toDto(user);
+
+
+	}
+
 	@Override
 	public UserDto getUserInfo(String userId) {
 		User user = userRepository.findByUserId(userId);

@@ -9,6 +9,7 @@ import java.io.IOException;
 
 public interface UserService {
 
+    UserDto socialLogin(UserDto userDto, String refreshToken);
 	UserDto getUserInfo(String userId);
 	UserDto setUserInfo(ModifyDto modifyDto, MultipartFile image) throws IOException;
 	boolean checkDuplicate(String nickname);
@@ -19,4 +20,5 @@ public interface UserService {
 	int getFiveCnt(String userId);
 	void setFiveCnt(String userId, int sentencyCnt);
 	void setCouponCnt(String userId, int couponCnt);
+
 }
