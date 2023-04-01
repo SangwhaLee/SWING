@@ -3,6 +3,7 @@ package com.swing.user.controller;
 import com.swing.user.model.dto.ModifyDto;
 import com.swing.user.model.dto.UserDto;
 import com.swing.user.model.entity.User;
+import com.swing.user.model.service.JwtService;
 import com.swing.user.model.service.UserService;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -27,10 +28,54 @@ public class UserController {
 	
 	@Autowired
 	private UserService userService;
+
+	@Autowired
+	private JwtService jwtService;
 	public static final Logger logger = LoggerFactory.getLogger(UserController.class);
 	private static final String SUCCESS = "success";
 	private static final String FAIL = "fail";
 	private static final String ALREADY_EXIST = "already exists";
+
+
+
+	@ApiOperation(value = "소셜로그인", notes = "access-token, Refresh-token과 로그인 결과 메세지를 반환한다.", response = Map.class)
+	@PostMapping("/socialLogin")
+	public ResponseEntity<?> socialLogin(
+			@RequestBody @ApiParam(value = "로그인 시 필요한 회원정보.", required = true) UserDto userDto) {
+		Map<String, Object> resultMap = new HashMap<>();
+		System.out.println(userDto);
+		HttpStatus status;
+		try {
+
+			String accessToken = jwtService.createAccessToken("userid", userDto.getUserId());// key, data
+			String refreshToken = jwtService.createRefreshToken("userid", userDto.getUserId());// key, data
+			UserDto user = userService.socialLogin(userDto, refreshToken);
+
+			if(user!=null) {
+				logger.debug("로그인 accessToken 정보 : {}", accessToken);
+				logger.debug("로그인 refreshToken 정보 : {}", refreshToken);
+				resultMap.put("access-token", accessToken);
+				resultMap.put("refresh-token", refreshToken);
+				resultMap.put("userId", user.getUserId());
+				resultMap.put("nickname", user.getNickname());
+				resultMap.put("coupon",user.getCoupon());
+				resultMap.put("message", SUCCESS);
+				status = HttpStatus.OK;
+			}
+			else {
+				status = HttpStatus.ACCEPTED;
+				resultMap.put("message",ALREADY_EXIST);
+			}
+		} catch (Exception e) {
+			e.printStackTrace();
+			logger.error("로그인 실패 : {}", e);
+			resultMap.put("message", e.getMessage());
+			status = HttpStatus.INTERNAL_SERVER_ERROR;
+		}
+
+		return new ResponseEntity<>(resultMap, status);
+	}
+
 	@ApiOperation(value = "회원정보 조회", notes = "회원정보 조회 API", response = Map.class)
 	@GetMapping("/{userId}")
 	public ResponseEntity<?> getUserInfo(
