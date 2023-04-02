@@ -56,6 +56,7 @@ public class UserController {
 				logger.debug("로그인 refreshToken 정보 : {}", refreshToken);
 				resultMap.put("access-token", accessToken);
 				resultMap.put("refresh-token", refreshToken);
+				resultMap.put("profileImageUrl", user.getProfileImageUrl());
 				resultMap.put("userId", user.getUserId());
 				resultMap.put("nickname", user.getNickname());
 				resultMap.put("coupon",user.getCoupon());
