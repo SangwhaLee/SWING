@@ -87,6 +87,7 @@ public class DoodleServiceImpl implements DoodleService {
 		UserRoom userRoom = new UserRoom();
 		userRoom.setRoom(room);
 		userRoom.setUser(user);
+		userRoomRepository.save(userRoom);
 		
 		return ChatUserDto.toDto(user);
 	}
