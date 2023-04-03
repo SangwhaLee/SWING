@@ -236,12 +236,16 @@ public class DoodleController {
 			@PathVariable @ApiParam(value = "모드") int mode) {
 		
 		Map<String, Object> resultMap = new HashMap<>();
+		Map<String, Object> data = new HashMap<>();
 		HttpStatus status = HttpStatus.OK;
 		
 		try {
 			int changedMode = doodleService.modifyMode(roomId, mode);
 			resultMap.put("message", SUCCESS);
-			resultMap.put("changedMode", changedMode);
+			
+			data.put("messageType", MessageType.MODE);
+			data.put("mode", changedMode);
+			simpMessagingTemplate.convertAndSend("/sub/" + roomId, data);
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error("방 모드 변경 실패 : {}", e);
