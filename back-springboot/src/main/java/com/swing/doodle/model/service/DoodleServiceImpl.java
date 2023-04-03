@@ -117,7 +117,7 @@ public class DoodleServiceImpl implements DoodleService {
 		userRoomRepository.delete(userRoom);
 		
 		Integer cnt = userRoomRepository.countByRoom_RoomId(roomId);
-		if (cnt == 0) {
+		if (cnt == null) {
 			Room room = roomRepository.findByRoomId(roomId);
 			roomRepository.delete(room);
 		}
