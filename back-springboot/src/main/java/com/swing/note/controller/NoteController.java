@@ -3,6 +3,7 @@ package com.swing.note.controller;
 import com.swing.note.model.dto.GetSentenceNoteDto;
 import com.swing.note.model.dto.GetWordNoteDto;
 import com.swing.note.model.service.NoteService;
+import com.swing.user.model.service.UserService;
 import com.swing.user.controller.UserController;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -26,6 +27,8 @@ public class NoteController {
 	
 	@Autowired
 	private NoteService noteService;
+	@Autowired
+	private UserService userService;
 	
 	public static final Logger logger = LoggerFactory.getLogger(UserController.class);
 	private static final String SUCCESS = "success";
@@ -72,7 +75,12 @@ public class NoteController {
 		try {
 			List<GetWordNoteDto> getWordNoteDtoList = noteService.getWords(userId, key);
 			resultMap.put("wordNoteList", getWordNoteDtoList);
+			if(key==1){
+				int coupon = userService.getCouponCnt(userId);
+				resultMap.put("coupon",coupon);
+			}
 			resultMap.put("message", SUCCESS);
+			
 		} catch (Exception e) {
 			logger.error("틀린 단어 조회 실패 : {}", e);
 			resultMap.put("message", FAIL);
@@ -165,6 +173,10 @@ public class NoteController {
 		try {
 			List<GetSentenceNoteDto> getSentenceNoteDtoList = noteService.getSentences(userId, key);
 			resultMap.put("sentenceNoteList", getSentenceNoteDtoList);
+			if(key==1){
+				int coupon = userService.getCouponCnt(userId);
+				resultMap.put("coupon",coupon);
+			}
 			resultMap.put("message", SUCCESS);
 		} catch (Exception e) {
 			logger.error("틀린 문장 조회 실패 : {}", e);
