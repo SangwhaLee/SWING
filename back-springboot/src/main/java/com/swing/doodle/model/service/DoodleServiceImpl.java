@@ -111,8 +111,9 @@ public class DoodleServiceImpl implements DoodleService {
 	
 	@Override
 	@Transactional
-	public void leaveRoom(int roomId, String userId) {
+	public void leaveRoom(String userId) {
 		UserRoom userRoom = userRoomRepository.findByUser_UserId(userId);
+		int roomId = userRoom.getRoom().getRoomId();
 		userRoomRepository.delete(userRoom);
 		
 		Integer cnt = userRoomRepository.countByRoom_RoomId(roomId);

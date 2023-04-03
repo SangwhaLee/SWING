@@ -38,5 +38,5 @@ public interface DoodleService {
 	
 	RoomInfoDto getRoomInfo (int roomId);
 	
-	void leaveRoom(int roomId, String userId);
+	void leaveRoom(String userId);
 }
