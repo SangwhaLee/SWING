@@ -43,7 +43,6 @@ public class DoodleController {
 	
 	@MessageMapping("/send")
 	public void sendMsg(@Payload Map<String,Object> data) {
-//		System.out.println(data.entrySet());
 		simpMessagingTemplate.convertAndSend("/sub/" + data.get("roomId"), data);
 	}
 	
@@ -254,7 +253,7 @@ public class DoodleController {
 		
 	}
 	
-	@ApiOperation(value = "게임 시작(방 잠금 설정)", notes = "게임 시작(방 잠금 설정) API", response = Map.class)
+	@ApiOperation(value = "게임 시작(방 잠금/해제)", notes = "게임 시작(방 잠금/해제) API", response = Map.class)
 	@PutMapping("/start/{roomId}")
 	public ResponseEntity<?> lockRoom(
 			@PathVariable @ApiParam(value = "방 번호") int roomId) {
@@ -268,7 +267,7 @@ public class DoodleController {
 			resultMap.put("started", started);
 		} catch (Exception e) {
 			e.printStackTrace();
-			logger.error("게임 시작(방 잠금 설정) 실패 : {}", e);
+			logger.error("방 잠금/해제 실패 : {}", e);
 			resultMap.put("message", FAIL);
 			status = HttpStatus.INTERNAL_SERVER_ERROR;
 		}
@@ -278,17 +277,21 @@ public class DoodleController {
 	}
 	
 	@ApiOperation(value = "게임 시작(라운드 5개 생성)", notes = "게임 시작(라운드 5개 생성) API", response = Map.class)
-	@GetMapping("/start/{roomName}")
+	@GetMapping("/start/{roomId}/{roomName}")
 	public ResponseEntity<?> getFive(
+			@PathVariable @ApiParam(value = "방 번호") int roomId,
 			@PathVariable @ApiParam(value = "방 제목") String roomName) {
 		
 		Map<String, Object> resultMap = new HashMap<>();
+		Map<String, Object> data = new HashMap<>();
 		HttpStatus status = HttpStatus.OK;
 		
 		try {
 			List<RoundInfoDto> roundInfoDtoList = doodleService.getFive(roomName);
 			resultMap.put("message", SUCCESS);
-			resultMap.put("roundInfoList", roundInfoDtoList);
+			data.put("messageType", MessageType.START);
+			data.put("roundInfoList", roundInfoDtoList);
+			simpMessagingTemplate.convertAndSend("/sub/" + roomId, data);
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error("게임 시작(라운드 5개 생성) 실패 : {}", e);
