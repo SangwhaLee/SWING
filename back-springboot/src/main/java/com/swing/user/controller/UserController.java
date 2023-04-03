@@ -16,6 +16,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 import java.util.HashMap;
 import java.util.Map;
@@ -205,7 +206,6 @@ public class UserController {
 		return new ResponseEntity<>(resultMap, status);
 		
 	}
-	
 	@ApiOperation(value = "사진 업로드 테스트", notes = "사진 업로드 테스트 API", response = Map.class)
 	@GetMapping("")
 	public ResponseEntity<?> upload(
@@ -227,6 +227,57 @@ public class UserController {
 		
 		return new ResponseEntity<>(resultMap, status);
 		
+	}
+	@ApiOperation(value = "access-token 유효성 검사", notes = "access-token 유효성 검사.", response = Map.class)
+	@PostMapping("/check")
+	public ResponseEntity<?> checkToken(HttpServletRequest request) {
+		Map<String, Object> resultMap = new HashMap<>();
+		HttpStatus status;
+		String token = request.getHeader("Access-Token");
+		
+		//액세스토큰이 유효한지 확인한 후 결과 반환.
+		if (jwtService.checkToken(token)) {
+			resultMap.put("message", SUCCESS);
+			status = HttpStatus.OK;
+		} else {
+			logger.debug("access-token 만료.");
+			resultMap.put("message", FAIL);
+			status = HttpStatus.ACCEPTED;
+		}
+		
+		return new ResponseEntity<>(resultMap, status);
+	}
+	
+	@ApiOperation(value = "access-token 재발급", notes = "만료된 access-token을 재발급받는다.", response = Map.class)
+	@PostMapping("/refresh")
+	public ResponseEntity<?> refreshToken(@RequestBody String userId, HttpServletRequest request) {
+		Map<String, Object> resultMap = new HashMap<>();
+		HttpStatus status = HttpStatus.OK;
+		String token = request.getHeader("Refresh-Token");
+		logger.debug("token : {}, userId : {}", token, userId);
+		
+		// RefreshToken을 받으면 이 토큰이 유효한지 확인한 후 AccessToken을 재발급한다.
+		if (jwtService.checkToken(token)) {
+			String refreshToken = userService.getRefreshToken(userId);
+			if (refreshToken == null) {
+				// 잘못된 유저정보로 토큰 요청한 경우
+				resultMap.put("message", FAIL);
+				return new ResponseEntity<>(resultMap, status);
+			}
+			if (token.equals(refreshToken)) {
+				String accessToken = jwtService.createAccessToken("userId", userId);
+				logger.debug("access-token : {}", accessToken);
+				logger.debug("access-token 재발급 완료.");
+				resultMap.put("access-token", accessToken);
+				status = HttpStatus.OK;
+			}
+		} else {
+			logger.debug("refresh-token 만료.");
+			resultMap.put("message", FAIL);
+			status = HttpStatus.UNAUTHORIZED;
+		}
+		
+		return new ResponseEntity<>(resultMap, status);
 	}
 	
 	@ApiOperation(value = "sentency 1일 도전횟수 조회", notes = "sentency 도전횟수 조회 API", response = Map.class)
