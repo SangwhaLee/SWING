@@ -111,7 +111,7 @@ public class UserServiceImpl implements UserService {
 	
 	@Override
 	public String upload (MultipartFile image) throws IOException {
-		return uploadFeedImages(image);
+		return s3Upload.uploadFiles(image, "images/profile");
 	}
 	
 	@Override
@@ -153,12 +153,4 @@ public class UserServiceImpl implements UserService {
 		User user = userRepository.findByUserId(userId);
 		return user.getCoupon();
 	}
-	
-	/**
-	 * 이미지 업로드 처리 메서드
-	 */
-	private String uploadFeedImages (MultipartFile image) throws IOException {
-		return s3Upload.uploadFiles(image, "images");
-	}
-	
 }
