@@ -13,6 +13,7 @@ import lombok.Setter;
 public class RoomInfoDto {
 	private int roomId;
 	private String name;
+	private String leaderId;
 	private String leaderNickname;
 	private int mode;
 	
@@ -20,6 +21,7 @@ public class RoomInfoDto {
 		return new RoomInfoDto(
 				room.getRoomId(),
 				room.getName(),
+				room.getLeader().getUserId(),
 				room.getLeader().getNickname(),
 				room.getMode()
 		);
