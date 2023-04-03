@@ -76,7 +76,27 @@ public class UserController {
 
 		return new ResponseEntity<>(resultMap, status);
 	}
-
+	
+	@ApiOperation(value = "로그아웃", notes = "로그아웃하는 유저의 Refresh Token을 삭제한다.", response = Map.class)
+	@GetMapping("/logout/{userId}")
+	public ResponseEntity<?> logoutUser(
+			@PathVariable @ApiParam(value = "로그아웃 할 유저의 ID", required = true) String userId) {
+		Map<String, Object> resultMap = new HashMap<>();
+		HttpStatus status;
+		
+		try {
+			userService.delRefreshToken(userId);
+			resultMap.put("message", SUCCESS);
+			status = HttpStatus.OK;
+		} catch (Exception e) {
+			logger.error("로그아웃 실패 : {}", e);
+			resultMap.put("message", e.getMessage());
+			status = HttpStatus.INTERNAL_SERVER_ERROR;
+		}
+		
+		return new ResponseEntity<>(resultMap, status);
+	}
+	
 	@ApiOperation(value = "회원정보 조회", notes = "회원정보 조회 API", response = Map.class)
 	@GetMapping("/{userId}")
 	public ResponseEntity<?> getUserInfo(

@@ -32,7 +32,8 @@ public class UserServiceImpl implements UserService {
 			// User Build
 			user.setUserId(userDto.getUserId());
 			user.setNickname(userDto.getUserId());
-
+			user.setSentencyCnt(3);
+			user.setFiveCnt(1);
 			user.setProfileImageUrl(DEFAULT_IMAGE_URL);
 			user.setRefreshToken(refreshToken);
 
@@ -86,6 +87,26 @@ public class UserServiceImpl implements UserService {
 			return false;
 		userRepository.delete(user);
 		return true;
+	}
+	
+	@Override
+	public void saveRefreshToken(String userId, String refreshToken) {
+		User user = userRepository.findByUserId(userId);
+		user.setRefreshToken(refreshToken);
+		userRepository.save(user);
+	}
+	
+	@Override
+	public String getRefreshToken(String userId) {
+		User user = userRepository.findByUserId(userId);
+		return user != null ? user.getRefreshToken() : null;
+	}
+	
+	@Override
+	public void delRefreshToken(String userId) {
+		User user = userRepository.findByUserId(userId);
+		user.setRefreshToken(null);
+		userRepository.save(user);
 	}
 	
 	@Override
