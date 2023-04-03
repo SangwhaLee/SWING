@@ -12,13 +12,16 @@ import lombok.RequiredArgsConstructor;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.event.EventListener;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.messaging.handler.annotation.MessageMapping;
 import org.springframework.messaging.handler.annotation.Payload;
 import org.springframework.messaging.simp.SimpMessagingTemplate;
+import org.springframework.messaging.simp.stomp.StompHeaderAccessor;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.socket.messaging.SessionDisconnectEvent;
 
 import java.util.HashMap;
 import java.util.List;
@@ -46,6 +49,20 @@ public class DoodleController {
 		if (MessageType.LEAVE.equals(data.get("messageType"))) {
 			doodleService.leaveRoom(data.get("userId") + "");
 		} else simpMessagingTemplate.convertAndSend("/sub/" + data.get("roomId"), data);
+	}
+	
+	@EventListener
+	public void webSocketDisconnectListener(SessionDisconnectEvent event) {
+		
+		System.out.println("DisconnectEvent : " + event);
+		
+		StompHeaderAccessor headerAccessor = StompHeaderAccessor.wrap(event.getMessage());
+		
+		// stomp 세션에 있던 uuid 와 roomId 를 확인하여 채팅방 유저 리스트와 room에서 해당 유저를 삭제
+		String userId = (String) headerAccessor.getSessionAttributes().get("userId");
+		String roomId = (String) headerAccessor.getSessionAttributes().get("roomId");
+		
+		System.out.println("headAccessor : " + headerAccessor);
 	}
 	
 	@ApiOperation(value = "방 생성", notes = "방 생성 API", response = Map.class)
