@@ -43,7 +43,9 @@ public class DoodleController {
 	
 	@MessageMapping("/send")
 	public void sendMsg(@Payload Map<String,Object> data) {
-		simpMessagingTemplate.convertAndSend("/sub/" + data.get("roomId"), data);
+		if (MessageType.LEAVE.equals(data.get("messageType"))) {
+			doodleService.leaveRoom(data.get("userId") + "");
+		} else simpMessagingTemplate.convertAndSend("/sub/" + data.get("roomId"), data);
 	}
 	
 	@ApiOperation(value = "방 생성", notes = "방 생성 API", response = Map.class)
@@ -114,17 +116,17 @@ public class DoodleController {
 			@PathVariable @ApiParam(value = "유저 ID") String userId) {
 		
 		Map<String, Object> resultMap = new HashMap<>();
-		Map<String, Object> data = new HashMap<>();
+//		Map<String, Object> data = new HashMap<>();
 		HttpStatus status = HttpStatus.OK;
 		
 		try {
-			doodleService.leaveRoom(roomId, userId);
+//			doodleService.leaveRoom(roomId, userId);
 			resultMap.put("message", SUCCESS);
 			
 			// 방에 있는 사람들한테 나간 유저 ID 전달
-			data.put("messageType", MessageType.LEAVE);
-			data.put("userId", userId);
-			simpMessagingTemplate.convertAndSend("/sub/" + roomId, data);
+//			data.put("messageType", MessageType.LEAVE);
+//			data.put("userId", userId);
+//			simpMessagingTemplate.convertAndSend("/sub/" + roomId, data);
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error("방 퇴장 실패 : {}", e);
