@@ -250,22 +250,22 @@ public class UserController {
 	
 	@ApiOperation(value = "access-token 재발급", notes = "만료된 access-token을 재발급받는다.", response = Map.class)
 	@PostMapping("/refresh")
-	public ResponseEntity<?> refreshToken(@RequestBody String userId, HttpServletRequest request) {
+	public ResponseEntity<?> refreshToken(@RequestBody UserDto userDto, HttpServletRequest request) {
 		Map<String, Object> resultMap = new HashMap<>();
 		HttpStatus status = HttpStatus.OK;
 		String token = request.getHeader("Refresh-Token");
-		logger.debug("token : {}, userId : {}", token, userId);
+		logger.debug("token : {}, userId : {}", token, userDto.getUserId());
 		
 		// RefreshToken을 받으면 이 토큰이 유효한지 확인한 후 AccessToken을 재발급한다.
 		if (jwtService.checkToken(token)) {
-			String refreshToken = userService.getRefreshToken(userId);
+			String refreshToken = userService.getRefreshToken(userDto.getUserId());
 			if (refreshToken == null) {
 				// 잘못된 유저정보로 토큰 요청한 경우
 				resultMap.put("message", FAIL);
 				return new ResponseEntity<>(resultMap, status);
 			}
 			if (token.equals(refreshToken)) {
-				String accessToken = jwtService.createAccessToken("userId", userId);
+				String accessToken = jwtService.createAccessToken("userId", userDto.getUserId());
 				logger.debug("access-token : {}", accessToken);
 				logger.debug("access-token 재발급 완료.");
 				resultMap.put("access-token", accessToken);
