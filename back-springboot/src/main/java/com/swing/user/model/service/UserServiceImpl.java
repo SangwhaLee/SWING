@@ -57,8 +57,8 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public UserDto setUserInfo(ModifyDto modifyDto, MultipartFile image) throws IOException {
 		User user = userRepository.findByUserId(modifyDto.getUserId());
-		
-		if(image!=null && !image.isEmpty()){
+
+		if(image!=null && image.getSize()!=2){
 			String url = upload(image);
 			
 			user.setProfileImageUrl(url);
