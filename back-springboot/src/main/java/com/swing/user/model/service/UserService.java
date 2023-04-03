@@ -25,5 +25,6 @@ public interface UserService {
 	int getFiveCnt(String userId);
 	void setFiveCnt(String userId, int sentencyCnt);
 	void setCouponCnt(String userId, int couponCnt);
+	int getCouponCnt(String userId);
 
 }
