@@ -36,16 +36,6 @@ public class User {
 	private int coupon;
 	private String refreshToken;
 	
-	@OneToOne(mappedBy = "user",
-			cascade = CascadeType.REMOVE,
-			orphanRemoval = true)
-	private FiveRank fiveRank;
-	
-	@OneToOne(mappedBy = "user",
-			cascade = CascadeType.REMOVE,
-			orphanRemoval = true)
-	private SentencyRank sentencyRank;
-	
 	@OneToMany(mappedBy = "user",
 			cascade = CascadeType.REMOVE,
 			orphanRemoval = true)

@@ -10,7 +10,7 @@ import java.io.IOException;
 import java.util.List;
 
 public interface SentencyService {
-	SentencyRank saveResult (String userId, int score);
+	void saveRank (String userId, int score);
 	Sentence getSentency();
 	
 	String upload(MultipartFile multipartFile, int sentenceId) throws IOException;
