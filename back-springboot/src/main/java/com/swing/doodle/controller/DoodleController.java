@@ -46,7 +46,8 @@ public class DoodleController {
 		if ("LEAVE".equals(data.get("messageType").toString())) {
 			logger.warn(data.get("userId") + " leaving");
 			doodleService.leaveRoom(data.get("userId").toString());
-		} else simpMessagingTemplate.convertAndSend("/sub/" + data.get("roomId"), data);
+		}
+		simpMessagingTemplate.convertAndSend("/sub/" + data.get("roomId"), data);
 	}
 	
 //	@EventListener
