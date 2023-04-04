@@ -1,7 +1,9 @@
 package com.swing.user.model.service;
 
 import com.swing.five.model.entity.FiveRank;
+import com.swing.five.model.entity.FiveStat;
 import com.swing.five.model.repository.FiveRankRepository;
+import com.swing.five.model.repository.FiveStatRepository;
 import com.swing.sentency.model.entity.SentencyRank;
 import com.swing.sentency.model.repository.SentencyRankRepository;
 import com.swing.user.model.dto.ModifyDto;
@@ -27,6 +29,8 @@ public class UserServiceImpl implements UserService {
 	
 	@Autowired
 	FiveRankRepository fiveRankRepository;
+	@Autowired
+	FiveStatRepository fiveStatRepository;
 	@Autowired
 	SentencyRankRepository sentecyRankRepository;
 	@Override
@@ -57,6 +61,13 @@ public class UserServiceImpl implements UserService {
 			sentencyRank.setScore(0);
 			
 			sentecyRankRepository.save(sentencyRank);
+			
+			FiveStat fiveStat = new FiveStat();
+			fiveStat.setUser(user);
+			fiveStat.setStreak(0);
+			fiveStat.setTotalTry(0);
+			fiveStat.setTotalScore(0);
+			fiveStat.setTotalCorrect(0);
 
 		}
 		user.setRefreshToken(refreshToken);
