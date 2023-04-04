@@ -257,7 +257,7 @@ public class DoodleServiceImpl implements DoodleService {
 		List<UserGame> userGameList = userGameRepository.findTop10ByUser_UserIdOrderByGame_GameIdDesc(userId);
 		for (UserGame userGame : userGameList) {
 			Game game = userGame.getGame();
-			getGameHistoryDtoList.add(new GetGameHistoryDto(userGame.getRank(), game.getRoomName(), game.getPlayTime()));
+			getGameHistoryDtoList.add(new GetGameHistoryDto(userGame.getGame().getGameId(), userGame.getRank(), game.getRoomName(), game.getPlayTime()));
 		}
 		return getGameHistoryDtoList;
 	}
