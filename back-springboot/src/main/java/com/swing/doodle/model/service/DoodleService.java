@@ -34,7 +34,7 @@ public interface DoodleService {
 	
 	ChatUserDto enterRoom (int roomId, String userId);
 	
-	List<ChatUserDto> getRoomUsers (int roomId);
+	List<ChatUserDto> getRoomUsers (int roomId, String userId);
 	
 	RoomInfoDto getRoomInfo (int roomId);
 	
