@@ -112,14 +112,13 @@ public class DoodleServiceImpl implements DoodleService {
 	@Override
 	@Transactional
 	public void leaveRoom(String userId) {
-		UserRoom userRoom = userRoomRepository.findByUser_UserId(userId);
-		int roomId = userRoom.getRoom().getRoomId();
-		userRoomRepository.delete(userRoom);
-		
-		Integer cnt = userRoomRepository.countByRoom_RoomId(roomId);
-		if (cnt == 0 || cnt == null) {
-			Room room = roomRepository.findByRoomId(roomId);
+		Room room = roomRepository.findByLeader_UserId(userId);
+		if (room != null) {
+			userRoomRepository.deleteAllByRoom_RoomId(room.getRoomId());
 			roomRepository.delete(room);
+		} else {
+			UserRoom userRoom = userRoomRepository.findByUser_UserId(userId);
+			userRoomRepository.delete(userRoom);
 		}
 	}
 	
