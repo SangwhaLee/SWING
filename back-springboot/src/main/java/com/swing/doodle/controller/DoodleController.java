@@ -50,20 +50,6 @@ public class DoodleController {
 		simpMessagingTemplate.convertAndSend("/sub/" + data.get("roomId"), data);
 	}
 	
-//	@EventListener
-//	public void webSocketDisconnectListener(SessionDisconnectEvent event) {
-//
-//		System.out.println("DisconnectEvent : " + event);
-//
-//		StompHeaderAccessor headerAccessor = StompHeaderAccessor.wrap(event.getMessage());
-//
-//		System.out.println("headAccessor : " + headerAccessor);
-//		String userId = (String) headerAccessor.getSessionAttributes().get("userId");
-//		String roomId = (String) headerAccessor.getSessionAttributes().get("roomId");
-//
-//		System.out.println(roomId + " " + userId);
-//	}
-	
 	@ApiOperation(value = "방 생성", notes = "방 생성 API", response = Map.class)
 	@PostMapping("/room")
 	public ResponseEntity<?> createRoom(
@@ -155,16 +141,17 @@ public class DoodleController {
 	}
 	
 	@ApiOperation(value = "방 정보 조회", notes = "방 정보 조회 API", response = Map.class)
-	@GetMapping("/room/info/{roomId}")
+	@GetMapping("/room/info/{roomId}/{userId}")
 	public ResponseEntity<?> getRoomInfo(
-			@PathVariable @ApiParam(value = "방 ID") int roomId) {
+			@PathVariable @ApiParam(value = "방 ID") int roomId,
+			@PathVariable @ApiParam(value = "유저 ID") String userId) {
 		
 		Map<String, Object> resultMap = new HashMap<>();
 		HttpStatus status = HttpStatus.OK;
 		
 		try {
 			RoomInfoDto roomInfoDto = doodleService.getRoomInfo(roomId);
-			List<ChatUserDto> chatUserDtoList = doodleService.getRoomUsers(roomId);
+			List<ChatUserDto> chatUserDtoList = doodleService.getRoomUsers(roomId, userId);
 			resultMap.put("message", SUCCESS);
 			resultMap.put("roomInfo", roomInfoDto);
 			resultMap.put("chatUserList", chatUserDtoList);

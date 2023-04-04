@@ -93,10 +93,11 @@ public class DoodleServiceImpl implements DoodleService {
 	}
 	
 	@Override
-	public List<ChatUserDto> getRoomUsers (int roomId) {
+	public List<ChatUserDto> getRoomUsers (int roomId, String userId) {
 		List<ChatUserDto> chatUserDtoList = new ArrayList<>();
 		List<UserRoom> userRoomList = userRoomRepository.findAllByRoom_RoomId(roomId);
 		for (UserRoom userRoom : userRoomList) {
+			if (userRoom.getUser().getUserId() == userId) continue;
 			chatUserDtoList.add(ChatUserDto.toDto(userRoom.getUser()));
 		}
 		
