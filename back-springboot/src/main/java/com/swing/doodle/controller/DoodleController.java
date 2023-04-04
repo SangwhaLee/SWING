@@ -46,14 +46,11 @@ public class DoodleController {
 		if ("LEAVE".equals(data.get("messageType").toString())) {
 			logger.warn(data.get("userId") + " leave");
 			doodleService.leaveRoom(data.get("userId").toString());
-			simpMessagingTemplate.convertAndSend("/sub/" + data.get("roomId"), data);
 		} else if ("ENTER".equals(data.get("messageType").toString())) {
 			logger.warn(data.get("userId") + " enter");
 			doodleService.enterRoom(Integer.parseInt(data.get("roomId").toString()), data.get("userId").toString());
-			simpMessagingTemplate.convertAndSend("/sub/" + data.get("roomId"), data);
-		} else {
-			simpMessagingTemplate.convertAndSend("/sub/" + data.get("roomId"), data);
 		}
+		simpMessagingTemplate.convertAndSend("/sub/" + data.get("roomId"), data);
 	}
 	
 	@ApiOperation(value = "방 생성", notes = "방 생성 API", response = Map.class)
