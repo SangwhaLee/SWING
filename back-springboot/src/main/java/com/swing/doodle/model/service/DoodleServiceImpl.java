@@ -97,7 +97,8 @@ public class DoodleServiceImpl implements DoodleService {
 		List<ChatUserDto> chatUserDtoList = new ArrayList<>();
 		List<UserRoom> userRoomList = userRoomRepository.findAllByRoom_RoomId(roomId);
 		for (UserRoom userRoom : userRoomList) {
-			chatUserDtoList.add(ChatUserDto.toDto(userRoom.getUser()));
+			if (userRoom.getUser().getUserId() != userId)
+				chatUserDtoList.add(ChatUserDto.toDto(userRoom.getUser()));
 		}
 		chatUserDtoList.add(ChatUserDto.toDto(userRepository.findByUserId(userId)));
 		
