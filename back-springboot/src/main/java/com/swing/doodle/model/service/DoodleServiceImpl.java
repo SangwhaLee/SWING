@@ -99,6 +99,7 @@ public class DoodleServiceImpl implements DoodleService {
 		for (UserRoom userRoom : userRoomList) {
 			chatUserDtoList.add(ChatUserDto.toDto(userRoom.getUser()));
 		}
+		chatUserDtoList.add(ChatUserDto.toDto(userRepository.findByUserId(userId)));
 		
 		return chatUserDtoList;
 	}
