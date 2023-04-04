@@ -108,11 +108,11 @@ public class DoodleController {
 				resultMap.put("message", SUCCESS);
 				
 				// 기존 방에 있던 사람들한테 새로 들어온 유저 정보를 던짐
-				data.put("messageType", MessageType.ENTER);
-				data.put("userId", newUser.getUserId());
-				data.put("nickname", newUser.getNickname());
-				data.put("profileImageUrl", newUser.getProfileImageUrl());
-				simpMessagingTemplate.convertAndSend("/sub/" + roomId, data);
+//				data.put("messageType", MessageType.ENTER);
+//				data.put("userId", newUser.getUserId());
+//				data.put("nickname", newUser.getNickname());
+//				data.put("profileImageUrl", newUser.getProfileImageUrl());
+//				simpMessagingTemplate.convertAndSend("/sub/" + roomId, data);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
