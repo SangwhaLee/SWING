@@ -100,7 +100,6 @@ public class DoodleServiceImpl implements DoodleService {
 			chatUserDtoList.add(ChatUserDto.toDto(userRoom.getUser()));
 		}
 		
-		if (chatUserDtoList.size() == 1) return null;
 		return chatUserDtoList;
 	}
 	
