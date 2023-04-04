@@ -44,8 +44,11 @@ public class DoodleController {
 	@MessageMapping("/send")
 	public void sendMsg(@Payload Map<String,Object> data) {
 		if ("LEAVE".equals(data.get("messageType").toString())) {
-			logger.warn(data.get("userId") + " leaving");
+			logger.warn(data.get("userId") + " leave");
 			doodleService.leaveRoom(data.get("userId").toString());
+		} else if ("ENTER".equals(data.get("messageType").toString())) {
+			logger.warn(data.get("userId") + " enter");
+			doodleService.enterRoom(Integer.parseInt(data.get("roomId").toString()), data.get("userId").toString());
 		}
 		simpMessagingTemplate.convertAndSend("/sub/" + data.get("roomId"), data);
 	}
@@ -83,7 +86,6 @@ public class DoodleController {
 			@PathVariable @ApiParam(value = "유저 ID") String userId) {
 		
 		Map<String, Object> resultMap = new HashMap<>();
-		Map<String, Object> data = new HashMap<>();
 		HttpStatus status = HttpStatus.OK;
 		
 		try {
@@ -92,13 +94,6 @@ public class DoodleController {
 			if (newUser == null) resultMap.put("message", ALREADY_EXIST);
 			else {
 				resultMap.put("message", SUCCESS);
-				
-				// 기존 방에 있던 사람들한테 새로 들어온 유저 정보를 던짐
-//				data.put("messageType", MessageType.ENTER);
-//				data.put("userId", newUser.getUserId());
-//				data.put("nickname", newUser.getNickname());
-//				data.put("profileImageUrl", newUser.getProfileImageUrl());
-//				simpMessagingTemplate.convertAndSend("/sub/" + roomId, data);
 			}
 		} catch (Exception e) {
 			e.printStackTrace();
@@ -118,17 +113,10 @@ public class DoodleController {
 			@PathVariable @ApiParam(value = "유저 ID") String userId) {
 		
 		Map<String, Object> resultMap = new HashMap<>();
-//		Map<String, Object> data = new HashMap<>();
 		HttpStatus status = HttpStatus.OK;
 		
 		try {
-//			doodleService.leaveRoom(roomId, userId);
 			resultMap.put("message", SUCCESS);
-			
-			// 방에 있는 사람들한테 나간 유저 ID 전달
-//			data.put("messageType", MessageType.LEAVE);
-//			data.put("userId", userId);
-//			simpMessagingTemplate.convertAndSend("/sub/" + roomId, data);
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error("방 퇴장 실패 : {}", e);
