@@ -12,6 +12,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class GetGameHistoryDto {
+	private int gameId;
 	private int rank;
 	private String roomName;
 	private LocalDateTime playTime;
