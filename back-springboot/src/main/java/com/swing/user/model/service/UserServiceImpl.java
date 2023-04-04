@@ -1,5 +1,9 @@
 package com.swing.user.model.service;
 
+import com.swing.five.model.entity.FiveRank;
+import com.swing.five.model.repository.FiveRankRepository;
+import com.swing.sentency.model.entity.SentencyRank;
+import com.swing.sentency.model.repository.SentencyRankRepository;
 import com.swing.user.model.dto.ModifyDto;
 import com.swing.user.model.dto.UserDto;
 import com.swing.user.model.entity.User;
@@ -20,7 +24,11 @@ public class UserServiceImpl implements UserService {
 	
 	@Autowired
 	private UserRepository userRepository;
-
+	
+	@Autowired
+	FiveRankRepository fiveRankRepository;
+	@Autowired
+	SentencyRankRepository sentecyRankRepository;
 	@Override
 	public UserDto socialLogin(UserDto userDto, String refreshToken) {
 
@@ -36,8 +44,20 @@ public class UserServiceImpl implements UserService {
 			user.setFiveCnt(1);
 			user.setProfileImageUrl(DEFAULT_IMAGE_URL);
 			user.setRefreshToken(refreshToken);
-
 			user = userRepository.save(user);
+			
+			FiveRank fiveRank = new FiveRank();
+			fiveRank.setUser(user);
+			fiveRank.setScore(0);
+			
+			fiveRankRepository.save(fiveRank);
+			
+			SentencyRank sentencyRank = new SentencyRank();
+			sentencyRank.setUser(user);
+			sentencyRank.setScore(0);
+			
+			sentecyRankRepository.save(sentencyRank);
+
 		}
 		user.setRefreshToken(refreshToken);
 		userRepository.save(user);

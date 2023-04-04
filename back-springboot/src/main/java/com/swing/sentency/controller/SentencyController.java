@@ -68,7 +68,7 @@ public class SentencyController {
 		HttpStatus status = HttpStatus.OK;
 		
 		try {
-			sentencyService.saveResult(userId, score);
+			sentencyService.saveRank(userId, score);
 			resultMap.put("message", SUCCESS);
 			// 결과 저장 성공한 경우, 성공 메시지 반환, 200 응답 코드
 		} catch (Exception e) {

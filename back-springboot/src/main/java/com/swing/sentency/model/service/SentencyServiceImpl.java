@@ -23,9 +23,6 @@ public class SentencyServiceImpl implements SentencyService {
 	private S3Upload s3Upload;
 	
 	@Autowired
-	private UserRepository userRepository;
-	
-	@Autowired
 	private SentencyRankRepository sentencyRankRepository;
 	
 	@Autowired
@@ -53,23 +50,13 @@ public class SentencyServiceImpl implements SentencyService {
 	}
 	
 	@Override
-	public SentencyRank saveResult(String userId, int score) {
+	public void saveRank(String userId, int score) {
 		SentencyRank sentencyRank = sentencyRankRepository.findByUser_UserId(userId);
 		
-		if(sentencyRank==null){
-			User user = userRepository.findByUserId(userId);
-			sentencyRank = new SentencyRank();
-			sentencyRank.setUser(user);
+		if(sentencyRank.getScore()<score){
 			sentencyRank.setScore(score);
-
-			return sentencyRankRepository.save(sentencyRank);
+			sentencyRankRepository.save(sentencyRank);
 		}
-		else if(sentencyRank.getScore()<score){
-			sentencyRank.setScore(score);
-
-			return sentencyRankRepository.save(sentencyRank);
-		}
-		return sentencyRank;
 	}
 	
 	@Override

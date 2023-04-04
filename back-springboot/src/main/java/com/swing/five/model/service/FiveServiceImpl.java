@@ -11,6 +11,7 @@ import com.swing.five.model.repository.FiveRankRepository;
 import com.swing.five.model.repository.FiveStatRepository;
 import com.swing.five.model.repository.WordRepository;
 import com.swing.five.model.repository.WordTodayRepository;
+import com.swing.sentency.model.entity.SentencyRank;
 import com.swing.user.model.repository.UserRepository;
 import com.swing.util.S3Upload;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -63,11 +64,13 @@ public class FiveServiceImpl implements FiveService {
 	}
 	
 	@Override
-	public void saveRank (String userId, int dayScore) {
-		FiveRank fiveRank = new FiveRank();
-		fiveRank.setUser(userRepository.findByUserId(userId));
-		fiveRank.setScore(dayScore);
-		fiveRankRepository.save(fiveRank);
+	public void saveRank(String userId, int score) {
+		FiveRank fiveRank = fiveRankRepository.findByUser_UserId(userId);
+		
+		if(fiveRank.getScore()<score){
+			fiveRank.setScore(score);
+			fiveRankRepository.save(fiveRank);
+		}
 	}
 	
 	@Override
