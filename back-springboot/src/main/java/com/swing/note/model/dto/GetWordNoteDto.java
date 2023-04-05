@@ -14,6 +14,7 @@ import lombok.ToString;
 public class GetWordNoteDto {
 	private Integer wordNoteId;
 	private String content;
+	private String meaningKr;
 	private String meaningEn;
 	private int checked;
 	
@@ -23,6 +24,7 @@ public class GetWordNoteDto {
 		return new GetWordNoteDto(
 				wordNote.getWordNoteId(),
 				wordDto.getContent(),
+				wordDto.getMeaningKr(),
 				wordDto.getMeaningEn(),
 				wordNote.getChecked()
 		);
