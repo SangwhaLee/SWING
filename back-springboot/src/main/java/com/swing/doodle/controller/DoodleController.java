@@ -43,10 +43,10 @@ public class DoodleController {
 	
 	@MessageMapping("/send")
 	public void sendMsg(@Payload Map<String,Object> data) {
-		if (MessageType.ENTER.equals(data.get("messageType"))) {
+		if ("ENTER".equals(data.get("messageType").toString())) {
 			logger.warn(data.get("userId") + " enter");
 			doodleService.enterRoom(Integer.parseInt(data.get("roomId").toString()), data.get("userId").toString());
-		} else if (MessageType.LEAVE.equals(data.get("messageType"))) {
+		} else if ("LEAVE".equals(data.get("messageType").toString())) {
 			logger.warn(data.get("userId") + " leave");
 			doodleService.leaveRoom(data.get("userId").toString());
 		}
