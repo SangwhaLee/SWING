@@ -11,8 +11,6 @@ import com.swing.five.model.repository.FiveRankRepository;
 import com.swing.five.model.repository.FiveStatRepository;
 import com.swing.five.model.repository.WordRepository;
 import com.swing.five.model.repository.WordTodayRepository;
-import com.swing.sentency.model.entity.SentencyRank;
-import com.swing.user.model.repository.UserRepository;
 import com.swing.util.S3Upload;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -22,14 +20,13 @@ import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
+import static java.util.stream.Collectors.toList;
+
 @Service
 public class FiveServiceImpl implements FiveService {
 	
 	@Autowired
 	private S3Upload s3Upload;
-	
-	@Autowired
-	private UserRepository userRepository;
 	
 	@Autowired
 	private WordRepository wordRepository;
@@ -58,9 +55,7 @@ public class FiveServiceImpl implements FiveService {
 	
 	@Override
 	public List<WordDto> getFive () {
-		List<WordDto> wordDtoList = new ArrayList<>();
-		wordTodayRepository.findAll().forEach(x -> wordDtoList.add(WordDto.toDto(x)));
-		return wordDtoList;
+		return wordTodayRepository.findAll().stream().map(WordDto::toDto).collect(toList());
 	}
 	
 	@Override

@@ -6,6 +6,5 @@ import org.springframework.stereotype.Repository;
 
 @Repository
 public interface FiveStatRepository extends JpaRepository<FiveStat, Integer> {
-	
 	FiveStat findByUser_UserId (String userId);
 }
