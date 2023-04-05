@@ -81,22 +81,12 @@ public class FiveServiceImpl implements FiveService {
 		fiveRankRepository.save(fiveRank);
 		
 		// save to Five Stat
-		FiveStat oldStat = fiveStatRepository.findByUser_UserId(fiveResultDto.getUserId());
-		if (oldStat == null) {
-			FiveStat newStat = new FiveStat();
-			newStat.setUser(userRepository.findByUserId(fiveResultDto.getUserId()));
-			newStat.setTotalScore(fiveResultDto.getDayScore());
-			newStat.setTotalTry(fiveResultDto.getDayTry());
-			newStat.setTotalCorrect(fiveResultDto.getDayCorrect());
-			newStat.setStreak(fiveResultDto.getDayCorrect() == 5 ? 1 : 0);
-			fiveStatRepository.save(newStat);
-		} else {
-			oldStat.setTotalScore(oldStat.getTotalScore() + fiveResultDto.getDayScore());
-			oldStat.setTotalTry(oldStat.getTotalTry() + fiveResultDto.getDayTry());
-			oldStat.setTotalCorrect(oldStat.getTotalCorrect() + fiveResultDto.getDayCorrect());
-			oldStat.setStreak(fiveResultDto.getDayCorrect() == 5 ? oldStat.getStreak() + 1 : 0);
-			fiveStatRepository.save(oldStat);
-		}
+		FiveStat stat = fiveStatRepository.findByUser_UserId(fiveResultDto.getUserId());
+		stat.setTotalScore(stat.getTotalScore() + fiveResultDto.getDayScore());
+		stat.setTotalTry(stat.getTotalTry() + fiveResultDto.getDayTry());
+		stat.setTotalCorrect(stat.getTotalCorrect() + fiveResultDto.getDayCorrect());
+		stat.setStreak(fiveResultDto.getDayCorrect() == 5 ? stat.getStreak() + 1 : 0);
+		fiveStatRepository.save(stat);
 	}
 	
 	@Override
