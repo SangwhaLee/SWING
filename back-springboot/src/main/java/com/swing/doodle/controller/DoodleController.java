@@ -43,12 +43,12 @@ public class DoodleController {
 	
 	@MessageMapping("/send")
 	public void sendMsg(@Payload Map<String,Object> data) {
-		if ("LEAVE".equals(data.get("messageType").toString())) {
-			logger.warn(data.get("userId") + " leave");
-			doodleService.leaveRoom(data.get("userId").toString());
-		} else if ("ENTER".equals(data.get("messageType").toString())) {
+		if (MessageType.ENTER.equals(data.get("messageType"))) {
 			logger.warn(data.get("userId") + " enter");
 			doodleService.enterRoom(Integer.parseInt(data.get("roomId").toString()), data.get("userId").toString());
+		} else if (MessageType.LEAVE.equals(data.get("messageType"))) {
+			logger.warn(data.get("userId") + " leave");
+			doodleService.leaveRoom(data.get("userId").toString());
 		}
 		simpMessagingTemplate.convertAndSend("/sub/" + data.get("roomId"), data);
 	}
@@ -79,54 +79,56 @@ public class DoodleController {
 		
 	}
 	
-	@ApiOperation(value = "방 입장", notes = "방 입장 API", response = Map.class)
-	@PostMapping("/room/enter/{roomId}/{userId}")
-	public ResponseEntity<?> enterRoom(
-			@PathVariable @ApiParam(value = "방 ID") int roomId,
-			@PathVariable @ApiParam(value = "유저 ID") String userId) {
-		
-		Map<String, Object> resultMap = new HashMap<>();
-		HttpStatus status = HttpStatus.OK;
-		
-		try {
-			// 새로 들어온 사람 정보
-			ChatUserDto newUser = doodleService.enterRoom(roomId, userId);
-			if (newUser == null) resultMap.put("message", ALREADY_EXIST);
-			else {
-				resultMap.put("message", SUCCESS);
-			}
-		} catch (Exception e) {
-			e.printStackTrace();
-			logger.error("방 입장 실패 : {}", e);
-			resultMap.put("message", FAIL);
-			status = HttpStatus.INTERNAL_SERVER_ERROR;
-		}
-		
-		return new ResponseEntity<>(resultMap, status);
-		
-	}
+//	DEPRECATED
+//	@ApiOperation(value = "방 입장", notes = "방 입장 API", response = Map.class)
+//	@PostMapping("/room/enter/{roomId}/{userId}")
+//	public ResponseEntity<?> enterRoom(
+//			@PathVariable @ApiParam(value = "방 ID") int roomId,
+//			@PathVariable @ApiParam(value = "유저 ID") String userId) {
+//
+//		Map<String, Object> resultMap = new HashMap<>();
+//		HttpStatus status = HttpStatus.OK;
+//
+//		try {
+//			// 새로 들어온 사람 정보
+//			ChatUserDto newUser = doodleService.enterRoom(roomId, userId);
+//			if (newUser == null) resultMap.put("message", ALREADY_EXIST);
+//			else {
+//				resultMap.put("message", SUCCESS);
+//			}
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//			logger.error("방 입장 실패 : {}", e);
+//			resultMap.put("message", FAIL);
+//			status = HttpStatus.INTERNAL_SERVER_ERROR;
+//		}
+//
+//		return new ResponseEntity<>(resultMap, status);
+//
+//	}
 	
-	@ApiOperation(value = "방 퇴장", notes = "방 퇴장 API", response = Map.class)
-	@DeleteMapping("/room/leave/{roomId}/{userId}")
-	public ResponseEntity<?> leaveRoom(
-			@PathVariable @ApiParam(value = "방 ID") int roomId,
-			@PathVariable @ApiParam(value = "유저 ID") String userId) {
-		
-		Map<String, Object> resultMap = new HashMap<>();
-		HttpStatus status = HttpStatus.OK;
-		
-		try {
-			resultMap.put("message", SUCCESS);
-		} catch (Exception e) {
-			e.printStackTrace();
-			logger.error("방 퇴장 실패 : {}", e);
-			resultMap.put("message", FAIL);
-			status = HttpStatus.INTERNAL_SERVER_ERROR;
-		}
-		
-		return new ResponseEntity<>(resultMap, status);
-		
-	}
+//	DEPRECATED
+//	@ApiOperation(value = "방 퇴장", notes = "방 퇴장 API", response = Map.class)
+//	@DeleteMapping("/room/leave/{roomId}/{userId}")
+//	public ResponseEntity<?> leaveRoom(
+//			@PathVariable @ApiParam(value = "방 ID") int roomId,
+//			@PathVariable @ApiParam(value = "유저 ID") String userId) {
+//
+//		Map<String, Object> resultMap = new HashMap<>();
+//		HttpStatus status = HttpStatus.OK;
+//
+//		try {
+//			resultMap.put("message", SUCCESS);
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//			logger.error("방 퇴장 실패 : {}", e);
+//			resultMap.put("message", FAIL);
+//			status = HttpStatus.INTERNAL_SERVER_ERROR;
+//		}
+//
+//		return new ResponseEntity<>(resultMap, status);
+//
+//	}
 	
 	@ApiOperation(value = "방 정보 조회", notes = "방 정보 조회 API", response = Map.class)
 	@GetMapping("/room/info/{roomId}/{userId}")
@@ -200,27 +202,28 @@ public class DoodleController {
 		
 	}
 	
-	@ApiOperation(value = "방 삭제", notes = "방 삭제 API", response = Map.class)
-	@DeleteMapping("/room/{roomId}")
-	public ResponseEntity<?> deleteRoom(
-			@PathVariable @ApiParam(value = "검색어 타입") int roomId) {
-		
-		Map<String, Object> resultMap = new HashMap<>();
-		HttpStatus status = HttpStatus.OK;
-		
-		try {
-			doodleService.deleteRoom(roomId);
-			resultMap.put("message", SUCCESS);
-		} catch (Exception e) {
-			e.printStackTrace();
-			logger.error("방 삭제 실패 : {}", e);
-			resultMap.put("message", FAIL);
-			status = HttpStatus.INTERNAL_SERVER_ERROR;
-		}
-		
-		return new ResponseEntity<>(resultMap, status);
-		
-	}
+//	DEPRECATED
+//	@ApiOperation(value = "방 삭제", notes = "방 삭제 API", response = Map.class)
+//	@DeleteMapping("/room/{roomId}")
+//	public ResponseEntity<?> deleteRoom(
+//			@PathVariable @ApiParam(value = "검색어 타입") int roomId) {
+//
+//		Map<String, Object> resultMap = new HashMap<>();
+//		HttpStatus status = HttpStatus.OK;
+//
+//		try {
+//			doodleService.deleteRoom(roomId);
+//			resultMap.put("message", SUCCESS);
+//		} catch (Exception e) {
+//			e.printStackTrace();
+//			logger.error("방 삭제 실패 : {}", e);
+//			resultMap.put("message", FAIL);
+//			status = HttpStatus.INTERNAL_SERVER_ERROR;
+//		}
+//
+//		return new ResponseEntity<>(resultMap, status);
+//
+//	}
 	
 	@ApiOperation(value = "방 모드 변경", notes = "방 모드 변경 API", response = Map.class)
 	@PutMapping("/room/{roomId}/{mode}")

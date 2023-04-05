@@ -140,10 +140,12 @@ public class DoodleServiceImpl implements DoodleService {
 		return roomListToRoomDtoList(roomList);
 	}
 	
-	@Override
-	public void deleteRoom (int roomId) {
-		roomRepository.delete(roomRepository.findByRoomId(roomId));
-	}
+//	DEPRECATED
+//	@Override
+//	@Transactional
+//	public void deleteRoom (int roomId) {
+//		roomRepository.delete(roomRepository.findByRoomId(roomId));
+//	}
 	
 	@Override
 	public int modifyMode (int roomId, int mode) {
