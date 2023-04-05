@@ -218,7 +218,9 @@ public class DoodleServiceImpl implements DoodleService {
 			getRoundResultDtoList.add(new GetRoundResultDto(
 					history.getUser().getNickname(),
 					history.getUser().getProfileImageUrl(),
-					history.getGameImageUrl()
+					history.getGameImageUrl(),
+					history.getRound().getWord().getContent(),
+					history.getRound().getWord().getMeaningKr()
 			));
 		}
 		return getRoundResultDtoList;

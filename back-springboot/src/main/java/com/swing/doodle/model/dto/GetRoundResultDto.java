@@ -15,12 +15,16 @@ public class GetRoundResultDto {
 	String nickname;
 	String profileImageUrl;
 	String roundImageUrl;
+	String content;
+	String meaningKr;
 	
 	public static GetRoundResultDto toDto (History history) {
 		return new GetRoundResultDto(
 				history.getUser().getNickname(),
 				history.getUser().getProfileImageUrl(),
-				history.getGameImageUrl()
+				history.getGameImageUrl(),
+				history.getRound().getWord().getContent(),
+				history.getRound().getWord().getMeaningKr()
 		);
 	}
 }
