@@ -4,11 +4,9 @@ import com.swing.doodle.model.entity.History;
 import com.swing.doodle.model.entity.Room;
 import com.swing.doodle.model.entity.UserGame;
 import com.swing.doodle.model.entity.UserRoom;
-import com.swing.five.model.entity.FiveRank;
 import com.swing.five.model.entity.FiveStat;
 import com.swing.note.model.entity.SentenceNote;
 import com.swing.note.model.entity.WordNote;
-import com.swing.sentency.model.entity.SentencyRank;
 import lombok.*;
 
 import javax.persistence.*;
