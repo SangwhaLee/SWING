@@ -19,26 +19,25 @@ import java.io.IOException;
 
 @Service
 public class UserServiceImpl implements UserService {
-	
+	//새로 가입했을 때 사용할 기본 이미지
 	private final String DEFAULT_IMAGE_URL = "https://a405-swing.s3.ap-northeast-2.amazonaws.com/images/profile/default.png";
 	@Autowired
 	private S3Upload s3Upload;
-	
 	@Autowired
 	private UserRepository userRepository;
-	
 	@Autowired
 	FiveRankRepository fiveRankRepository;
 	@Autowired
 	FiveStatRepository fiveStatRepository;
 	@Autowired
-	SentencyRankRepository sentecyRankRepository;
+	SentencyRankRepository sentencyRankRepository;
+	
 	@Override
 	public UserDto socialLogin(UserDto userDto, String refreshToken) {
 
 		User user = userRepository.findByUserId(userDto.getUserId());
 
-		if(user==null) {
+		if(user==null) { //회원이 아닌 경우 새로 가입한다.
 
 			user = new User();
 			// User Build
@@ -48,6 +47,7 @@ public class UserServiceImpl implements UserService {
 			user.setFiveCnt(1);
 			user.setProfileImageUrl(DEFAULT_IMAGE_URL);
 			user.setRefreshToken(refreshToken);
+			
 			user = userRepository.save(user);
 			
 			FiveRank fiveRank = new FiveRank();
@@ -60,7 +60,7 @@ public class UserServiceImpl implements UserService {
 			sentencyRank.setUser(user);
 			sentencyRank.setScore(0);
 			
-			sentecyRankRepository.save(sentencyRank);
+			sentencyRankRepository.save(sentencyRank);
 			
 			FiveStat fiveStat = new FiveStat();
 			fiveStat.setUser(user);
@@ -68,14 +68,15 @@ public class UserServiceImpl implements UserService {
 			fiveStat.setTotalTry(0);
 			fiveStat.setTotalScore(0);
 			fiveStat.setTotalCorrect(0);
-
+	
+			fiveStatRepository.save(fiveStat);
 		}
-		user.setRefreshToken(refreshToken);
-		userRepository.save(user);
+		else{
+			user.setRefreshToken(refreshToken);
+			userRepository.save(user);
+		}
 
 		return UserDto.toDto(user);
-
-
 	}
 
 	@Override
