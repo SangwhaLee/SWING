@@ -90,16 +90,17 @@ public class UserServiceImpl implements UserService {
 	public UserDto setUserInfo(ModifyDto modifyDto, MultipartFile image) throws IOException {
 		User user = userRepository.findByUserId(modifyDto.getUserId());
 
-		if(image!=null && image.getSize()!=2){
+		if(image!=null && image.getSize()!=2){ // 프로필 이미지가 변경된 경우
 			String url = upload(image);
 			
 			user.setProfileImageUrl(url);
 		}
-		if(modifyDto.getNickname()!=null){
+		
+		if(modifyDto.getNickname()!=null){ // 닉네임이 변경된 경우
 			user.setNickname(modifyDto.getNickname());
 		}
 		
-		if(modifyDto.isDefaultImage()){
+		if(modifyDto.isDefaultImage()){  // 기본 이미지로 설정하는 경우
 			user.setProfileImageUrl(DEFAULT_IMAGE_URL);
 		}
 		
@@ -122,15 +123,9 @@ public class UserServiceImpl implements UserService {
 	}
 	
 	@Override
-	public void saveRefreshToken(String userId, String refreshToken) {
-		User user = userRepository.findByUserId(userId);
-		user.setRefreshToken(refreshToken);
-		userRepository.save(user);
-	}
-	
-	@Override
 	public String getRefreshToken(String userId) {
 		User user = userRepository.findByUserId(userId);
+		
 		return user != null ? user.getRefreshToken() : null;
 	}
 	
@@ -138,6 +133,7 @@ public class UserServiceImpl implements UserService {
 	public void delRefreshToken(String userId) {
 		User user = userRepository.findByUserId(userId);
 		user.setRefreshToken(null);
+		
 		userRepository.save(user);
 	}
 	
@@ -149,6 +145,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public User getSentencyCnt(String userId) {
 		User user = userRepository.findByUserId(userId);
+		
 		return user;
 	}
 	
@@ -156,12 +153,14 @@ public class UserServiceImpl implements UserService {
 	public void setSentencyCnt(String userId, int sentencyCnt) {
 		User user = userRepository.findByUserId(userId);
 		user.setSentencyCnt(sentencyCnt);
+		
 		userRepository.save(user);
 	}
 	
 	@Override
 	public int getFiveCnt (String userId) {
 		User user = userRepository.findByUserId(userId);
+		
 		return user == null ? 0 : user.getFiveCnt();
 	}
 	
@@ -169,6 +168,7 @@ public class UserServiceImpl implements UserService {
 	public void setFiveCnt (String userId, int fiveCnt) {
 		User user = userRepository.findByUserId(userId);
 		user.setFiveCnt(fiveCnt);
+		
 		userRepository.save(user);
 	}
 	
@@ -183,6 +183,7 @@ public class UserServiceImpl implements UserService {
 	@Override
 	public int getCouponCnt(String userId) {
 		User user = userRepository.findByUserId(userId);
+		
 		return user.getCoupon();
 	}
 }

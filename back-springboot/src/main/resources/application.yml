@@ -20,9 +20,6 @@ spring:
         format_sql: true
     database-platform: org.hibernate.dialect.MySQL5InnoDBDialect
 
-# jwt secret key
-
-
 file:
   path: C:/images
 cloud:

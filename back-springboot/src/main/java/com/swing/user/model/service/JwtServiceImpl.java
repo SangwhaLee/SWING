@@ -23,18 +23,18 @@ public class JwtServiceImpl implements JwtService {
 	@Override
 	public <T> String createAccessToken(String key, T data) {
 		return create(key, data, "access-token", 1000 * 60 * ACCESS_TOKEN_EXPIRE_MINUTES);
-//		return create(key, data, "access-token", 1000 * 60);
+//		return create(key, data, "access-token", 1000 * 60);  //1분(테스트용)
 	}
 	
 	//	AccessToken에 비해 유효기간을 길게...
 	@Override
 	public <T> String createRefreshToken(String key, T data) {
 		return create(key, data, "refresh-token", 1000 * 60 * 60 * 24 * 7 * REFRESH_TOKEN_EXPIRE_MINUTES);
-//		return create(key, data, "refresh-token", 1000 * 60*2);
+//		return create(key, data, "refresh-token", 1000 * 60*2); //2분(테스트용)
 	}
 	
-	//Token 발급
 	
+	//Token 발급
 	/**
 	 * key : Claim에 셋팅될 key 값
 	 * data : Claim에 셋팅 될 data 값
@@ -46,7 +46,7 @@ public class JwtServiceImpl implements JwtService {
 	public <T> String create(String key, T data, String subject, long expire) {
 		String jwt = Jwts.builder()
 				// Header 설정 : 토큰의 타입, 해쉬 알고리즘 정보 세팅.
-				.setHeaderParam("typ", "JWT")
+				.setHeaderParam("type", "JWT")
 				.setHeaderParam("regDate", System.currentTimeMillis()) // 생성 시간
 				// Payload 설정 : 유효기간(Expiration), 토큰 제목 (Subject), 데이터 (Claim) 등 정보 세팅.
 				.setExpiration(new Date(System.currentTimeMillis() + expire)) // 토큰 유효기간

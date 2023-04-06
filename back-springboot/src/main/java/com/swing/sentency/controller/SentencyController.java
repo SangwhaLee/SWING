@@ -55,7 +55,6 @@ public class SentencyController {
 		}
 		
 		return new ResponseEntity<>(resultMap, status);
-		
 	}
 	
 	@ApiOperation(value = "결과 저장", notes = "게임 결과 저장 API", response = Map.class)
@@ -123,5 +122,4 @@ public class SentencyController {
 		
 		return new ResponseEntity<>(resultMap, status);
 	}
-	
 }

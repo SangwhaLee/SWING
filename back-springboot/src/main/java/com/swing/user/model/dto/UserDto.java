@@ -17,7 +17,6 @@ public class UserDto {
 	private int sentencyCnt;
 	private int fiveCnt;
 	private int coupon;
-	private int first;
 	
 	public static UserDto toDto(User user) {
 		return new UserDto(
@@ -26,8 +25,7 @@ public class UserDto {
 				user.getProfileImageUrl(),
 				user.getSentencyCnt(),
 				user.getFiveCnt(),
-				user.getCoupon(),
-				0
+				user.getCoupon()
 		);
 	}
 }

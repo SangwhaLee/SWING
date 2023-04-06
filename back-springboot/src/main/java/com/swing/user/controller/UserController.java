@@ -15,7 +15,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
-
 import javax.servlet.http.HttpServletRequest;
 import javax.transaction.Transactional;
 import java.util.HashMap;
@@ -37,24 +36,24 @@ public class UserController {
 	private static final String FAIL = "fail";
 	private static final String ALREADY_EXIST = "already exists";
 
-
-
 	@ApiOperation(value = "소셜로그인", notes = "access-token, Refresh-token과 로그인 결과 메세지를 반환한다.", response = Map.class)
 	@PostMapping("/socialLogin")
-	public ResponseEntity<?> socialLogin(
-			@RequestBody @ApiParam(value = "로그인 시 필요한 회원정보.", required = true) UserDto userDto) {
+	public ResponseEntity<?> socialLogin(@RequestBody @ApiParam(value = "로그인 시 필요한 회원정보.", required = true) UserDto userDto) {
 		Map<String, Object> resultMap = new HashMap<>();
-		System.out.println(userDto);
-		HttpStatus status;
-		try {
 
+		HttpStatus status = HttpStatus.OK;
+		try {
+			// access token 및 refresh token 발급
 			String accessToken = jwtService.createAccessToken("userid", userDto.getUserId());// key, data
 			String refreshToken = jwtService.createRefreshToken("userid", userDto.getUserId());// key, data
+			
+			// 로그인
 			UserDto user = userService.socialLogin(userDto, refreshToken);
 
 			if(user!=null) {
 				logger.debug("로그인 accessToken 정보 : {}", accessToken);
 				logger.debug("로그인 refreshToken 정보 : {}", refreshToken);
+				
 				resultMap.put("access-token", accessToken);
 				resultMap.put("refresh-token", refreshToken);
 				resultMap.put("profileImageUrl", user.getProfileImageUrl());
@@ -62,7 +61,6 @@ public class UserController {
 				resultMap.put("nickname", user.getNickname());
 				resultMap.put("coupon",user.getCoupon());
 				resultMap.put("message", SUCCESS);
-				status = HttpStatus.OK;
 			}
 			else {
 				status = HttpStatus.ACCEPTED;
@@ -83,12 +81,11 @@ public class UserController {
 	public ResponseEntity<?> logoutUser(
 			@PathVariable @ApiParam(value = "로그아웃 할 유저의 ID", required = true) String userId) {
 		Map<String, Object> resultMap = new HashMap<>();
-		HttpStatus status;
+		HttpStatus status = HttpStatus.OK;
 		
 		try {
 			userService.delRefreshToken(userId);
 			resultMap.put("message", SUCCESS);
-			status = HttpStatus.OK;
 		} catch (Exception e) {
 			logger.error("로그아웃 실패 : {}", e);
 			resultMap.put("message", e.getMessage());
@@ -112,7 +109,7 @@ public class UserController {
 				resultMap.put("message", SUCCESS);
 				resultMap.put("user", userDto);
 			}
-			else{
+			else{  // 잘못된 유저의 정보를 요청한 경우
 				resultMap.put("message", FAIL);
 				status = HttpStatus.ACCEPTED;
 			}
@@ -136,17 +133,17 @@ public class UserController {
 		HttpStatus status = HttpStatus.OK;
 		
 		try {
-			if(userService.checkDuplicate(nickname)){
+			if(userService.checkDuplicate(nickname)){  // 중복 x
 				resultMap.put("possible",true);
 			}
-			else{
+			else{  // 중복 o
 				resultMap.put("possible",false);
 			}
 			resultMap.put("message", SUCCESS);
 		}
 		catch (Exception e) {
 			e.printStackTrace();
-			logger.error("사진 업로드 실패 : {}", e);
+			logger.error("닉네임 중복 확인 실패 : {}", e);
 			resultMap.put("message", FAIL);
 			status = HttpStatus.INTERNAL_SERVER_ERROR;
 		}
@@ -154,6 +151,7 @@ public class UserController {
 		return new ResponseEntity<>(resultMap, status);
 		
 	}
+	
 	@ApiOperation(value = "회원 정보 수정", notes = "회원 정보 수정 API", response = Map.class)
 	@PutMapping("")
 	@Transactional
@@ -180,6 +178,7 @@ public class UserController {
 		return new ResponseEntity<>(resultMap, status);
 		
 	}
+	
 	@ApiOperation(value = "회원 탈퇴", notes = "회원 탈퇴 API", response = Map.class)
 	@DeleteMapping("/{userId}")
 	public ResponseEntity<?> deleteUser(
@@ -206,39 +205,19 @@ public class UserController {
 		return new ResponseEntity<>(resultMap, status);
 		
 	}
-	@ApiOperation(value = "사진 업로드 테스트", notes = "사진 업로드 테스트 API", response = Map.class)
-	@GetMapping("")
-	public ResponseEntity<?> upload(
-			@RequestPart @ApiParam(value = "이미지 정보") MultipartFile image) {
-		
-		Map<String, Object> resultMap = new HashMap<>();
-		HttpStatus status = HttpStatus.OK;
-		
-		try {
-			String url = userService.upload(image);
-			resultMap.put("message", SUCCESS);
-			resultMap.put("url", url);
-		} catch (Exception e) {
-			e.printStackTrace();
-			logger.error("사진 업로드 실패 : {}", e);
-			resultMap.put("message", FAIL);
-			status = HttpStatus.INTERNAL_SERVER_ERROR;
-		}
-		
-		return new ResponseEntity<>(resultMap, status);
-		
-	}
+
 	@ApiOperation(value = "access-token 유효성 검사", notes = "access-token 유효성 검사.", response = Map.class)
 	@PostMapping("/check")
 	public ResponseEntity<?> checkToken(HttpServletRequest request) {
 		Map<String, Object> resultMap = new HashMap<>();
-		HttpStatus status;
+		HttpStatus status = HttpStatus.OK;
+		
+		// Header에서 access token 가져오기
 		String token = request.getHeader("Access-Token");
 		
-		//액세스토큰이 유효한지 확인한 후 결과 반환.
+		// 액세스토큰이 유효한지 확인한 후 결과 반환.
 		if (jwtService.checkToken(token)) {
 			resultMap.put("message", SUCCESS);
-			status = HttpStatus.OK;
 		} else {
 			logger.debug("access-token 만료.");
 			resultMap.put("message", FAIL);
@@ -253,6 +232,8 @@ public class UserController {
 	public ResponseEntity<?> refreshToken(@RequestBody UserDto userDto, HttpServletRequest request) {
 		Map<String, Object> resultMap = new HashMap<>();
 		HttpStatus status = HttpStatus.OK;
+		
+		// Header에서 refresh token 가져오기
 		String token = request.getHeader("Refresh-Token");
 		logger.debug("token : {}, userId : {}", token, userDto.getUserId());
 		
@@ -265,11 +246,11 @@ public class UserController {
 				return new ResponseEntity<>(resultMap, status);
 			}
 			if (token.equals(refreshToken)) {
+				// access token 갱신
 				String accessToken = jwtService.createAccessToken("userId", userDto.getUserId());
 				logger.debug("access-token : {}", accessToken);
 				logger.debug("access-token 재발급 완료.");
 				resultMap.put("access-token", accessToken);
-				status = HttpStatus.OK;
 			}
 		} else {
 			logger.debug("refresh-token 만료.");
@@ -290,9 +271,11 @@ public class UserController {
 		
 		try {
 			User user = userService.getSentencyCnt(userId);
+			
 			resultMap.put("message", SUCCESS);
 			resultMap.put("sentencyCnt", user.getSentencyCnt());
 			resultMap.put("coupon", user.getCoupon());
+			
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error("sentency 일일 도전횟수 조회 실패 : {}", e);
@@ -301,7 +284,6 @@ public class UserController {
 		}
 		
 		return new ResponseEntity<>(resultMap, status);
-		
 	}
 
 	
@@ -325,7 +307,6 @@ public class UserController {
 		}
 		
 		return new ResponseEntity<>(resultMap, status);
-		
 	}
 	
 	@ApiOperation(value = "Hi-five 1일 도전횟수 조회", notes = "Hi-five 도전횟수 조회 API", response = Map.class)
@@ -348,7 +329,6 @@ public class UserController {
 		}
 		
 		return new ResponseEntity<>(resultMap, status);
-		
 	}
 	
 	@ApiOperation(value = "Hi-five 1일 도전횟수 수정", notes = "Hi-five 도전횟수 수정 API", response = Map.class)
@@ -371,7 +351,6 @@ public class UserController {
 		}
 		
 		return new ResponseEntity<>(resultMap, status);
-		
 	}
 	
 	@ApiOperation(value = "sentency 쿠폰 개수 수정", notes = "sentency 쿠폰 개수 수정 API", response = Map.class)
@@ -394,6 +373,5 @@ public class UserController {
 		}
 		
 		return new ResponseEntity<>(resultMap, status);
-		
 	}
 }

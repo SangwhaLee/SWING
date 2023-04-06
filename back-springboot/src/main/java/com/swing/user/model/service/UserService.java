@@ -14,10 +14,7 @@ public interface UserService {
 	UserDto setUserInfo(ModifyDto modifyDto, MultipartFile image) throws IOException;
 	boolean checkDuplicate(String nickname);
 	boolean deleteUser(String userId);
-	void saveRefreshToken(String userId, String refreshToken);
-	
 	String getRefreshToken(String userId);
-	
 	void delRefreshToken(String userId);
 	String upload (MultipartFile image) throws IOException;
 	User getSentencyCnt(String userId);
