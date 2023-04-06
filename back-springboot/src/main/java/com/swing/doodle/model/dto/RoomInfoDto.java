@@ -16,6 +16,7 @@ public class RoomInfoDto {
 	private String leaderId;
 	private String leaderNickname;
 	private int mode;
+	private int started;
 	
 	public static RoomInfoDto toDto(Room room){
 		return new RoomInfoDto(
@@ -23,7 +24,8 @@ public class RoomInfoDto {
 				room.getName(),
 				room.getLeader().getUserId(),
 				room.getLeader().getNickname(),
-				room.getMode()
+				room.getMode(),
+				room.getStarted()
 		);
 	}
 }
