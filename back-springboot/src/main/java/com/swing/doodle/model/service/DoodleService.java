@@ -2,6 +2,7 @@ package com.swing.doodle.model.service;
 
 import com.swing.doodle.model.dto.*;
 import com.swing.user.model.dto.ChatUserDto;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
 import java.util.List;
@@ -22,7 +23,7 @@ public interface DoodleService {
 	
 	List<RoundInfoDto> getFive (String roomName);
 	
-	void saveRoundResult (SaveRoundResultDto roundResultSaveDto) throws IOException;
+	String saveRoundResult (SaveRoundResultDto roundResultSaveDto, MultipartFile image) throws IOException;
 	
 	List<GetRoundResultDto> getRoundResult (int roundId);
 	

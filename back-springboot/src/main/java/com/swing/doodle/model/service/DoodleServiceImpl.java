@@ -12,6 +12,7 @@ import com.swing.util.S3Upload;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.transaction.Transactional;
 import java.io.IOException;
@@ -202,12 +203,14 @@ public class DoodleServiceImpl implements DoodleService {
 	}
 	
 	@Override
-	public void saveRoundResult (SaveRoundResultDto roundResultSaveDto) throws IOException {
+	public String saveRoundResult (SaveRoundResultDto roundResultSaveDto, MultipartFile image) throws IOException {
 		History history = new History();
 		history.setUser(userRepository.findByUserId(roundResultSaveDto.getUserId()));
 		history.setRound(roundRepository.findByRoundId(roundResultSaveDto.getRoundId()));
-		history.setGameImageUrl(s3Upload.uploadFiles(roundResultSaveDto.getImage(), "images/doodle"));
+		String imageUrl = s3Upload.uploadFiles(image, "images/doodle");
+		history.setGameImageUrl(imageUrl);
 		historyRepository.save(history);
+		return imageUrl;
 	}
 	
 	@Override
