@@ -28,7 +28,7 @@ cloud:
       access-key: [ACCESS-KEY]
       secret-key: [SECRET-KEY]
     s3:
-      bucket : a405-swing
+      bucket : [BUCKET]
     region:
       static: ap-northeast-2
     stack:
