@@ -81,7 +81,7 @@ public class DoodleServiceImpl implements DoodleService {
 	
 	@Override
 	public ChatUserDto enterRoom (int roomId, String userId) {
-		if (userRoomRepository.findByUser_UserId(userId) != null) userRoomRepository.deleteByUser_UserId(userId);
+		if (userRoomRepository.findAllByUser_UserId(userId) != null) userRoomRepository.deleteByUser_UserId(userId);
 		
 		User user = userRepository.findByUserId(userId);
 		Room room = roomRepository.findByRoomId(roomId);
