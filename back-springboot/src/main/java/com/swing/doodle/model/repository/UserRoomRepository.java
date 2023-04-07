@@ -15,4 +15,6 @@ public interface UserRoomRepository extends JpaRepository<UserRoom, Integer> {
 	List<UserRoom> findAllByRoom_RoomId (int roomId);
 	
 	void deleteAllByRoom_RoomId (Integer roomId);
+	
+	void deleteByUser_UserId (String userId);
 }
