@@ -302,16 +302,16 @@ public class DoodleController {
 	@ApiOperation(value = "라운드 결과 저장", notes = "라운드 결과 저장 API", response = Map.class)
 	@PostMapping("/round")
 	public ResponseEntity<?> saveRoundResult(
-			@RequestPart @ApiParam(value = "유저 ID") String userId,
-			@RequestPart @ApiParam(value = "라운드 ID") int roundId,
+			@RequestPart @ApiParam(value = "유저 ID, 라운드 ID") SaveRoundResultDto saveRoundResultDto,
 			@RequestPart @ApiParam(value = "그린 이미지") MultipartFile image) {
 		
 		Map<String, Object> resultMap = new HashMap<>();
 		HttpStatus status = HttpStatus.OK;
 		
 		try {
-			doodleService.saveRoundResult(new SaveRoundResultDto(userId, roundId, image));
+			String imageUrl = doodleService.saveRoundResult(saveRoundResultDto, image);
 			resultMap.put("message", SUCCESS);
+			resultMap.put("imageUrl", imageUrl);
 		} catch (Exception e) {
 			e.printStackTrace();
 			logger.error("라운드 결과 저장 실패 : {}", e);
